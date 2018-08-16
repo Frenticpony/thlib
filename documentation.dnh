@@ -1,0 +1,51 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+	thlib Documentation (WIP)
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+-=-=-=- ECL Style Types -=-=-=-
+
+STYLE_CIRCLE
+
+	count  - number of shots in circle
+	layer  - number of layered shots
+	angle2 - angle offset for layer shots
+
+STYLE_FAN
+
+	count  - number of fan groups in circle
+	layer  - number of shots in each fan
+	angle2 - angle between each shot in the fan
+	sub1   - number of layered shots
+	
+
+STYLE_WAVE
+
+	count  - number of main shots in circle
+	layer  - number of layered shots
+	angle2 - angle offset for layer shots
+	sub1   - number of extra main shots
+	sub2   - speed modifier to apply to extra main shots
+	sub3   - angle offset of each extra main shots
+
+STYLE_RING
+
+	count  - number of shots per ring
+	layer  - number of rings to fire in a circle pattern
+	radius - size of ring
+	sub1   - sub radius of rings
+	sub2   - number of layered rings
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
