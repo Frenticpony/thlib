@@ -1,0 +1,69 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib BGM Library (bgm_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+	to do: literally everything
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+let bgm_th10_00 = GetCurrentScriptDirectory ~ "../bgm/th10_00.ogg";
+let bgm_th10_09 = GetCurrentScriptDirectory ~ "../bgm/th10_09.ogg";
+let bgm_th10_10 = GetCurrentScriptDirectory ~ "../bgm/th10_10.ogg";
+
+let objBGM = 0;
+let objBGM_Trance = 0;
+
+function LoadBGM(arg)
+{
+	LoadSound(arg);
+}
+
+function StartBGM(volume, path, pathB)
+{
+	let bgm01 = ObjSound_Create();
+	
+	task BGMHandler
+	{
+		while(GetCommonData("isGameStarted", false) == true)
+		{
+			if(GetCommonData("ChangeBGM", -1) == 1)
+			{
+				SetCommonData("ChangeBGM", -1);
+				ObjSound_Stop(bgm01);
+				ObjSound_Load(bgm01, pathB);
+				ObjSound_SetLoopEnable(bgm01, true);
+				ObjSound_Play(bgm01);
+			}
+			ObjSound_SetVolumeRate(bgm01, GetCommonData("BGMVol", 0));
+			yield;
+		}
+	}
+	
+	ObjSound_Load(bgm01, path);
+	ObjSound_SetLoopEnable(bgm01, true);
+	ObjSound_Play(bgm01);
+	ObjSound_SetRestartEnable(bgm01, true);
+	BGMHandler;
+	return bgm01;
+}
+
+task LoadMenuBGM()
+{
+	LoadSound(bgm_th10_00);
+}
+
+task LoadStageBGM(unitA, unitB)
+{
+	LoadSound(unitA);
+	LoadSound(unitB);
+}
+
+task LoadStageBGMTrance(unitA, unitB, unitC, unitD)
+{
+	LoadSound(unitA);
+	LoadSound(unitB);
+	LoadSound(unitC);
+	LoadSound(unitD);
+}

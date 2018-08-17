@@ -1,0 +1,510 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib ShotData Library (shotdata_lib.dnh)
+	
+	Author: Frenticpony
+	Version 1.0
+	
+	to do: add pc-98 shots
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+//Straight Laser
+let ST_LASER_GREY = 1; //Gray
+let ST_LASER_DRED = 2; //Dark Red
+let ST_LASER_RED = 3; //Red
+let ST_LASER_PURPLE = 4; //Purple
+let ST_LASER_PINK = 5; //Pink
+let ST_LASER_DBLUE = 6; //Dark Blue
+let ST_LASER_BLUE = 7; //Blue
+let ST_LASER_SKY = 8; //Sky
+let ST_LASER_ICE = 9; //Ice
+let ST_LASER_DGREEN = 10; //Dark Green
+let ST_LASER_GREEN = 11; //Green
+let ST_LASER_LIME = 12; //Lime
+let ST_LASER_GOLD = 13; //Gold
+let ST_LASER_YELLOW = 14; //Yellow
+let ST_LASER_ORANGE = 15; //Orange
+let ST_LASER_WHITE = 16; //White
+
+//Youmu/Arrowhead/Wake Shot
+let SHOT_YOUMU_GREY = 17; //Grey*
+let SHOT_YOUMU_DRED = 18; //Dark Red*
+let SHOT_YOUMU_RED = 19; //Red*
+let SHOT_YOUMU_PURPLE = 20; //Purple*
+let SHOT_YOUMU_PINK = 21; //Pink*
+let SHOT_YOUMU_DBLUE = 22; //Dark Blue*
+let SHOT_YOUMU_BLUE = 23; //Blue*
+let SHOT_YOUMU_SKY = 24; //Sky*
+let SHOT_YOUMU_ICE = 25; //Ice*
+let SHOT_YOUMU_DGREEN = 26; //Dark Green*
+let SHOT_YOUMU_GREEN = 27; //Green*
+let SHOT_YOUMU_LIME = 28; //Lime*
+let SHOT_YOUMU_GOLD = 29; //Gold*
+let SHOT_YOUMU_YELLOW = 30; //Yellow*
+let SHOT_YOUMU_ORANGE = 31; //Orange*
+let SHOT_YOUMU_WHITE = 32; //White*
+
+//Bordered Round Shot
+let SHOT_BROUND_GREY = 33; //Grey*
+let SHOT_BROUND_DRED = 34; //Dark Red*
+let SHOT_BROUND_RED = 35; //Red*
+let SHOT_BROUND_PURPLE = 36; //Purple*
+let SHOT_BROUND_PINK = 37; //Pink*
+let SHOT_BROUND_DBLUE = 38; //Dark Blue*
+let SHOT_BROUND_BLUE = 39; //Blue*
+let SHOT_BROUND_SKY = 40; //Sky*
+let SHOT_BROUND_ICE = 41; //Ice*
+let SHOT_BROUND_DGREEN = 42; //Dark Green*
+let SHOT_BROUND_GREEN = 43; //Green*
+let SHOT_BROUND_LIME = 44; //Lime*
+let SHOT_BROUND_GOLD = 45; //Gold*
+let SHOT_BROUND_YELLOW = 46; //Yellow*
+let SHOT_BROUND_ORANGE = 47; //Orange*
+let SHOT_BROUND_WHITE = 48; //White*
+
+//Round Shot
+let SHOT_ROUND_GREY   = 49; //Grey*
+let SHOT_ROUND_DRED   = 50; //Dark Red*
+let SHOT_ROUND_RED    = 51; //Red*
+let SHOT_ROUND_PURPLE = 52; //Purple*
+let SHOT_ROUND_PINK   = 53; //Pink*
+let SHOT_ROUND_DBLUE  = 54; //Dark Blue*
+let SHOT_ROUND_BLUE   = 55; //Blue*
+let SHOT_ROUND_SKY    = 56; //Sky*
+let SHOT_ROUND_ICE    = 57; //Ice*
+let SHOT_ROUND_DGREEN = 58; //Dark Green*
+let SHOT_ROUND_GREEN  = 59; //Green*
+let SHOT_ROUND_LIME   = 60; //Lime*
+let SHOT_ROUND_GOLD   = 61; //Gold*
+let SHOT_ROUND_YELLOW = 62; //Yellow*
+let SHOT_ROUND_ORANGE = 63; //Orange*
+let SHOT_ROUND_WHITE  = 64; //White*
+
+//Rice Shot
+let SHOT_RICE_GREY   = 65; //Grey*
+let SHOT_RICE_DRED   = 66; //Dark Red*
+let SHOT_RICE_RED    = 67; //Red*
+let SHOT_RICE_PURPLE = 68; //Purple*
+let SHOT_RICE_PINK   = 69; //Pink*
+let SHOT_RICE_DBLUE  = 70; //Dark Blue*
+let SHOT_RICE_BLUE   = 71; //Blue*
+let SHOT_RICE_SKY    = 72; //Sky*
+let SHOT_RICE_ICE    = 73; //Ice*
+let SHOT_RICE_DGREEN = 74; //Dark Green*
+let SHOT_RICE_GREEN  = 75; //Green*
+let SHOT_RICE_LIME   = 76; //Lime*
+let SHOT_RICE_GOLD   = 77; //Gold*
+let SHOT_RICE_YELLOW = 78; //Yellow*
+let SHOT_RICE_ORANGE = 79; //Orange*
+let SHOT_RICE_WHITE  = 80; //White*
+
+//Kunai Shot
+let SHOT_KUNAI_GREY   = 81; //Grey*
+let SHOT_KUNAI_DRED   = 82; //Dark Red*
+let SHOT_KUNAI_RED    = 83; //Red*
+let SHOT_KUNAI_PURPLE = 84; //Purple*
+let SHOT_KUNAI_PINK   = 85; //Pink*
+let SHOT_KUNAI_DBLUE  = 86; //Dark Blue*
+let SHOT_KUNAI_BLUE   = 87; //Blue*
+let SHOT_KUNAI_SKY    = 88; //Sky*
+let SHOT_KUNAI_ICE    = 89; //Ice*
+let SHOT_KUNAI_DGREEN = 90; //Dark Green*
+let SHOT_KUNAI_GREEN  = 91; //Green*
+let SHOT_KUNAI_LIME   = 92; //Lime*
+let SHOT_KUNAI_GOLD   = 93; //Gold*
+let SHOT_KUNAI_YELLOW = 94; //Yellow*
+let SHOT_KUNAI_ORANGE = 95; //Orange*
+let SHOT_KUNAI_WHITE  = 96; //White*
+
+//Ice Shot
+let SHOT_ICE_GREY   = 97; //Grey*
+let SHOT_ICE_DRED   = 98; //Dark Red*
+let SHOT_ICE_RED    = 99; //Red*
+let SHOT_ICE_PURPLE = 100; //Purple*
+let SHOT_ICE_PINK   = 101; //Pink*
+let SHOT_ICE_DBLUE  = 102; //Dark Blue*
+let SHOT_ICE_BLUE   = 103; //Blue*
+let SHOT_ICE_SKY    = 104; //Sky*
+let SHOT_ICE_ICE    = 105; //Ice*
+let SHOT_ICE_DGREEN = 106; //Dark Green*
+let SHOT_ICE_GREEN  = 107; //Green*
+let SHOT_ICE_LIME   = 108; //Lime*
+let SHOT_ICE_GOLD   = 109; //Gold*
+let SHOT_ICE_YELLOW = 110; //Yellow*
+let SHOT_ICE_ORANGE = 111; //Orange*
+let SHOT_ICE_WHITE  = 112; //White*
+
+//Amulet Shot
+let SHOT_AMULET_GREY   = 113; //Grey*
+let SHOT_AMULET_DRED   = 114; //Dark Red*
+let SHOT_AMULET_RED    = 115; //Red*
+let SHOT_AMULET_PURPLE = 116; //Purple*
+let SHOT_AMULET_PINK   = 117; //Pink*
+let SHOT_AMULET_DBLUE  = 118; //Dark Blue*
+let SHOT_AMULET_BLUE   = 119; //Blue*
+let SHOT_AMULET_SKY    = 120; //Sky*
+let SHOT_AMULET_ICE    = 121; //Ice*
+let SHOT_AMULET_DGREEN = 122; //Dark Green*
+let SHOT_AMULET_GREEN  = 123; //Green*
+let SHOT_AMULET_LIME   = 124; //Lime*
+let SHOT_AMULET_GOLD   = 125; //Gold*
+let SHOT_AMULET_YELLOW = 126; //Yellow*
+let SHOT_AMULET_ORANGE = 127; //Orange*
+let SHOT_AMULET_WHITE  = 128; //White*
+
+//Reisen Bullet Shot
+let SHOT_BULLET_GREY   = 129; //Grey*
+let SHOT_BULLET_DRED   = 130; //Dark Red*
+let SHOT_BULLET_RED    = 131; //Red*
+let SHOT_BULLET_PURPLE = 132; //Purple*
+let SHOT_BULLET_PINK   = 133; //Pink*
+let SHOT_BULLET_DBLUE  = 134; //Dark Blue*
+let SHOT_BULLET_BLUE   = 135; //Blue*
+let SHOT_BULLET_SKY    = 136; //Sky*
+let SHOT_BULLET_ICE    = 137; //Ice*
+let SHOT_BULLET_DGREEN = 138; //Dark Green*
+let SHOT_BULLET_GREEN  = 139; //Green*
+let SHOT_BULLET_LIME   = 140; //Lime*
+let SHOT_BULLET_GOLD   = 141; //Gold*
+let SHOT_BULLET_YELLOW = 142; //Yellow*
+let SHOT_BULLET_ORANGE = 143; //Orange*
+let SHOT_BULLET_WHITE  = 144; //White*
+
+//Erin/Seija Inverse Shots
+let SHOT_INVERSE_GREY   = 145; //Grey*
+let SHOT_INVERSE_DRED   = 146; //Dark Red*
+let SHOT_INVERSE_RED    = 147; //Red*
+let SHOT_INVERSE_PURPLE = 148; //Purple*
+let SHOT_INVERSE_PINK   = 149; //Pink*
+let SHOT_INVERSE_DBLUE  = 150; //Dark Blue*
+let SHOT_INVERSE_BLUE   = 151; //Blue*
+let SHOT_INVERSE_SKY    = 152; //Sky*
+let SHOT_INVERSE_ICE    = 153; //Ice*
+let SHOT_INVERSE_DGREEN = 154; //Dark Green*
+let SHOT_INVERSE_GREEN  = 155; //Green*
+let SHOT_INVERSE_LIME   = 156; //Lime*
+let SHOT_INVERSE_GOLD   = 157; //Gold*
+let SHOT_INVERSE_YELLOW = 158; //Yellow*
+let SHOT_INVERSE_ORANGE = 159; //Orange*
+let SHOT_INVERSE_WHITE  = 160; //White*
+
+//Marisa Small Star Shot
+let SHOT_SSTAR_GREY   = 161; //Grey*
+let SHOT_SSTAR_DRED   = 162; //Dark Red*
+let SHOT_SSTAR_RED    = 163; //Red*
+let SHOT_SSTAR_PURPLE = 164; //Purple*
+let SHOT_SSTAR_PINK   = 165; //Pink*
+let SHOT_SSTAR_DBLUE  = 166; //Dark Blue*
+let SHOT_SSTAR_BLUE   = 167; //Blue*
+let SHOT_SSTAR_SKY    = 168; //Sky*
+let SHOT_SSTAR_ICE    = 169; //Ice*
+let SHOT_SSTAR_DGREEN = 170; //Dark Green*
+let SHOT_SSTAR_GREEN  = 171; //Green*
+let SHOT_SSTAR_LIME   = 172; //Lime*
+let SHOT_SSTAR_GOLD   = 173; //Gold*
+let SHOT_SSTAR_YELLOW = 174; //Yellow*
+let SHOT_SSTAR_ORANGE = 175; //Orange*
+let SHOT_SSTAR_WHITE  = 176; //White*
+
+//Murasa Droplet Shot
+let SHOT_DROPLET_GREY   = 177; //Grey*
+let SHOT_DROPLET_DRED   = 178; //Dark Red*
+let SHOT_DROPLET_RED    = 179; //Red*
+let SHOT_DROPLET_PURPLE = 180; //Purple*
+let SHOT_DROPLET_PINK   = 181; //Pink*
+let SHOT_DROPLET_DBLUE  = 182; //Dark Blue*
+let SHOT_DROPLET_BLUE   = 183; //Blue*
+let SHOT_DROPLET_SKY    = 184; //Sky*
+let SHOT_DROPLET_ICE    = 185; //Ice*
+let SHOT_DROPLET_DGREEN = 186; //Dark Green*
+let SHOT_DROPLET_GREEN  = 187; //Green*
+let SHOT_DROPLET_LIME   = 188; //Lime*
+let SHOT_DROPLET_GOLD   = 189; //Gold*
+let SHOT_DROPLET_YELLOW = 190; //Yellow*
+let SHOT_DROPLET_ORANGE = 191; //Orange*
+let SHOT_DROPLET_WHITE  = 192; //White*
+
+//Heart Shot
+let SHOT_HEART_GREY   = 193; //Grey*
+let SHOT_HEART_RED    = 194; //Red*
+let SHOT_HEART_PURPLE = 195; //Purple*
+let SHOT_HEART_BLUE   = 196; //Blue*
+let SHOT_HEART_ICE    = 197; //Ice*
+let SHOT_HEART_GREEN  = 198; //Green*
+let SHOT_HEART_YELLOW = 199; //Yellow*
+let SHOT_HEART_WHITE  = 200; //White*
+
+//Arrow Shot
+let SHOT_ARROW_GREY   = 201; //Grey*
+let SHOT_ARROW_RED    = 202; //Red*
+let SHOT_ARROW_PURPLE = 203; //Purple*
+let SHOT_ARROW_BLUE   = 204; //Blue*
+let SHOT_ARROW_ICE    = 205; //Ice*
+let SHOT_ARROW_GREEN  = 206; //Green*
+let SHOT_ARROW_YELLOW = 207; //Yellow*
+let SHOT_ARROW_WHITE  = 208; //White*
+
+//DDC Laser Tip
+let SHOT_LASERTIP_GREY   = 209; //Grey*
+let SHOT_LASERTIP_RED    = 210; //Red*
+let SHOT_LASERTIP_PURPLE = 211; //Purple*
+let SHOT_LASERTIP_BLUE   = 212; //Blue*
+let SHOT_LASERTIP_ICE    = 213; //Ice*
+let SHOT_LASERTIP_GREEN  = 214; //Green*
+let SHOT_LASERTIP_YELLOW = 215; //Yellow*
+let SHOT_LASERTIP_WHITE  = 216; //White*
+
+//TD Large Light Shot
+let SHOT_LIGHT_GREY   = 217; //Grey*
+let SHOT_LIGHT_RED    = 218; //Red*
+let SHOT_LIGHT_PURPLE = 219; //Purple*
+let SHOT_LIGHT_BLUE   = 220; //Blue*
+let SHOT_LIGHT_ICE    = 221; //Ice*
+let SHOT_LIGHT_GREEN  = 222; //Green*
+let SHOT_LIGHT_YELLOW = 223; //Yellow*
+let SHOT_LIGHT_WHITE  = 224; //White*
+
+//Marisa Large Star Shot
+let SHOT_LSTAR_GREY   = 225; //Grey*
+let SHOT_LSTAR_RED    = 226; //Red*
+let SHOT_LSTAR_PURPLE = 227; //Purple*
+let SHOT_LSTAR_BLUE   = 228; //Blue*
+let SHOT_LSTAR_ICE    = 229; //Ice*
+let SHOT_LSTAR_GREEN  = 230; //Green*
+let SHOT_LSTAR_YELLOW = 231; //Yellow*
+let SHOT_LSTAR_WHITE  = 232; //White*
+
+//Large Round Shot
+let SHOT_LROUND_GREY   = 233; //Grey*
+let SHOT_LROUND_RED    = 234; //Red*
+let SHOT_LROUND_PURPLE = 235; //Purple*
+let SHOT_LROUND_BLUE   = 236; //Blue*
+let SHOT_LROUND_ICE    = 237; //Ice*
+let SHOT_LROUND_GREEN  = 238; //Green*
+let SHOT_LROUND_YELLOW = 239; //Yellow*
+let SHOT_LROUND_WHITE  = 240; //White*
+
+//Butterfly Shot
+let SHOT_BUTTERFLY_GREY   = 241; //Grey*
+let SHOT_BUTTERFLY_RED    = 242; //Red*
+let SHOT_BUTTERFLY_PURPLE = 243; //Purple*
+let SHOT_BUTTERFLY_BLUE   = 244; //Blue*
+let SHOT_BUTTERFLY_ICE    = 245; //Ice*
+let SHOT_BUTTERFLY_GREEN  = 246; //Green*
+let SHOT_BUTTERFLY_YELLOW = 247; //Yellow*
+let SHOT_BUTTERFLY_WHITE  = 248; //White*
+
+//Sakuya Knife
+let SHOT_SKNIFE_GREY   = 249; //Grey*
+let SHOT_SKNIFE_RED    = 250; //Red*
+let SHOT_SKNIFE_PURPLE = 251; //Purple*
+let SHOT_SKNIFE_BLUE   = 252; //Blue*
+let SHOT_SKNIFE_ICE    = 253; //Ice*
+let SHOT_SKNIFE_GREEN  = 254; //Green*
+let SHOT_SKNIFE_YELLOW = 255; //Yellow*
+let SHOT_SKNIFE_WHITE  = 256; //White*
+
+//Oval Shot
+let SHOT_OVAL_GREY   = 257; //Grey*
+let SHOT_OVAL_RED    = 258; //Red*
+let SHOT_OVAL_PURPLE = 259; //Purple*
+let SHOT_OVAL_BLUE   = 260; //Blue*
+let SHOT_OVAL_ICE    = 261; //Ice*
+let SHOT_OVAL_GREEN  = 262; //Green*
+let SHOT_OVAL_YELLOW = 263; //Yellow*
+let SHOT_OVAL_WHITE  = 264; //White*
+
+//Youmu Knife
+let SHOT_YKNIFE_GREY   = 265; //Grey*
+let SHOT_YKNIFE_RED    = 266; //Red*
+let SHOT_YKNIFE_PURPLE = 267; //Purple*
+let SHOT_YKNIFE_BLUE   = 268; //Blue*
+let SHOT_YKNIFE_ICE    = 269; //Ice*
+let SHOT_YKNIFE_GREEN  = 270; //Green*
+let SHOT_YKNIFE_YELLOW = 271; //Yellow*
+let SHOT_YKNIFE_WHITE  = 272; //White*
+
+//EoSD Fire
+let SHOT_FIRE_EOSD = 273;
+
+//Moukou Fire
+let SHOT_FIRE_MOKOU = 274;
+
+//DDC Fire Red
+let SHOT_DDCFIRE_RED = 275;
+
+//DDC Fire Purple
+let SHOT_DDCFIRE_VIOLET = 276;
+
+//DDC Fire Violet
+let SHOT_DDCFIRE_PURPLE = 277;
+
+//DDC Fire Gold
+let SHOT_DDCFIRE_GOLD = 278;
+
+//Small Fire Red
+let SHOT_FIRE_RED = 279;
+
+//Small Fire Blue
+let SHOT_FIRE_BLUE = 280;
+
+//Small Fire Gold
+let SHOT_FIRE_GOLD = 281;
+
+//Small Fire Violet
+let SHOT_FIRE_VIOLET = 282;
+
+//GFW Small Fire Yellow
+let SHOT_GFWFIRE_YELLOW = 283;
+
+//GFW Small Fire Red
+let SHOT_GFWFIRE_RED = 284;
+
+//Bubble Shot (Spinning, MoF+)
+let SHOT_BUBBLE_RED    = 285; //Red*
+let SHOT_BUBBLE_BLUE   = 286; //Blue*
+let SHOT_BUBBLE_GREEN  = 287; //Green*
+let SHOT_BUBBLE_YELLOW = 288; //Yellow*
+
+//Bubble Shot (Fixed, EoSD - PoFV)
+let SHOT_BUBBLEF_RED    = 289; //Red*
+let SHOT_BUBBLEF_BLUE   = 290; //Blue*
+let SHOT_BUBBLEF_GREEN  = 291; //Green*
+let SHOT_BUBBLEF_YELLOW = 292; //Yellow*
+
+//Pellet Shot
+let SHOT_PELLET_GREY   = 293; //Grey*
+let SHOT_PELLET_DRED   = 294; //Dark Red*
+let SHOT_PELLET_RED    = 295; //Red*
+let SHOT_PELLET_PURPLE = 296; //Purple*
+let SHOT_PELLET_PINK   = 297; //Pink*
+let SHOT_PELLET_DBLUE  = 298; //Dark Blue*
+let SHOT_PELLET_BLUE   = 299; //Blue*
+let SHOT_PELLET_SKY    = 300; //Sky*
+let SHOT_PELLET_ICE    = 301; //Ice*
+let SHOT_PELLET_DGREEN = 302; //Dark Green*
+let SHOT_PELLET_GREEN  = 303; //Green*
+let SHOT_PELLET_LIME   = 304; //Lime*
+let SHOT_PELLET_GOLD   = 305; //Gold*
+let SHOT_PELLET_YELLOW = 306; //Yellow*
+let SHOT_PELLET_ORANGE = 307; //Orange*
+let SHOT_PELLET_WHITE  = 308; //White*
+
+//MoF Spinning + Shot
+let SHOT_MOF_GREY   = 309; //Grey*
+let SHOT_MOF_DRED   = 310; //Dark Red*
+let SHOT_MOF_RED    = 311; //Red*
+let SHOT_MOF_PURPLE = 312; //Purple*
+let SHOT_MOF_PINK   = 313; //Pink*
+let SHOT_MOF_DBLUE  = 314; //Dark Blue*
+let SHOT_MOF_BLUE   = 315; //Blue*
+let SHOT_MOF_SKY    = 316; //Sky*
+let SHOT_MOF_ICE    = 317; //Ice*
+let SHOT_MOF_DGREEN = 318; //Dark Green*
+let SHOT_MOF_GREEN  = 319; //Green*
+let SHOT_MOF_LIME   = 320; //Lime*
+let SHOT_MOF_GOLD   = 321; //Gold*
+let SHOT_MOF_YELLOW = 322; //Yellow*
+let SHOT_MOF_ORANGE = 323; //Orange*
+let SHOT_MOF_WHITE  = 324; //White*
+
+//th08 Yin-yang
+let SHOT_YY_RED    = 325;
+let SHOT_YY_GREEN  = 326;
+let SHOT_YY_PURPLE = 327;
+let SHOT_YY_PINK   = 328;
+
+//DDC 8th Note
+let SHOT_EIGHTH_RED      = 329;
+let SHOT_EIGHTH_BLUE     = 330;
+let SHOT_EIGHTH_YELLOW   = 331;
+let SHOT_EIGHTH_PURPLE   = 332;
+
+//DDC Rest
+let SHOT_REST_GREY   = 333; //Grey*
+let SHOT_REST_RED    = 334; //Red*
+let SHOT_REST_PURPLE = 335; //Purple*
+let SHOT_REST_BLUE   = 336; //Blue*
+let SHOT_REST_ICE    = 337; //Ice*
+let SHOT_REST_GREEN  = 338; //Green*
+let SHOT_REST_YELLOW = 339; //Yellow*
+let SHOT_REST_WHITE  = 340; //White*
+
+//Coins
+let SHOT_COIN_GOLD   = 341;
+let SHOT_COIN_SILVER = 342;
+let SHOT_COIN_BRONZE = 343;
+
+//th09 Coins
+let SHOT_COIN_GOLD_09   = 344;
+let SHOT_COIN_SILVER_09 = 345;
+let SHOT_COIN_RED       = 346;
+
+//Loose/Curve Laser
+let SHOT_LASER_GREY   = 347; //Gray
+let SHOT_LASER_DRED   = 348; //Dark Red
+let SHOT_LASER_RED    = 349; //Red
+let SHOT_LASER_PURPLE = 350; //Purple
+let SHOT_LASER_PINK   = 351; //Pink
+let SHOT_LASER_DBLUE  = 352; //Dark Blue
+let SHOT_LASER_BLUE   = 353; //Blue
+let SHOT_LASER_SKY    = 354; //Sky
+let SHOT_LASER_ICE    = 355; //Ice
+let SHOT_LASER_DGREEN = 356; //Dark Green
+let SHOT_LASER_GREEN  = 357; //Green
+let SHOT_LASER_LIME   = 358; //Lime
+let SHOT_LASER_GOLD   = 359; //Gold
+let SHOT_LASER_YELLOW = 360; //Yellow
+let SHOT_LASER_ORANGE = 361; //Orange
+let SHOT_LASER_WHITE  = 362; //White
+
+//Delays
+let DELAY_GREY = 1000;
+let DELAY_RED = 1001;
+let DELAY_PURPLE = 1002;
+let DELAY_BLUE = 1003;
+let DELAY_ICE = 1004;
+let DELAY_GREEN = 1005;
+let DELAY_YELLOW = 1006;
+let DELAY_WHITE = 1007;
+
+let DELAY_SGREY = 1008;
+let DELAY_SRED = 1009;
+let DELAY_SBLUE = 1010;
+let DELAY_SGREEN = 1011;
+let DELAY_SYELLOW = 1012;
+
+//MoF-UFO Break Effect
+let SHOT_BREAK_GREY   = 1013; //Grey*
+let SHOT_BREAK_DRED   = 1014; //Dark Red*
+let SHOT_BREAK_RED    = 1015; //Red*
+let SHOT_BREAK_PURPLE = 1016; //Purple*
+let SHOT_BREAK_PINK   = 1017; //Pink*
+let SHOT_BREAK_DBLUE  = 1018; //Dark Blue*
+let SHOT_BREAK_BLUE   = 1019; //Blue*
+let SHOT_BREAK_SKY    = 1020; //Sky*
+let SHOT_BREAK_ICE    = 1021; //Ice*
+let SHOT_BREAK_DGREEN = 1022; //Dark Green*
+let SHOT_BREAK_GREEN  = 1023; //Green*
+let SHOT_BREAK_LIME   = 1024; //Lime*
+let SHOT_BREAK_GOLD   = 1025; //Gold*
+let SHOT_BREAK_YELLOW = 1026; //Yellow*
+let SHOT_BREAK_ORANGE = 1027; //Orange*
+let SHOT_BREAK_WHITE  = 1028; //White*
+
+
+
+//DDC 8th Note
+//let SHOT_DDCMUSIC_ = ;
+
+//DDC Quarter Rest
+//let SHOT_DDCREST_ = ;
+
+//PCB 8th
+//let SHOT_PCBEIGHTH_ = ;
+
+//PCB 8th pair
+//let SHOT_PCBEIGHTHPAIR_ = ;
+
+
+

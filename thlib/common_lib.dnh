@@ -1,0 +1,1084 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Common Library (common_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+	to do: interpolation functions
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+#include"./bgm_lib.dnh"
+#include"./image_lib.dnh"
+
+//---------- System ----------
+
+let loadingBgBlack = 0;
+
+let GetDifficulty = 0;
+
+let E = [0];
+let EN = [0, 1];
+let EH = [0, 2];
+let EL = [0, 3];
+let ENH = [0, 1, 2];
+let ENL = [0, 1, 3];
+let EHL = [0, 2, 3];
+let ENHL = [0, 1, 2, 3];
+let N = [1];
+let NH = [1, 2];
+let NL = [1, 3];
+let NHL = [1, 2, 3];
+let H = [2];
+let HL = [2, 3];
+let L = [3];
+
+let Easy = 0;
+let Normal = 1;
+let Hard = 2;
+let Lunatic = 3;
+
+let DIFF_EASY = 0;
+let DIFF_NORMAL = 1;
+let DIFF_HARD = 2;
+let DIFF_LUNATIC = 3;
+
+//---------- Effects ----------
+
+let EFF_CHARGE = 0;
+let EFF_DISCHARGE = 1;
+let EFF_EXPLODE = 2;
+let EFF_EXPLODE2 = 3;
+let EFF_ENEOFF = 4;
+
+//---------- Sound Effects ----------
+
+let EV_PLAY_SE = 1000001;
+let EV_PLAY_SE_PAN = 1000002;
+
+let se_alert    = 0;
+let se_big      = 1;
+let se_bonus    = 2;
+let se_bonus2   = 3;
+let se_bonus4   = 4;
+let se_boon00   = 5;
+let se_boon01   = 6;
+let se_bun      = 7;
+let se_cancel00 = 8;
+let se_cardget  = 9;
+let se_cat00    = 10;
+let se_ch00     = 11;
+let se_ch01     = 12;
+let se_ch02     = 13;
+let se_ch03     = 14;
+let se_cong     = 15;
+let se_damage00 = 16;
+let se_damage01 = 17;
+let se_don00    = 18;
+let se_enep00   = 19;
+let se_enep01   = 20;
+let se_enep02   = 21;
+let se_etbreak  = 22;
+let se_extend   = 23;
+let se_extend2  = 24;
+let se_fault    = 25;
+let se_focus    = 26;
+let se_goast1   = 27;
+let se_goast2   = 28;
+let se_graze    = 29;
+let se_gun00    = 30;
+let se_heal     = 31;
+let se_invalid  = 32;
+let se_item00   = 33;
+let se_kira00   = 34;
+let se_kira01   = 35;
+let se_kira02   = 36;
+let se_laser00  = 37;
+let se_laser01  = 38;
+let se_laser02  = 39;
+let se_lgods1   = 40;
+let se_lgods2   = 41;
+let se_lgods3   = 42;
+let se_lgods4   = 43;
+let se_lgodsget = 44;
+let se_msl      = 45;
+let se_msl2     = 46;
+let se_msl3     = 47;
+let se_nep00    = 48;
+let se_nodamage = 49;
+let se_noise    = 50;
+let se_notice   = 51;
+let se_ok00     = 52;
+let se_pause    = 53;
+let se_pin00    = 54;
+let se_pin01    = 55;
+let se_pldead00 = 56;
+let se_pldead01 = 57;
+let se_plst00   = 58;
+let se_power0   = 59;
+let se_power1   = 60;
+let se_powerup  = 61;
+let se_poyon    = 62;
+let se_select00 = 63;
+let se_shutter  = 64;
+let se_slash    = 65;
+let se_tan00    = 66;
+let se_tan01    = 67;
+let se_tan02    = 68;
+let se_tan03    = 69;
+let se_timeout  = 70;
+let se_timeout2 = 71;
+let se_trophy   = 72;
+let se_warp_l   = 73;
+let se_warp_n   = 74;
+let se_warp_r   = 75;
+let se_wolf     = 76;
+let se_bonus3   = 77;
+
+//---------- Interpolation ----------
+
+let IP_LINEAR = 0;
+let IP_ACCELERATE = 1;
+let IP_DECELERATE = 2;
+let IP_SMOOTHSTEP = 3;
+
+//---------- Enemy Constants ----------
+
+let ENE_FAIRY00_BLUE     = 0;  //Small blue common fairy
+let ENE_FAIRY00_RED      = 1;  //Small red common fairy
+let ENE_FAIRY00_GREEN    = 2;  //Small green common fairy
+let ENE_FAIRY00_YELLOW   = 3;  //Small yellow common fairy
+let ENE_FAIRY01_WHITE    = 4;  //Large sunflower fairy
+let ENE_FAIRY02_BLUE     = 5;  //Small blue maid fairy
+let ENE_FAIRY02_RED      = 6;  //Small red maid fairy
+let ENE_FAIRY03_BLUE     = 7;  //Medium TD blue fairy
+let ENE_FAIRY03_RED      = 8;  //Medium TD red fairy
+let ENE_YINYANG00_RED    = 9;  //Old red Yin-Yang
+let ENE_YINYANG00_GREEN  = 10; //Old green Yin-Yang
+let ENE_YINYANG00_BLUE   = 11; //Old blue Yin-Yang
+let ENE_YINYANG00_PURPLE = 12; //Old purple Yin-Yang
+let ENE_YINYANG01_RED    = 13; //Modern red Yin-Yang
+let ENE_YINYANG01_GREEN  = 14; //Modern green Yin-Yang
+let ENE_YINYANG01_BLUE   = 15; //Modern blue Yin-Yang
+let ENE_YINYANG01_PURPLE = 16; //Modern purple Yin-Yang
+let ENE_WISP00_RED       = 17; //Modern red Wisp
+let ENE_WISP00_GREEN     = 18; //Modern green Wisp
+let ENE_WISP00_BLUE      = 19; //Modern blue Wisp
+let ENE_WISP00_YELLOW    = 20; //Modern yellow Wisp
+
+let ENE_ROCK_B    = 50; //Big th11 Rock
+let ENE_ROCK_M    = 51; //Medium th11 Rock
+let ENE_ROCK_S    = 52; //Small th11 Rock
+
+//---------- Item Constants ----------
+
+let FP_ITEM_POWER_S = 0; //Small Power
+let FP_ITEM_POINT_S = 1; //Small Point
+let FP_ITEM_POWER = 2; //Large Power
+let FP_ITEM_POINT = 3; //Large Point
+let FP_ITEM_LIFE_S = 4; //Life Piece
+let FP_ITEM_BOMB_S = 5; //Bomb Piece
+let FP_ITEM_LIFE = 6; //1up Star
+let FP_ITEM_BOMB = 7; //Bomb Star
+let FP_ITEM_POWER_F = 8; //Full Power
+let FP_ITEM_POINT_STAR = 9; //MoF Point Star
+let FP_ITEM_POINT_F = 10; //MoF Full Point
+let FP_ITEM_LIFE_B = 11; //1up Box
+let FP_ITEM_BOMB_B = 12; //Bomb Box
+let FP_ITEM_CHERRY = 13; //Cherry Petal
+
+let FP_ITEM_SPOINT_T = 14; //IN Time Point
+let FP_ITEM_SPOINT_B = 15; //IN Blue Bullet Point
+let FP_ITEM_SPOINT_Y = 16; //Modern Yellow Bullet Point
+let FP_ITEM_SPOINT_G = 17; //Modern Green Bullet Point
+
+//---------- Positional ----------
+
+let MinX = 0;
+let MinY = 0;
+let MaxX = GetStgFrameWidth;
+let MaxY = GetStgFrameHeight;
+let CenX = 192;
+let CenY = GetStgFrameHeight/2;
+
+let GetCenterX = GetStgFrameWidth/2;
+let GetCenterY = GetStgFrameHeight/2;
+
+// -=-=-=-=-=-=-=-=-=-=- System Functions -=-=-=-=-=-=-=-=-=-=-
+
+function FP_GetPlayerLife
+{
+	let val = GetCommonData("FP_PLAYER_LIFE", 0);
+	return val;
+}
+
+function FP_GetPlayerBomb
+{
+	let val = GetCommonData("FP_PLAYER_BOMB", 0);
+	return val;
+}
+
+function FP_GetPlayerScore
+{
+	let val = GetCommonData("FP_PLAYER_SCORE", 0);
+	return val;
+}
+
+function FP_GetPlayerPower
+{
+	let val = GetCommonData("FP_PLAYER_POWER", 0);
+	return val;
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Helper Functions -=-=-=-=-=-=-=-=-=-=-
+
+function ReturnIfTrue(arg)
+{
+	if(arg)
+	{
+		return;
+	}
+}
+
+function ReturnIfFalse(arg)
+{
+	if(!arg)
+	{
+		return;
+	}
+}
+
+function BreakIfTrue(arg)
+{
+	if(arg)
+	{
+		//break;
+	}
+}
+
+function BreakIfFalse(arg)
+{
+	if(!arg)
+	{
+		//break;
+	}
+}
+
+function flip(bool)
+{
+	if(bool)
+	{
+		bool = false;
+	}
+	else
+	{
+		bool = true;
+	}
+	return bool;
+}
+
+function rtd(rad)
+{
+	return (rad * 180) / pi;
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Math Helper Functions -=-=-=-=-=-=-=-=-=-=-
+
+function rand2(argA, argB)
+{
+	let val = argA;
+	if(argA < argB)
+	{
+		val = floor(rand(argA, argB + 1));
+	}
+	else
+	{
+		val = floor(rand(argA + 1, argB));
+	}
+	return val;
+}
+
+function InterpolateValue(startValue, destValue, frame, method, time)
+{
+	let loc_v = 0;
+	let value = 0;
+	alternative(method)
+	case(IP_LINEAR)
+	{
+		loc_v = frame / time;
+		value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	}
+	case(IP_ACCELERATE)
+	{
+		loc_v = frame / time;
+		loc_v = loc_v * loc_v;
+		value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	}
+	case(IP_DECELERATE)
+	{
+		loc_v = frame / time;
+		loc_v = 1 - (1 - loc_v) * (1 - loc_v);
+		value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	}
+	case(IP_SMOOTHSTEP)
+	{
+		loc_v = frame / time;
+		loc_v = ((loc_v) * (loc_v) * (3 - 2 * (loc_v)));
+		value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	}
+	return value;
+}
+
+function InterpolateLinear(startValue, destValue, frame, time)
+{
+	let loc_v = frame / time;
+	let value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	
+	return value;
+}
+
+function InterpolateAccelerate(startValue, destValue, frame, time)
+{
+	let loc_v = frame / time;
+		loc_v = loc_v * loc_v;
+	
+	let value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	
+	return value;
+}
+
+function InterpolateDecelerate(startValue, destValue, frame, time)
+{
+	let loc_v = frame / time;
+		loc_v = 1 - (1 - loc_v) * (1 - loc_v);
+	
+	let value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	
+	return value;
+}
+
+function InterpolateSmoothstep(startValue, destValue, frame, time)
+{
+	let loc_v = frame / time;
+		loc_v = ((loc_v) * (loc_v) * (3 - 2 * (loc_v)));
+		
+	let value = (destValue * loc_v) + (startValue * (1 - loc_v));
+	
+	return value;
+}
+
+
+
+function easeInQuad(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * (val) * val + startValue;
+}
+
+function easeInCubic(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * val * val * val + startValue;
+}
+
+function easeInQuart(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * val * val * val * val + startValue;
+}
+
+function easeInQuint(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * val * val * val * val * val + startValue;
+}
+
+function easeOutQuad(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return -valDiff *(val) * (val - 2) + startValue;
+}
+
+function easeOutCubic(startValue, endValue, frame, time)
+{
+	let val = frame / time - 1;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * (val * val * val + 1) + startValue;
+}
+
+function easeOutQuart(startValue, endValue, frame, time)
+{
+	let val = frame / time - 1;
+	let valDiff = endValue - startValue;
+	
+	return -valDiff * (val * val * val * val - 1) + startValue;
+}
+
+function easeOutQuint(startValue, endValue, frame, time)
+{
+	let val = frame / time - 1;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * (val * val * val * val * val + 1) + startValue;
+}
+
+function easeInOutQuad(startValue, endValue, frame, time)
+{
+	let val = frame / (time/2);
+	let valDiff = endValue - startValue;
+	
+	if(val < 1)
+	{
+		return valDiff / 2 * val * val + startValue;
+	}
+	val--;
+	return -valDiff / 2 * (val * (val - 2) - 1) + startValue;
+}
+
+function easeInOutCubic(startValue, endValue, frame, time)
+{
+	let val = frame / (time/2);
+	let valDiff = endValue - startValue;
+	
+	if(val < 1)
+	{
+		return valDiff / 2 * val * val * val + startValue;
+	}
+	val -= 2;
+	return valDiff / 2 * (val * val * val + 2) + startValue;
+}
+
+function easeInOutQuart(startValue, endValue, frame, time)
+{
+	let val = frame / (time/2);
+	let valDiff = endValue - startValue;
+	
+	if(val < 1)
+	{
+		return valDiff / 2 * val * val * val * val + startValue;
+	}
+	val -= 2;
+	return -valDiff / 2 * (val * val * val * val - 2) + startValue;
+}
+
+function easeInOutQuint(startValue, endValue, frame, time)
+{
+	let val = frame / (time/2);
+	let valDiff = endValue - startValue;
+	
+	if(val < 1)
+	{
+		return valDiff / 2 * val * val * val * val * val + startValue;
+	}
+	val -= 2;
+	return valDiff / 2 * (val * val * val * val * val + 2) + startValue;
+}
+
+function easeInSine(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return -valDiff * cos(val * (180/2)) + valDiff + startValue;
+}
+
+function easeOutSine(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return valDiff * sin(val * (180/2)) + startValue;
+}
+
+function easeInOutSine(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	return -valDiff / 2 * (cos(180 * frame / time) - 1) + startValue;
+}
+
+function easeInExpo(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	if(frame == 0){return startValue;}
+	return valDiff * (2 ^ (10 * (val - 1))) + startValue;
+}
+
+function easeOutExpo(startValue, endValue, frame, time)
+{
+	let val = frame / time;
+	let valDiff = endValue - startValue;
+	
+	if(frame == time){return endValue;}
+	return valDiff * (-(2^(-10 * val)) + 1) + startValue;
+}
+
+
+function GetDistanceFromTo(x1, y1, x2, y2)
+{
+	let val = ((x1 - x2) ^ 2 + (y1 - y2) ^ 2) ^ 0.5;
+	return val;
+}
+
+function GetAngleFromTo(x1, y1, x2, y2)
+{
+	let val = atan2(y2 - y1, x2 - x1);
+	return val;
+}
+
+function DigitToArray(digit, count)
+{
+	let res = [];
+	digit = truncate(digit);
+
+	loop
+	{
+		let tnum = truncate(digit % 10);
+		digit /= 10;
+		res = [tnum] ~ res;
+		if(truncate(digit) == 0){break;}
+	}
+
+	loop(max(0, count - length(res)))
+	{
+		res = [0] ~ res;
+	}
+
+	return res;
+}
+
+function CheckModulo(timer, value)
+{
+	if(timer % value == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Sound Effect Functions -=-=-=-=-=-=-=-=-=-=-
+
+function thSE_Play(se)
+{
+	NotifyEventAll(EV_PLAY_SE, se);
+}
+
+function thSE_PlayPan(se, x)
+{
+	NotifyEventAll(EV_PLAY_SE_PAN, [se, x]);
+}
+
+// -=-=-=-=-=-=-=-=-=-=- ObjRender Helper Functions -=-=-=-=-=-=-=-=-=-=-
+
+function ObjRender_SetScale(obj, scale)
+{
+	ObjRender_SetScaleXYZ(obj, scale, scale, 1);
+}
+
+function ObjRender_MoveToPosition(obj, x, y, speed, drag)
+{
+	let destinationx = x;
+	let destinationy = y;
+
+	let distancetopoint = ((destinationx - ObjRender_GetX(obj)) ^ 2 + (destinationy - ObjRender_GetY(obj)) ^ 2) ^ 0.5;
+	let directiontopoint = atan2(destinationy-ObjRender_GetY(obj),destinationx-ObjRender_GetX(obj));
+	
+	if(distancetopoint >= 1)
+	{
+		ObjRender_SetPosition(obj,ObjRender_GetX(obj) + cos(directiontopoint) * distancetopoint * drag,ObjRender_GetY(obj) + sin(directiontopoint) * distancetopoint * drag,0);
+	}
+	else
+	{
+		ObjRender_SetPosition(obj,destinationx,destinationy,0);
+	}
+}
+
+task ObjRender_FadeIn(obj, alpha, rate, target)
+{
+	while(alpha < target)
+	{
+		ObjRender_SetAlpha(obj, alpha);
+		alpha += rate;
+		yield;
+	}
+}
+
+task ObjRender_FadeOut(obj, alpha, rate)
+{
+	while(alpha > 0)
+	{
+		ObjRender_SetAlpha(obj, alpha);
+		alpha -= rate;
+		yield;
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Global Fade in/out -=-=-=-=-=-=-=-=-=-=-
+
+function VoidCatcher()
+{
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	//ObjPrim_SetTexture(obj, "");
+	ObjSprite2D_SetSourceRect(obj, 0, 0, 640, 480);
+	ObjSprite2D_SetDestRect(obj, 0, 0, 640, 480);
+	ObjRender_SetColor(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 1);
+}
+
+task FadeFromBlack(rate)
+{
+	loadingBgBlack = ObjPrim_Create(OBJ_SPRITE_2D);
+	//ObjPrim_SetTexture(loadingBgBlack, "");
+	ObjSprite2D_SetSourceRect(loadingBgBlack, 0, 0, 640, 480);
+	ObjSprite2D_SetDestRect(loadingBgBlack, 0, 0, 640, 480);
+	ObjRender_SetColor(loadingBgBlack, 0, 0, 0);
+	Obj_SetRenderPriorityI(loadingBgBlack, 98);
+	let bg2alpha = 255;
+	
+	while(bg2alpha > 0)
+	{
+		bg2alpha -= rate;
+		ObjRender_SetAlpha(loadingBgBlack, bg2alpha);
+		yield;
+	}
+}
+
+task FadeToBlack(rate)
+{
+	loadingBgBlack = ObjPrim_Create(OBJ_SPRITE_2D);
+	//ObjPrim_SetTexture(loadingBgBlack, "");
+	ObjSprite2D_SetSourceRect(loadingBgBlack, 0, 0, 640, 480);
+	ObjSprite2D_SetDestRect(loadingBgBlack, 0, 0, 640, 480);
+	ObjRender_SetColor(loadingBgBlack, 0, 0, 0);
+	Obj_SetRenderPriorityI(loadingBgBlack, 98);
+	let bg2alpha = 0;
+	
+	while(bg2alpha < 255)
+	{
+		bg2alpha += rate;
+		ObjRender_SetAlpha(loadingBgBlack, bg2alpha);
+		yield;
+	}
+}
+
+task RemoveBlack()
+{
+	ObjRender_SetAlpha(loadingBgBlack, 0);
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Input Functions -=-=-=-=-=-=-=-=-=-=-
+
+function isUpPressed
+{
+	if(GetVirtualKeyState(VK_UP) == KEY_PUSH)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isDownPressed
+{
+	if(GetVirtualKeyState(VK_DOWN) == KEY_PUSH)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isLeftPressed
+{
+	if(GetVirtualKeyState(VK_LEFT) == KEY_PUSH)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isRightPressed
+{
+	if(GetVirtualKeyState(VK_RIGHT) == KEY_PUSH)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isShotPressed
+{
+	if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function isBombPressed
+{
+	if(GetVirtualKeyState(VK_BOMB) == KEY_PUSH)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- 2D Sprite Helper Functions -=-=-=-=-=-=-=-=-=-=-
+
+function thDraw_CreateNumericSpriteList(texture, spacing, spX, spY, spWidth, spHeight, scale)
+{
+	let __nsl_drawNumber = ObjPrim_Create(OBJ_SPRITE_LIST_2D);
+	ObjPrim_SetTexture(__nsl_drawNumber, texture);
+	Obj_SetValue(__nsl_drawNumber, "a", 0);
+	Obj_SetValue(__nsl_drawNumber, "b", 0);
+	Obj_SetValue(__nsl_drawNumber, "c", -1);
+	
+	ObjSpriteList2D_CloseVertex(__nsl_drawNumber);
+	
+	__nsl_UpdateLoop();
+	
+	return __nsl_drawNumber;
+	
+	task __nsl_UpdateLoop()
+	{
+		let loc_a = Obj_GetValue(__nsl_drawNumber, "a");
+		let loc_b = Obj_GetValue(__nsl_drawNumber, "b");
+		let loc_c = Obj_GetValue(__nsl_drawNumber, "c");
+		
+		let stLength = 0;
+		let chArr = [];
+		
+		if(loc_c != -1 && length(chArr) < loc_c)
+		{
+			let tempArray = [];
+			loop(loc_c - length(chArr))
+			{
+				tempArray = tempArray ~ ['0'];
+			}
+			chArr = tempArray ~ chArr;
+		}
+	
+		yield;
+		while(!Obj_IsDeleted(__nsl_drawNumber))
+		{
+			let posX = ObjRender_GetX(__nsl_drawNumber);
+			let posY = ObjRender_GetY(__nsl_drawNumber);
+			
+			loc_a = Obj_GetValue(__nsl_drawNumber, "a");
+			loc_b = Obj_GetValue(__nsl_drawNumber, "b");
+			loc_c = Obj_GetValue(__nsl_drawNumber, "c");
+		
+			UpdateNumericSpriteList();
+			ObjRender_SetPosition(__nsl_drawNumber, posX, posY, 0);
+			yield;
+		}
+		
+		function UpdateNumericSpriteList()
+		{
+			let loc_x2 = 0;
+			
+			chArr = itoa(Obj_GetValue(__nsl_drawNumber, "a"));
+			
+			if(loc_c != -1 && length(chArr) < loc_c)
+			{
+				let tempArray = [];
+				loop(loc_c - length(chArr))
+				{
+					tempArray = tempArray ~ "0";
+				}
+				chArr = tempArray ~ chArr;
+			}
+		
+			stLength = length(chArr);
+			
+			alternative(Obj_GetValue(__nsl_drawNumber, "b"))
+			case(0){loc_x2 = 0;}
+			case(1){loc_x2 = round(0 - (spacing * (stLength / 2)));}
+			case(2){loc_x2 = round(-spacing * (stLength - 1));}
+			
+			ObjSpriteList2D_ClearVertexCount(__nsl_drawNumber);
+			ascent(j in 0..length(chArr))
+			{
+				let char = chArr[j];
+				char = char - 48;
+				
+				ObjRender_SetPosition(__nsl_drawNumber, loc_x2, 0, 1);
+				ObjSpriteList2D_SetSourceRect(__nsl_drawNumber, spX + (spWidth * char), spY, spX + (spWidth * (char + 1)), spY + spHeight);
+				ObjSpriteList2D_SetDestRect(__nsl_drawNumber, 0, 0, spWidth, spHeight);
+				ObjRender_SetFilterType(__nsl_drawNumber, FILTER_LINEAR);
+				ObjRender_SetScaleXYZ(__nsl_drawNumber, scale, scale, 1);
+				ObjSpriteList2D_AddVertex(__nsl_drawNumber);
+				
+				loc_x2 += spacing;
+			}
+			ObjSpriteList2D_CloseVertex(__nsl_drawNumber);
+		}
+	}
+}
+
+function thDraw_SetNumericSpriteListValue(obj, value)
+{
+	Obj_SetValue(obj, "a", value);
+}
+
+function thDraw_SetNumericSpriteListJustification(obj, just)
+{
+	Obj_SetValue(obj, "b", just);
+}
+
+function thDraw_SetMaxCharacterWidth(obj, width)
+{
+	Obj_SetValue(obj, "c", width);
+}
+
+
+function Create2DSpriteObject(path, x1, y1, x2, y2)
+{
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, path);
+	ObjSprite2D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite2D_SetDestRect(obj, 0, 0, x2 - x1, y2 - y1);
+	return obj;
+}
+
+function Create2DSpriteObjectB(path, x1, y1, x2, y2, x3, y3, x4, y4)
+{
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	//ObjPrim_SetTexture(obj, path);
+	ObjSprite2D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite2D_SetDestRect(obj, x3, y3, x4, y4);
+	return obj;
+}
+
+function Create2DSpriteObjectC(path, x1, y1, x2, y2)
+{
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, path);
+	ObjSprite2D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite2D_SetDestCenter(obj);
+	return obj;
+}
+
+function Change2DSpriteObject(obj, path, x1, y1, x2, y2)
+{
+	if(path != "NULL")
+	{
+		//ObjPrim_SetTexture(obj, path);
+	}
+	ObjSprite2D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite2D_SetDestRect(obj, x1, y1, x2, y2);
+}
+
+function Change2DSpriteObjectB(obj, path, x1, y1, x2, y2, x3, y3, x4, y4)
+{
+	if(path != "NULL")
+	{
+		//ObjPrim_SetTexture(obj, path);
+	}
+	ObjSprite2D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite2D_SetDestRect(obj, x3, y3, x4, y4);
+}
+
+
+function ObjPrim_CreateEffectCircle(sides, blend)
+{
+	let objVert = ObjPrim_Create(OBJ_PRIMITIVE_2D);
+	//ObjPrim_SetTexture(objVert, img_eff);
+	ObjPrim_SetPrimitiveType(objVert, PRIMITIVE_TRIANGLESTRIP);
+	ObjPrim_SetVertexCount(objVert, (sides * 2) + 2);
+	ObjRender_SetBlendType(objVert, blend);
+	Obj_SetValue(objVert, "B", true);
+	Obj_SetValue(objVert, "A", sides * 2);
+	return objVert;
+}
+
+function ObjEffCircle_SetRadiusA(objVert, radiusA)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		let vx1 = radiusA * cos(angle);
+		let vy1 = radiusA * sin(angle);
+		ObjPrim_SetVertexPosition(objVert, loc_indexVert, vx1, vy1, 0);
+		
+		angle += (360/(countVertex/2));
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetRadiusB(objVert, radiusB)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		let vx2 = radiusB * cos(angle);
+		let vy2 = radiusB * sin(angle);
+		ObjPrim_SetVertexPosition(objVert, loc_indexVert + 1, vx2, vy2, 0);
+		
+		angle += (360/(countVertex/2));
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetRadiusC(objVert, radiusA, radiusB)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		let vx1 = radiusA * cos(angle);
+		let vy1 = radiusA * sin(angle);
+		ObjPrim_SetVertexPosition(objVert, loc_indexVert, vx1, vy1, 0);
+		
+		let vx2 = radiusB * cos(angle);
+		let vy2 = radiusB * sin(angle);
+		ObjPrim_SetVertexPosition(objVert, loc_indexVert + 1, vx2, vy2, 0);
+		
+		angle += (360/(countVertex/2));
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetColorA(objVert, vertR, vertG, vertB)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		ObjPrim_SetVertexColor(objVert, loc_indexVert, vertR, vertG, vertB);
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetColorB(objVert, vertR, vertG, vertB)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		ObjPrim_SetVertexColor(objVert, loc_indexVert + 1, vertR, vertG, vertB);
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetColorC(objVert, vertRGBa, vertRGBb)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		ObjPrim_SetVertexColor(objVert, loc_indexVert, vertRGBa[0], vertRGBa[1], vertRGBa[2]);
+		ObjPrim_SetVertexColor(objVert, loc_indexVert + 1, vertRGBb[0], vertRGBb[1], vertRGBb[2]);
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetAlphaA(objVert, alphaA)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		ObjPrim_SetVertexAlpha(objVert, loc_indexVert, alphaA);
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetAlphaB(objVert, alphaB)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		ObjPrim_SetVertexAlpha(objVert, loc_indexVert + 1, alphaB);
+		loc_indexVert += 2;
+	}
+}
+
+function ObjEffCircle_SetAlphaC(objVert, alphaA, alphaB)
+{
+	let countVertex = Obj_GetValue(objVert, "A");
+	let angle = 0;
+	let loc_indexVert = 0;
+	loop((countVertex / 2) + 2)
+	{
+		ObjPrim_SetVertexAlpha(objVert, loc_indexVert, alphaA);
+		ObjPrim_SetVertexAlpha(objVert, loc_indexVert + 1, alphaB);
+		loc_indexVert += 2;
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- 3D Sprite Helper Functions -=-=-=-=-=-=-=-=-=-=-
+
+function Create3DSpriteObject(path, x1, y1, x2, y2)
+{
+	let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(obj, path);
+	ObjSprite3D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite3D_SetDestRect(obj, x1, y1, x2, y2);
+	return obj;
+}
+
+function Create3DSpriteObjectB(path, x1, y1, x2, y2, x3, y3, x4, y4)
+{
+	let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(obj, path);
+	ObjSprite3D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite3D_SetDestRect(obj, x3, y3, x4, y4);
+	return obj;
+}
+
+	
+// -=-=-=-=-=-=-=-=-=-=- The Best Function -=-=-=-=-=-=-=-=-=-=-
+
+function wait(t)
+{
+	loop(t)
+	{
+		yield;
+	}
+}

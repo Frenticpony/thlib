@@ -1,0 +1,799 @@
+/*
+
+WORK UP
+GIGA IMPACT
+
+SUCKER PUNCH
+DOUBLE TEAM
+
+*/
+//Main int that will hold boss obj ID
+let objDebug = 0;
+
+//Main Boss Handler/Timeline/Plural
+task boss_debug_bh()
+{
+	objDebug = ObjEnemy_Create(OBJ_ENEMY);
+	
+	thBoss_Init(objDebug);
+
+	while(!isBossActive)
+	{
+		yield;
+	}
+
+	thBoss_SetUpA(objDebug, BOSS_KANAKO, -64, -16);
+	thBoss_SetUpB(objDebug);
+	boss_debug_loop(objDebug);
+	
+	while(!bossEnd)
+	{
+		if(Obj_GetValueD(objDebug, "NA", false) == true)
+		{
+			alternative(bossAttackState)
+			case(0)
+			{
+				boss_debug_dpsTest(objDebug);
+			}
+			case(1)
+			{
+				boss_debug_ns02(objDebug);
+			}
+			case(2)
+			{
+				boss_debug_sc01(objDebug);
+			}
+			case(3)
+			{
+				isFinalBossAttack = true;
+				boss_debug_sc02(objDebug);
+			}
+			case(999)
+			{
+				debug_FinishMid_th10(objDebug);
+				bossEnd = true;
+			}
+			others
+			{
+				if(bossTimeout)
+				{
+					thBoss_EscapeMid(objDebug, 0, -32, 60);
+				}
+				else
+				{
+					thBoss_FinishBoss(objDebug);
+				}
+				bossEnd = true;
+			}
+		}
+		yield;
+	}
+}
+
+//Similar to @MainLoop, runs until boss object is deleted
+task boss_debug_loop(obj)
+{
+	isBossInitialized = true;
+	while(!Obj_IsDeleted(obj))
+	{
+		thBoss_MainLoop(obj);
+		yield;
+	}
+}
+
+//Talk Event
+function boss_debug_te(obj)
+{
+	let bossAdvance = false;
+	thBoss_InitTalkEvent(obj);
+
+	MainTask();
+	thBoss_WaitForZeroLife(obj);
+
+	task MainTask()
+	{
+		CreateTextEvent();
+	}
+
+	function MoveBoss
+	{
+		ObjMove_SetDestAtWeight(obj, CenX, CenY - 100, 7, 7);
+	}
+
+	function CreateTextEvent()
+	{
+		SetForbidPlayerShot(true);
+		SetForbidPlayerSpell(true);
+		let image1 = CreateSpeechImageA1("null.png", 0, 0, 2, 2, LEFT);
+		let image2 = CreateSpeechImageA1("null.png", 0, 0, 2, 2, RIGHT);
+		BeginSpeechEventA1(image1, image2);
+		loop(15){yield;}
+
+		SetSpeechA1("Testing, one two.", LEFT, BUBBLE_NORMAL);
+		WaitForInputA();
+
+		SetSpeechA1("Insert boss text here, or something.", RIGHT, BUBBLE_NORMAL);
+		WaitForInputA();
+
+		MoveBoss;
+		loop(60){yield;}
+
+		SetSpeechA1("Yo, what up, boi.", RIGHT, BUBBLE_NORMAL);
+		WaitForInputA();
+
+		SetSpeechA1("Ah, there's the boss.", LEFT, BUBBLE_NORMAL);
+		WaitForInputA();
+
+		SetCommonData("ChangeBGM", 1);
+
+		SetSpeechA1("Shoot it up!", LEFT, BUBBLE_NORMAL);
+		WaitForInputA();
+
+		EndTextEventA1;
+		loop(10){yield;}
+		SetForbidPlayerShot(false);
+		SetForbidPlayerSpell(false);
+		ObjEnemy_SetLife(obj, 0);
+	}
+
+	function WaitForInputA()
+	{
+		while(IsAllowNextText == false){yield;}
+	}
+}
+
+//Non-spell #1
+function boss_debug_ns01(obj)
+{	
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	thBoss_InitPattern(obj, 2000, 600);
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 64, 96, 60, false);
+	thBoss_Delay(60, bossAdvance);
+	
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
+
+	bossAdvance = true;
+	thEcl_Finish(ecl);
+	thBoss_FinishA(obj);
+
+	task MainTask
+	{
+		let main_frame = 0;
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(0)
+			{
+				
+			}
+			main_frame++;
+			yield;
+		}
+	}
+}
+
+//Non-spell #2
+function boss_debug_ns02(obj)
+{
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	thBoss_InitPattern(obj, 2000, 600);
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 160, 60, false);
+
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
+
+	bossAdvance = true;
+	thBoss_FinishA(obj);
+	thEcl_Finish(ecl);
+
+	task MainTask
+	{
+		let main_frame = 0;
+		
+		while(!bossAdvance && main_frame < 60)
+		{
+			main_frame++;
+			yield;
+		}
+		isBossInvincible = false;
+		
+		while(!bossAdvance)
+		{
+			main_frame++;
+			yield;
+		}
+	}
+}
+
+//Spell card #1
+function boss_debug_sc01(obj)
+{
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	thBoss_InitSpellcard(obj, 4000, 35, 0, "SpellCard 01");
+	thBoss_SetBossMoveField(obj, 80, 280, 64);
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 112, 60, false);
+
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
+
+	bossAdvance = true;
+	thEcl_Finish(ecl);
+	thBoss_FinishA(obj);
+
+	task at1()
+	{
+		let subFrame = 0;
+
+		let loc_value = 0;
+		let fireAngle = 0;
+		let fireSpeed = 0;
+		let loc_angVel = 0;
+
+		while(!bossAdvance)
+		{
+			alternative(subFrame)
+			case(1)
+			{
+				loc_value = round(sRand(0, 1));
+				fireAngle = sRand(0, 180) / 6;
+				fireSpeed = sRand(0.5, 1.5);
+				loc_angVel = 0;
+
+
+				if(loc_value == 0)
+				{
+					fireAngle = 180 + fireAngle;
+					loc_angVel = 0.01;
+				}
+				else
+				{
+					fireAngle -= fireAngle*2;
+					loc_angVel = -0.01;
+				}
+
+				//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_GOLD, 8, se_tan00, 0, 1);
+				//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+				//AddPattern_SetAccelerationVelocityX(initShots, 120, loc_angVel, 999);
+			}
+			case(2)
+			{
+				loc_value = round(sRand(0, 1));
+				fireAngle = sRand(0, 180) / 6;
+				fireSpeed = sRand(0.5, 1.6);
+				loc_angVel = 0;
+
+
+				if(loc_value == 0)
+				{
+					fireAngle = 180 + sRand(30, 60);
+					loc_angVel = 0.01;
+				}
+				else
+				{
+					fireAngle = 0 - sRand(30, 60);
+					loc_angVel = -0.01;
+				}
+
+				//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_YELLOW, 8, se_tan00, 0, 1);
+				//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+				//AddPattern_SetAccelerationVelocityY(initShots, 120, 0, 999);
+			}
+			case(3)
+			{
+				//loc_value = round(sRand(0, 1));
+				fireAngle = 270 + sRand(-20, 20);
+				fireSpeed = sRand(0.5, 1.75);
+				loc_angVel = 0;
+
+				//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_RED, 8, se_tan00, 0, 1);
+				//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+				//AddPattern_SetAccelerationVelocityY(initShots, 120, 0, 999);
+				subFrame = -1;
+				if(GetDifficulty == Lunatic)
+				{
+					fireAngle = 270 + sRand(-20, 20);
+					fireSpeed = sRand(0.5, 1.75);
+					loc_angVel = 0;
+
+					//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_DRED, 8, se_tan00, 0, 1);
+					//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+					//AddPattern_SetAccelerationVelocityY(initShots, 120, 0, 999);
+					subFrame = -1;
+				}
+			}
+			subFrame++;
+			yield;
+		}
+	}
+
+	//1: Dark yellow, 180 - 360
+	//2: Yellow - 120 gravity ()
+	//3: Red - 120 gravity ()
+
+	task MainTask
+	{
+		let main_frame = 0;
+		while(!bossAdvance && main_frame < 60)
+		{
+			main_frame++;
+			yield;
+		}
+		isBossInvincible = false;
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(60)
+			{
+				thEffect_Play(obj, 0);
+			}
+			case(150)
+			{
+				at1();
+			}
+			case(271)
+			{
+				thEnemy_SetRandomMoveDistance(obj, IP_DECELERATE, 40, 60, false);
+			}
+			case(505)
+			{
+				main_frame = 150;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+}
+
+//Spell card #2
+function boss_debug_sc02(obj)
+{
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	thBoss_InitSpellcard(obj, 4000, 35, 0, "SpellCard 02");
+	thBoss_SetBossMoveField(obj, 80, 280, 64);
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 240, 60, false);
+
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
+
+	bossAdvance = true;
+	thEcl_Finish(ecl);
+	thBoss_FinishA(obj);
+
+	task at1()
+	{
+		let subFrame = 0;
+
+		let loc_value = 0;
+		let fireAngle = 0;
+		let fireSpeed = 0;
+		let loc_angVel = 0;
+
+		while(!bossAdvance)
+		{
+			alternative(subFrame)
+			case(1)
+			{
+				loc_value = round(sRand(0, 1));
+				fireAngle = sRand(0, 180) / 6;
+				fireSpeed = sRand(0.5, 1.5);
+				loc_angVel = 0;
+
+
+				if(loc_value == 0)
+				{
+					fireAngle = 180 + fireAngle;
+					loc_angVel = 0.01;
+				}
+				else
+				{
+					fireAngle -= fireAngle*2;
+					loc_angVel = -0.01;
+				}
+
+				//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_GOLD, 8, se_tan00, 0, 1);
+				//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+				//AddPattern_SetAccelerationVelocityX(initShots, 120, loc_angVel, 999);
+			}
+			case(2)
+			{
+				loc_value = round(sRand(0, 1));
+				fireAngle = sRand(0, 180) / 6;
+				fireSpeed = sRand(0.5, 1.6);
+				loc_angVel = 0;
+
+
+				if(loc_value == 0)
+				{
+					fireAngle = 180 + sRand(30, 60);
+					loc_angVel = 0.01;
+				}
+				else
+				{
+					fireAngle = 0 - sRand(30, 60);
+					loc_angVel = -0.01;
+				}
+
+				//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_YELLOW, 8, se_tan00, 0, 1);
+				//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+				//AddPattern_SetAccelerationVelocityY(initShots, 120, 0, 999);
+			}
+			case(3)
+			{
+				//loc_value = round(sRand(0, 1));
+				fireAngle = 270 + sRand(-20, 20);
+				fireSpeed = sRand(0.5, 1.75);
+				loc_angVel = 0;
+
+				//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_RED, 8, se_tan00, 0, 1);
+				//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+				//AddPattern_SetAccelerationVelocityY(initShots, 120, 0, 999);
+				subFrame = -1;
+				if(GetDifficulty == Lunatic)
+				{
+					fireAngle = 270 + sRand(-20, 20);
+					fireSpeed = sRand(0.5, 1.75);
+					loc_angVel = 0;
+
+					//initShots = CreateShotGroupA1(GetBossX, GetBossY, fireSpeed, fireAngle, SHOT_RICE_DRED, 8, se_tan00, 0, 1);
+					//AddPattern_SetAccelerationVelocityY(initShots, 0, 0.018, 999);
+					//AddPattern_SetAccelerationVelocityY(initShots, 120, 0, 999);
+					subFrame = -1;
+				}
+			}
+			subFrame++;
+			yield;
+		}
+	}
+
+	//1: Dark yellow, 180 - 360
+	//2: Yellow - 120 gravity ()
+	//3: Red - 120 gravity ()
+
+	task MainTask
+	{
+		let main_frame = 0;
+		while(!bossAdvance && main_frame < 60)
+		{
+			main_frame++;
+			yield;
+		}
+		isBossInvincible = false;
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(60)
+			{
+				thEffect_Play(obj, 0);
+			}
+			case(150)
+			{
+				at1();
+			}
+			case(271)
+			{
+				
+			}
+			case(505)
+			{
+				main_frame = 150;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+}
+
+//DPS Test
+function boss_debug_dpsTest(obj) 
+{	
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	thBoss_InitPattern(obj, 2000, 600);
+	//thBoss_InitSpellcard(obj, 100000, 999, 0, "Debug 'Damage Per Second'");
+	thBoss_SetBossMoveField(obj, 80, 280, 64);
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, CenY - 100, 40, false);
+	
+	wait(90);
+	
+	MainTask;
+	TrackDPS();
+	thBoss_WaitForZeroLife(obj);
+	
+	bossAdvance = true;
+	thEcl_Finish(ecl);
+	thBoss_FinishA(obj);
+	
+	task MainTask
+	{
+		let main_frame = -60;
+		let ecl_angleA = 0;
+		let ecl_angleB = 0;
+		
+		et_set_lc(ecl, 0, STYLE_CIRCLE, 6.5, 90, SHOT_LASER_LIME, 5, 1,  64, 16);
+		et_rad(ecl, 0, 30);
+		et_blend(ecl, 0, BLEND_ADD_ARGB);
+		ex_wait(ecl, 0, 10);
+		ex_spup_osc(ecl, 0, EX_NOWAIT, 45, 15, -0.058);
+		ex_angvel_osc(ecl, 0, EX_NOWAIT, 20, 25, 4.35);
+		
+		et_set_lc(ecl, 1, STYLE_CIRCLE, 6.5, 90, SHOT_LASER_LIME, 5, 1,  64, 16);
+		et_rad(ecl, 1, 30);
+		et_blend(ecl, 1, BLEND_ADD_ARGB);
+		ex_wait(ecl, 1, 10);
+		ex_spup_osc(ecl, 1, EX_NOWAIT, 45, 15, -0.058);
+		ex_angvel_osc(ecl, 1, EX_NOWAIT, 20, 25, -4.35);
+		
+		et_set_lc(ecl, 2, STYLE_CIRCLE, 5.5, 90, SHOT_LASER_GOLD, 13, 1,  84, 16);
+		et_rad(ecl, 2, -150);
+		et_blend(ecl, 2, BLEND_ADD_ARGB);
+		ex_wait(ecl, 2, 10);
+		ex_spup_osc(ecl, 2, EX_NOWAIT,   45, 15, -0.055);
+		ex_angvel_osc(ecl, 2, EX_NOWAIT, 30, 25, 4.65);
+		
+		et_set_lc(ecl, 3, STYLE_CIRCLE, 5.5, 90, SHOT_LASER_GOLD, 13, 1,  84, 16);
+		et_rad(ecl, 3, -150);
+		et_blend(ecl, 3, BLEND_ADD_ARGB);
+		ex_wait(ecl, 3, 10);
+		ex_spup_osc(ecl, 3, EX_NOWAIT,   45, 15, -0.055);
+		ex_angvel_osc(ecl, 3, EX_NOWAIT, 30, 25, -4.65);
+
+		while(!bossAdvance && main_frame < 0)
+		{
+			main_frame++;
+			yield;
+		}
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(0)
+			{
+				isBossInvincible = false;
+				thEffect_Play(obj, EFF_CHARGE);
+			}
+			case(-101)
+			{
+			/*
+				neat curve laser memorization stuff.
+				
+					et_set_lc(ecl, 0, STYLE_CIRCLE, 6.5, 90, SHOT_RICE_LIME, 15, 1,  64, 16);
+					et_pr(ecl, 0, 50);
+					et_rad(ecl, 0, 30);
+					et_blend(ecl, 0, BLEND_ADD_ARGB);
+					ex_wait(ecl, 0, 10);
+					ex_spup_osc(ecl, 0, EX_NOWAIT, 45, 15, -0.058);
+					ex_angvel_osc(ecl, 0, EX_NOWAIT, 20, 25, 4.35);
+					
+					et_set_lc(ecl, 1, STYLE_CIRCLE, 6.5, 90, SHOT_RICE_LIME, 15, 1,  64, 16);
+					et_pr(ecl, 1, 50);
+					et_rad(ecl, 1, 30);
+					et_blend(ecl, 1, BLEND_ADD_ARGB);
+					ex_wait(ecl, 1, 10);
+					ex_spup_osc(ecl, 1, EX_NOWAIT, 45, 15, -0.058);
+					ex_angvel_osc(ecl, 1, EX_NOWAIT, 20, 25, -4.35);
+			
+				and also
+				
+					et_set_lc(ecl, 0, STYLE_CIRCLE, 3.5, 90, SHOT_RICE_LIME, 15, 1,  74, 16);
+					et_pr(ecl, 0, 50);
+					et_rad(ecl, 0, 30);
+					et_blend(ecl, 0, BLEND_ADD_ARGB);
+					ex_wait(ecl, 0, 10);
+					ex_spup_osc(ecl, 0, EX_NOWAIT, 35, 15, -0.058);
+					ex_angvel_osc(ecl, 0, EX_NOWAIT, 20, 25, 4.35);
+					
+					et_set_lc(ecl, 1, STYLE_CIRCLE, 3.5, 90, SHOT_RICE_LIME, 15, 1,  74, 16);
+					et_pr(ecl, 1, 50);
+					et_rad(ecl, 1, 30);
+					et_blend(ecl, 1, BLEND_ADD_ARGB);
+					ex_wait(ecl, 1, 10);
+					ex_spup_osc(ecl, 1, EX_NOWAIT, 35, 15, -0.058);
+					ex_angvel_osc(ecl, 1, EX_NOWAIT, 20, 25, -4.35);
+			
+			case(95)
+			
+				ecl_angleA = sRand(0, 360);
+					
+				et_ang(ecl, 0, ecl_angleA);
+				et_ang(ecl, 1, ecl_angleA + 65);
+				et_on(ecl, 0);
+				et_on(ecl, 1);
+				main_frame = 0;
+			*/
+			}
+			case(-100)
+			{
+				ecl_angleA += 4;
+				ecl_angleB += 4;
+				
+				et_ang(ecl, 0, ecl_angleB + (cos(ecl_angleA * 10) * 10));
+				exm_modify(ecl, 0, 3, 4, sRand(-40, 40));
+				
+				alternative(floor(sRand(0, 2)))
+				case(0)
+				{
+					exm_modify(ecl, 0, 4, 1, SHOT_BROUND_RED);
+					exm_modify(ecl, 0, 4, 2, DELAY_RED);
+					exm_modify(ecl, 0, 3, 5, 1);
+				}
+				case(1)
+				{
+					exm_modify(ecl, 0, 4, 1, SHOT_ROUND_RED);
+					exm_modify(ecl, 0, 4, 2, DELAY_RED);
+					exm_modify(ecl, 0, 3, 5, 1.5);
+				}
+				et_on(ecl, 0);
+				main_frame = 0;
+			}
+			case(95)
+			{
+				ecl_angleA = sRand(0, 360);
+					
+				et_ang(ecl, 0, ecl_angleA);
+				et_ang(ecl, 1, ecl_angleA + 65);
+				et_on(ecl, 0);
+				et_on(ecl, 1);
+				//main_frame = 96;
+			}
+			case(190)
+			{
+				ecl_angleA = sRand(0, 360);
+					
+				et_ang(ecl, 2, ecl_angleA);
+				et_ang(ecl, 3, ecl_angleA + 65);
+				et_on(ecl, 2);
+				et_on(ecl, 3);
+				main_frame = -90;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+	
+	function roundPC(value, multiple)
+	{
+		return floor((value + (multiple / 2)) / multiple) * multiple;
+	}
+	
+	function at1()
+	{
+		ascent(i in 0..360)
+		{
+			CreateShotA1(CenX, CenY, 1, roundPC(i, 1.4), 17, 0);
+		}
+		//et_on(ecl, 0);
+	}
+	
+	task TrackDPS()
+	{
+		/* ------------------------------------------
+		0.12m default player DPS, useful as a control/baseline
+		------------------------------------------
+		
+		Forward Focus: ~270
+		Penetration (lasers): ~260
+		Spread: ~250
+		Homing: ~230-240
+		
+		------------------------------------------
+		
+		------------------------------------------ */
+		let objTxt = ObjText_Create();
+		ObjText_SetFontSize(objTxt,12);
+		ObjText_SetFontColorTop(objTxt,254,254,254);
+		ObjText_SetFontColorBottom(objTxt,255,255,255);
+		ObjText_SetFontBorderType(objTxt,BORDER_FULL);
+		ObjText_SetFontBorderColor(objTxt,0,0,0);
+		ObjText_SetFontBorderWidth(objTxt,1);
+		Obj_SetRenderPriorityI(objTxt, 79);
+		
+		let dps_count = 0;
+		let dps = 0;
+		let string = "";
+		let refresh = 2;
+		ObjMove_SetPosition(objTxt, 150, 500);
+		while(!bossAdvance)
+		{
+			if(dps_count > 60 * refresh)
+			{ 
+				dps = (100000 - ObjEnemy_GetInfo(obj, INFO_LIFE)) / refresh;
+				ObjEnemy_SetLife(obj, 100000);
+				dps_count = 0;  
+			}
+			let string = rtos("000.00", dps);
+			ObjText_SetText(objTxt, "DPS: " ~ string);
+			ObjRender_SetPosition(objTxt, 5, 40, 0);
+			dps_count++;
+			yield;
+		}
+		Obj_Delete(objTxt);
+	}
+	
+	// ??????
+	task TShaderDistortion(objB)
+	{
+		//yield;
+		//while(GetCommonData("IsTalking", false)){
+		//	yield;
+		//}
+		// ???????
+		//while( length(GetEnemyBossObjectID()) <= 0 ){ yield; }
+		
+		// ????
+		let RT = "RT_DistortionTexture";
+		CreateRenderTarget( RT );
+		RenderToTextureA1( RT, 20, 29, true );
+		
+		// ???2D????????
+		let objSprite = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjRender_SetPosition( objSprite, 0 - 32, 0 - 16, 0);
+		ObjPrim_SetTexture( objSprite, RT );
+		ObjRender_SetBlendType( objSprite, BLEND_ALPHA );
+		ObjPrim_SetPrimitiveType( objSprite, PRIMITIVE_TRIANGLESTRIP );
+		ObjPrim_SetVertexCount( objSprite, 4 );
+		ObjSprite2D_SetSourceRect( objSprite, 0, 0, 640, 480 );
+		ObjSprite2D_SetDestRect( objSprite, 0, 0, 640, 480  );
+		Obj_SetRenderPriorityI( objSprite, 30 );
+		
+		// ??????
+		let shdpath		= GetCurrentScriptDirectory() ~ "./../shader/HLSL_Distortion.fx";
+		let objShader	= ObjShader_Create();
+		ObjShader_SetShaderF( objShader, shdpath );
+		ObjShader_SetTechnique( objShader, "tcDistortion" );
+		ObjShader_SetShaderO( objSprite, objShader );
+		
+		let frame	= 0;
+		let count	= 0;
+		let seed	= 0;
+		let pos		= [ 0, 0 ];
+		let move1	= 0;
+		let moveA	= 0;
+		loop
+		{
+			//let objEnm = GetEnemyBossObjectID();
+			RenderToTextureA1( RT, 20, 28, true );
+			
+			//if( length(objEnm) > 0 )
+			//{ 
+				pos = [ ObjMove_GetX(objB), ObjMove_GetY(objB) ]; 
+			//}
+			//else
+			//{ 
+			//	break; 
+			//}
+			
+			if( count > 1 )
+			{
+				count = 0;
+				seed++;
+			}
+			move1 = 1 * sin( moveA );
+			
+			ObjShader_SetTexture( objShader, "g_Texture", RT );
+			ObjShader_SetFloat( objShader, "m_frame", frame );
+			ObjShader_SetFloat( objShader, "m_count", count );
+			ObjShader_SetFloat( objShader, "m_seed", seed );
+			ObjShader_SetFloat( objShader, "m_alpha", 1 );
+			ObjShader_SetFloat( objShader, "m_x", pos[0] );
+			ObjShader_SetFloat( objShader, "m_y", pos[1] );
+			
+			frame++;
+			count += 0.01;
+			if( move1 < 1 ){ moveA += 1; }
+			
+			yield;
+		}
+		Obj_Delete( objSprite );
+		Obj_Delete( objShader );
+	}
+}

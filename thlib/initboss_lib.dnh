@@ -1,0 +1,455 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Boss Initalization Helper Library (initboss_lib.dnh)
+	
+	Author: Frenticpony
+	Version 0.5
+	
+	to do: add more bosses
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+#include"./animate_lib.dnh"
+#include"./spellbg_lib.dnh"
+#include"./cutin_lib.dnh"
+
+// ---------- th06 ----------
+let BOSS_RUMIA_06     = 0;
+let BOSS_DAYOSEI_06   = 1;
+let BOSS_CIRNO_06     = 2;
+let BOSS_MEILING_06   = 3;
+let BOSS_KOAKUMA      = 4;
+let BOSS_PATCHOULI_06 = 5;
+let BOSS_SAKUYA       = 6;
+let BOSS_REMILIA      = 7;
+let BOSS_FLANDRE_06   = 8;
+
+// ---------- th07 ----------
+let BOSS_LETTY     = 9;
+let BOSS_CHEN      = 10;
+let BOSS_ALICE     = 11;
+let BOSS_LUNASA    = 12;
+let BOSS_MERLIN    = 13;
+let BOSS_LYRICA    = 14;
+let BOSS_YOUMU     = 15;
+let BOSS_YUYUKO_07 = 16;
+let BOSS_RAN       = 17;
+let BOSS_YUKARI    = 18;
+
+// ---------- th08 ----------
+let BOSS_WRIGGLE = 19;
+let BOSS_MYSTIA  = 20;
+let BOSS_KEINE   = 21;
+let BOSS_REIMU   = 22;
+let BOSS_MARISA  = 23;
+let BOSS_TEWI_08 = 24;
+let BOSS_REISEN  = 25;
+let BOSS_ERIN    = 26;
+let BOSS_KAGUYA  = 27;
+let BOSS_KEINEB  = 28;
+let BOSS_MOUKOU  = 29;
+
+// ---------- th09/9.5 ----------
+let BOSS_MEDICINE = 30;
+let BOSS_YUUKA    = 31;
+let BOSS_KOMACHI  = 32;
+let BOSS_SHIKIEKI = 33;
+
+let BOSS_RUMIA      = 34;
+let BOSS_CIRNO      = 35;
+let BOSS_MEILING    = 36;
+let BOSS_PATCHOULI  = 37;
+let BOSS_FLANDRE    = 38;
+let BOSS_SUIKA      = 39;
+let BOSS_YUKARI_095 = 40;
+
+// ---------- th10 ----------
+let BOSS_SHIZUHA  = 41;
+let BOSS_MINORIKO = 42;
+let BOSS_HINA     = 43;
+let BOSS_NITORI   = 44;
+let BOSS_MOMIZI   = 45;
+let BOSS_AYA      = 46;
+let BOSS_SANAE    = 47;
+let BOSS_KANAKO   = 48;
+let BOSS_SUWAKO   = 49;
+
+// ---------- th11 ----------
+let BOSS_KISUME = 50;
+let BOSS_YAMAME = 51;
+let BOSS_PARSEE = 52;
+let BOSS_YUUGI  = 53;
+let BOSS_CAT    = 54;
+let BOSS_SATORI = 55;
+let BOSS_ORIN   = 56;
+let BOSS_UTSUHO = 57;
+let BOSS_KOISHI = 58;
+
+// ---------- th12 ----------
+let BOSS_NAZRIN   = 59;
+let BOSS_KOGASA   = 60;
+let BOSS_ICHIRIN  = 61;
+let BOSS_MURASA   = 62;
+let BOSS_SHOU     = 63;
+let BOSS_BYAKUREN = 64;
+let BOSS_NUE      = 65;
+
+// ---------- th13 ----------
+let BOSS_YUYUKO       = 66;
+let BOSS_KYOUKO       = 67;
+let BOSS_YOSHIKA      = 68;
+let BOSS_SEIGA        = 69;
+let BOSS_SOGA         = 70;
+let BOSS_MONONOBE     = 71;
+let BOSS_TOYOSATOMIMI = 72;
+let BOSS_MAMIZOU      = 73;
+
+// ---------- th14 ----------
+let BOSS_CIRNO_14     = 74;
+let BOSS_WAKASAGIHIME = 75;
+let BOSS_SEKIBANKI    = 76;
+let BOSS_KAGEROU      = 77;
+let BOSS_BENBEN       = 78;
+let BOSS_YATSUHASHI   = 79;
+let BOSS_SEIJA        = 80;
+let BOSS_SHINMYOUMARU = 81;
+let BOSS_RAIKO        = 82;
+
+// ---------- th15 ----------
+let BOSS_SEIRAN     = 83;
+let BOSS_RINGO      = 84;
+let BOSS_DOREMY     = 85;
+let BOSS_SAGUME     = 86;
+let BOSS_CLOWNPIECE = 87;
+let BOSS_JUNKO      = 88;
+let BOSS_HECATIA    = 89;
+
+// ---------- th16 ----------
+let BOSS_LARVA      = 83;
+let BOSS_LILY       = 1;
+let BOSS_SAKATA     = 84;
+let BOSS_KOMANO     = 85;
+let BOSS_YATADERA   = 86;
+let BOSS_TEIREIDA   = 87;
+let BOSS_NISHIDA    = 88;
+let BOSS_OKINA      = 89;
+
+function InitBoss(FPEnemy, value)
+{
+	alternative(value)
+	case(BOSS_RUMIA)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateNitori(FPEnemy);
+		SpellCardBGNitori(FPEnemy);
+		img_ename_current = img_ename_nitori;
+		img_ct_current = img_ct_nitori;
+	}
+	case(BOSS_PATCHOULI)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimatePatchouli(FPEnemy);
+		SpellCardBGNitori(FPEnemy);
+		img_ename_current = img_ename_nitori;
+		img_ct_current = img_ct_nitori;
+	}
+	case(BOSS_SHIZUHA)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateShizuha(FPEnemy);
+		SpellCardBGAki(FPEnemy);
+		img_ename_current = img_ename_shizuha;
+		img_ct_current = img_ct_shizuha;
+	}
+	case(BOSS_MINORIKO)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateMinoriko(FPEnemy);
+		SpellCardBGAki(FPEnemy);
+		img_ename_current = img_ename_minoriko;
+		img_ct_current = img_ct_minoriko;
+	}
+	case(BOSS_HINA)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateHina(FPEnemy);
+		SpellCardBGHina(FPEnemy);
+		img_ename_current = img_ename_hina;
+		img_ct_current = img_ct_hina;
+	}
+	case(BOSS_NITORI)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateNitori(FPEnemy);
+		SpellCardBGNitori(FPEnemy);
+		img_ename_current = img_ename_nitori;
+		img_ct_current = img_ct_nitori;
+	}
+	case(BOSS_AYA)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateAya(FPEnemy);
+		SpellCardBGAya(FPEnemy);
+		img_ename_current = img_ename_aya;
+		img_ct_current = img_ct_aya00;
+	}
+	case(BOSS_SANAE)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateSanae(FPEnemy);
+		SpellCardBGSanae(FPEnemy);
+		img_ename_current = img_ename_sanae;
+		img_ct_current = img_ct_sanae00;
+	}
+	case(BOSS_KANAKO)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 512);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateKanako(FPEnemy);
+		SpellCardBGKanako(FPEnemy);
+		img_ename_current = img_ename_kanako;
+		img_ct_current = img_ct_kanako;
+	}
+	case(BOSS_SUWAKO)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateSuwako(FPEnemy);
+		SpellCardBGSuwako(FPEnemy);
+		img_ename_current = img_ename_suwako;
+		img_ct_current = img_ct_suwako;
+	}
+	case(BOSS_KISUME)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateKisume(FPEnemy);
+		SpellCardBGKisumeYamame(FPEnemy);
+		img_ename_current = img_ename_kisume;
+		img_ct_current = img_ct_kisume;
+	}
+	case(BOSS_YAMAME)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateYamame(FPEnemy);
+		SpellCardBGKisumeYamame(FPEnemy);
+		img_ename_current = img_ename_yamame;
+		img_ct_current = img_ct_yamame;
+	}
+	case(BOSS_PARSEE)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateParsee(FPEnemy);
+		SpellCardBGParsee(FPEnemy);
+		img_ename_current = img_ename_parsee;
+		img_ct_current = img_ct_parsee;
+	}
+	case(BOSS_YUUGI)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateYuugi(FPEnemy);
+		SpellCardBGYuugi(FPEnemy);
+		img_ename_current = img_ename_yuugi;
+		img_ct_current = img_ct_yuugi;
+	}
+	case(BOSS_SATORI)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateSatori(FPEnemy);
+		SpellCardBGSatori(FPEnemy);
+		img_ename_current = img_ename_satori;
+		img_ct_current = img_ct_satori;
+	}
+	case(BOSS_ORIN)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateOrin(FPEnemy);
+		SpellCardBGOrin(FPEnemy);
+		img_ename_current = img_ename_orin;
+		img_ct_current = img_ct_orin;
+	}
+	case(BOSS_UTSUHO)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 512);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		//Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateUtsuho(FPEnemy);
+		SpellCardBGUtsuho(FPEnemy);
+		img_ename_current = img_ename_utsuho;
+		img_ct_current = img_ct_utsuho;
+	}
+	case(BOSS_KOISHI)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		Obj_SetValue(FPEnemy, "CT_YO", 30);
+		AnimateKoishi(FPEnemy);
+		SpellCardBGKoishi(FPEnemy);
+		img_ename_current = img_ename_koishi;
+		img_ct_current = img_ct_koishi;
+	}
+	case(BOSS_NAZRIN)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateNazrin(FPEnemy);
+		SpellCardBGNazrin(FPEnemy);
+		img_ename_current = img_ename_nazrin;
+		img_ct_current = img_ct_nazrin00;
+	}
+	case(BOSS_KOGASA)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateNazrin(FPEnemy);
+		SpellCardBGKogasa(FPEnemy);
+		img_ename_current = img_ename_kogasa;
+		img_ct_current = img_ct_kogasa00;
+	}
+	case(BOSS_ICHIRIN)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		AnimateIchirin(FPEnemy);
+		SpellCardBGIchirin(FPEnemy);
+		img_ename_current = img_ename_ichirin;
+		img_ct_current = img_ct_ichirin00;
+	}
+	case(BOSS_MURASA)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		//Obj_SetValue(FPEnemy, "CT_YO", 0);
+		AnimateMurasa(FPEnemy);
+		SpellCardBGMurasa(FPEnemy);
+		img_ename_current = img_ename_murasa;
+		img_ct_current = img_ct_murasa;
+	}
+	case(BOSS_SHOU)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 255);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 256);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		//Obj_SetValue(FPEnemy, "CT_YO", 0);
+		AnimateShou(FPEnemy);
+		SpellCardBGShou(FPEnemy);
+		img_ename_current = img_ename_shou;
+		img_ct_current = img_ct_shou;
+	}
+	case(BOSS_BYAKUREN)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 255);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 512);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		//Obj_SetValue(FPEnemy, "CT_YO", 0);
+		AnimateByakuren(FPEnemy);
+		SpellCardBGByakuren(FPEnemy);
+		img_ename_current = img_ename_byakuren;
+		img_ct_current = img_ct_byakuren;
+	}
+	case(BOSS_NUE)
+	{
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 255);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "CT_X", 512);
+		Obj_SetValue(FPEnemy, "CT_Y", 512);
+		//Obj_SetValue(FPEnemy, "CT_YO", 0);
+		AnimateNue(FPEnemy);
+		SpellCardBGNue(FPEnemy);
+		img_ename_current = img_ename_nue;
+		img_ct_current = img_ct_nue00;
+	}
+}
+
+
+
+

@@ -1,0 +1,488 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Dialogue Library (dialogue_lib.dnh)
+	
+	Author: unknown (gtBot?), modifications by Frenticpony
+	Version -
+	
+	to do: rewrite everything
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+// very basic dialogue 
+// i plan on having additive characters instead of a set limit of 2
+// which means you can have multiple characters like fairy wars final
+// although that depends on how lazy i get
+
+// another oddity is how crude the text boxes are which ill get around to eventually (maybe)
+
+//let img_balloon = GetMainStgScriptDirectory ~ "img/Global/effect/text_balloon.png"; // balloon
+//let img_box = GetMainStgScriptDirectory ~ "img/Global/effect/text_box.png"; // box
+
+let LastSpeechBub = ObjPrim_Create(OBJ_SPRITE_2D);
+let GetActiveSide = 1;
+let IsTextEventActive = false;
+let IsAllowNextText = false;
+let glob_offset = 0;
+
+let LEFT = 1;
+let RIGHT = -1;
+let NONE = 0;
+
+let BUBBLE_NORMAL = 1;
+let BUBBLE_SHOCK = 2;
+let BUBBLE_THOUGHT = 3;
+let BUBBLE_NORMAL_LARGE = 4;
+let BUBBLE_SHOCK_LARGE = 5;
+let BUBBLE_THOUGHT_LARGE = 6;
+
+let initial = 1;
+
+let boxcolorR = 255;
+let boxcolorG = 255;
+let boxcolorB = 255;
+
+function CreateSpeechImageA1(path, left, top, right, bottom, side){
+	let dobj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjRender_SetBlendType(dobj, BLEND_ALPHA);
+	Obj_SetRenderPriority(dobj, 0.79);
+	ObjRender_SetAlpha(dobj, 0);
+	ObjPrim_SetTexture(dobj, path);
+	ObjSprite2D_SetSourceRect(dobj, left, top, right, bottom);
+	ObjSprite2D_SetDestRect(dobj, -(right-left)/2, -(bottom-top), (right-left)/2, 0);
+	if(side == LEFT){ObjRender_SetPosition(dobj, 0, SCREEN_HEIGHT, 0);}
+	if(side == RIGHT){ObjRender_SetPosition(dobj, SCREEN_WIDTH, SCREEN_HEIGHT, 0);}
+	ObjRender_SetScaleXYZ(dobj, 1, 1, 1);
+	return dobj;
+}
+
+task ChangeSpeechImageA1(cobj, path, left, top, right, bottom, side){
+	ObjPrim_SetTexture(cobj, path);
+	ObjSprite2D_SetSourceRect(cobj, left, top, right, bottom);
+	ObjSprite2D_SetDestRect(cobj, -(right-left)/2, -(bottom-top), (right-left)/2, 0);
+	ObjRender_SetScaleXYZ(cobj, side, side, 1);
+}
+
+function CreateSpeechImageA2(path, side){
+	let dobj = ObjPrim_Create(OBJ_SPRITE_2D);
+	let width = GetTextureWidth(path);
+	let height = GetTextureHeight(path);
+	ObjRender_SetBlendType(dobj, BLEND_ALPHA);
+	Obj_SetRenderPriority(dobj, 0.85);
+	ObjRender_SetAlpha(dobj, 0);
+	ObjPrim_SetTexture(dobj, path);
+	ObjSprite2D_SetSourceRect(dobj, 0, 0, width, height);
+	ObjSprite2D_SetDestRect(dobj, -width/2, -height, width/2, 0);
+	if(side == LEFT){ObjRender_SetPosition(dobj, 0, SCREEN_HEIGHT, 0);}
+	if(side == RIGHT){ObjRender_SetPosition(dobj, SCREEN_WIDTH, SCREEN_HEIGHT, 0);}
+	ObjRender_SetScaleXYZ(dobj, side, 1, 1);
+	return dobj;
+}
+
+task ChangeSpeechImageA2(cobj, path, side){
+	let width = GetTextureWidth(path);
+	let height = GetTextureHeight(path);
+	ObjPrim_SetTexture(cobj, path);
+	ObjSprite2D_SetSourceRect(cobj, 0, 0, width, height);
+	ObjSprite2D_SetDestRect(cobj, -width/2, -height, width/2, 0);
+	ObjRender_SetScaleXYZ(cobj, side, side, 1);
+}
+
+task SetSpeechOffset(offset){
+	glob_offset = offset;
+}
+
+task BeginSpeechEventA1(ob1, ob2)
+{
+	task ChangeSide
+	{
+		activeside = GetActiveSide;
+		dist = 0.1;
+		loop(4){yield;}
+		dist2 = 0.1;
+	}
+	SetSpeechBox(0, 0);
+	IsTextEventActive = true;
+	IsAllowNextText = true;
+	let alpha = 0;
+	let dist = 6.75;
+	
+	let spang1 = 270+40;
+	let spang2 = 270-40;
+	
+	let CENTERX = GetStgFrameWidth/2;
+	let CENTERY = GetStgFrameHeight/2;
+	
+	ObjRender_SetAlpha(ob1, 0);
+	ObjRender_SetAlpha(ob2, 0);
+	ObjRender_SetColor(ob1, 155, 155, 155);
+	ObjRender_SetColor(ob2, 155, 155, 155);
+	ObjRender_SetPosition(ob1, CENTERX-215, ObjRender_GetY(ob1)+125, 0);
+	ObjRender_SetPosition(ob2, CENTERX+215, ObjRender_GetY(ob2)+125, 0);
+	
+	while(dist>0){
+		alpha+=15;
+		alpha = min(255, alpha);
+		dist-=0.15;
+		ObjRender_SetAlpha(ob1, alpha);
+		ObjRender_SetAlpha(ob2, alpha);
+		
+		ObjRender_SetPosition(ob1, ObjRender_GetX(ob1)+dist*cos(spang1), ObjRender_GetY(ob1)+dist*sin(spang1), 0);
+		ObjRender_SetPosition(ob2, ObjRender_GetX(ob2)+dist*cos(spang2), ObjRender_GetY(ob2)+dist*sin(spang2), 0);
+		yield;
+	}
+	let base = [ObjRender_GetX(ob1), ObjRender_GetY(ob1), 
+				ObjRender_GetX(ob2), ObjRender_GetY(ob2)];
+	
+	let activeside = 0;
+	
+		dist = 0;
+	let dist2 = 0;
+	let dm1 = 1;
+	let dm2 = -1;
+	
+	while(IsTextEventActive == true)
+	{
+		if(GetActiveSide == LEFT && initial == 1)
+		{
+			ObjRender_SetColor(ob1, 255, 255, 255);
+			ObjRender_SetColor(ob2, 100, 100, 100);
+			
+			ObjRender_SetPosition(ob1, round(ObjRender_GetX(ob1)+(dist*1.5)*cos(spang1)), round(ObjRender_GetY(ob1)+dist*sin(spang1)), 0);
+			ObjRender_SetPosition(ob2, round(ObjRender_GetX(ob2)+(dist2*1.5)*cos(spang2)), round(ObjRender_GetY(ob2)+dist2*sin(spang2)), 0);
+			if(dist < 4 && dist != 0)
+			{
+				dist += 0.35;
+				dist2 = 0;
+			}
+			else
+			{
+				dist = 0;
+				dist2 = 0;
+			}
+			if(boxcolorR < 255)
+			{
+				boxcolorR += 5;
+				boxcolorB -= 5;
+			}
+			else
+			{
+				boxcolorR = 255;
+				boxcolorB = 155;
+				boxcolorG = 155;
+			}
+			ObjRender_SetColor(LastSpeechBub, boxcolorR,boxcolorG,boxcolorB);
+		}
+		if(GetActiveSide == RIGHT && initial == 1)
+		{
+			ObjRender_SetColor(ob1, 100, 100, 100);
+			ObjRender_SetColor(ob2, 255, 255, 255);
+			ObjRender_SetPosition(ob1, round(ObjRender_GetX(ob1)+(dist2*1.5)*cos(spang1)), round(ObjRender_GetY(ob1)+dist2*sin(spang1)), 0);
+			ObjRender_SetPosition(ob2, round(ObjRender_GetX(ob2)+(dist*1.5)*cos(spang2)), round(ObjRender_GetY(ob2)+dist*sin(spang2)), 0);
+			if(dist2 > -4 && dist2 != 0)
+			{
+				dist2 -= 0.35;
+				dist = 0;
+			}
+			else
+			{
+				dist = 0;
+				dist2 = 0;
+			}
+			if(boxcolorB < 255)
+			{
+				boxcolorR -= 5;
+				boxcolorB += 5;
+			}
+			else
+			{
+				boxcolorR = 155;
+				boxcolorB = 255;
+				boxcolorG = 155;
+			}
+			ObjRender_SetColor(LastSpeechBub, boxcolorR,boxcolorG,boxcolorB);
+		}
+		if(GetActiveSide == LEFT && initial == 0)
+		{
+			ObjRender_SetColor(ob1, 255, 255, 255);
+			ObjRender_SetColor(ob2, 100, 100, 100);
+			
+			ObjRender_SetPosition(ob1, round(ObjRender_GetX(ob1)+(dist*1.5)*cos(spang1)), round(ObjRender_GetY(ob1)+dist*sin(spang1)), 0);
+			ObjRender_SetPosition(ob2, round(ObjRender_GetX(ob2)+(dist2*1.5)*cos(spang2)), round(ObjRender_GetY(ob2)+dist2*sin(spang2)), 0);
+			if(dist < 4 && dist != 0)
+			{
+				dist += 0.35;
+			}
+			else
+			{
+				dist = 0;
+			}
+			if(dist2 > -4 && dist2 != 0)
+			{
+				dist2 -= 0.35;
+			}
+			else
+			{
+				dist2 = 0;
+			}
+			if(boxcolorR < 255)
+			{
+				boxcolorR += 5;
+				boxcolorB -= 5;
+			}
+			else
+			{
+				boxcolorR = 255;
+				boxcolorB = 155;
+				boxcolorG = 155;
+			}
+			ObjRender_SetColor(LastSpeechBub, boxcolorR,boxcolorG,boxcolorB);
+		}
+		if(GetActiveSide == RIGHT && initial == 0)
+		{
+			ObjRender_SetColor(ob1, 100, 100, 100);
+			ObjRender_SetColor(ob2, 255, 255, 255);
+			ObjRender_SetPosition(ob1, round(ObjRender_GetX(ob1)+(dist2*1.5)*cos(spang1)), round(ObjRender_GetY(ob1)+dist2*sin(spang1)), 0);
+			ObjRender_SetPosition(ob2, round(ObjRender_GetX(ob2)+(dist*1.5)*cos(spang2)), round(ObjRender_GetY(ob2)+dist*sin(spang2)), 0);
+			if(dist < 4 && dist != 0)
+			{
+				dist += 0.35;
+			}
+			else
+			{
+				dist = 0;
+			}
+			if(dist2 > -4 && dist2 != 0)
+			{
+				dist2 -= 0.35;
+			}
+			else
+			{
+				dist2 = 0;
+			}
+			if(boxcolorB < 255)
+			{
+				boxcolorR -= 5;
+				boxcolorB += 5;
+			}
+			else
+			{
+				boxcolorR = 155;
+				boxcolorB = 255;
+				boxcolorG = 155;
+			}
+			ObjRender_SetColor(LastSpeechBub, boxcolorR,boxcolorG,boxcolorB);
+		}
+		if(GetActiveSide == NONE && initial == 0)
+		{
+			ObjRender_SetColor(ob1, 100, 100, 100);
+			ObjRender_SetColor(ob2, 100, 100, 100);
+			ObjRender_SetPosition(ob1, round(ObjRender_GetX(ob1)+(dist2*1.5)*cos(spang1)), round(ObjRender_GetY(ob1)+dist2*sin(spang1)), 0);
+			ObjRender_SetPosition(ob2, round(ObjRender_GetX(ob2)+(dist2*1.5)*cos(spang2)), round(ObjRender_GetY(ob2)+dist2*sin(spang2)), 0);
+			if(dist < 4 && dist != 0)
+			{
+				dist += 0.35;
+			}
+			else
+			{
+				dist = 0;
+			}
+			if(dist2 > -4 && dist2 != 0)
+			{
+				dist2 -= 0.35;
+			}
+			else
+			{
+				dist2 = 0;
+			}
+			if(boxcolorB < 255)
+			{
+				boxcolorR -= 5;
+				boxcolorB += 5;
+			}
+			else
+			{
+				boxcolorR = 155;
+				boxcolorB = 255;
+				boxcolorG = 155;
+			}
+			ObjRender_SetColor(LastSpeechBub, boxcolorR,boxcolorG,boxcolorB);
+		}
+		if(GetActiveSide == LEFT)
+		{
+			Obj_SetRenderPriority(ob1, 0.79);
+			Obj_SetRenderPriority(ob2, 0.78);
+		}
+		if(GetActiveSide == RIGHT)
+		{
+			Obj_SetRenderPriority(ob1, 0.78);
+			Obj_SetRenderPriority(ob2, 0.79);
+		}
+		if(activeside != GetActiveSide)
+		{
+			ChangeSide;
+		}
+		//dist = max(0, dist-0.15);
+		//dist2 = max(0, dist2-0.15);
+		//ObjRender_SetPosition(ob1, ObjRender_GetX(ob1)+dist*cos(spang1), ObjRender_GetY(ob1)+dist*sin(spang1), 0);
+		//ObjRender_SetPosition(ob2, ObjRender_GetX(ob2)+dist2*cos(spang2), ObjRender_GetY(ob2)+dist2*sin(spang2), 0);
+		yield;
+	}
+	
+	Obj_Delete(LastSpeechBub);
+	
+	while(alpha>0){
+		alpha-=15;
+		alpha = max(0, alpha);
+		dist-=0.35;
+		dist2-=0.35;
+		ObjRender_SetAlpha(ob1, alpha);
+		ObjRender_SetAlpha(ob2, alpha);
+		
+		ObjRender_SetPosition(ob1, ObjRender_GetX(ob1)+dist*cos(spang1), ObjRender_GetY(ob1)+dist*sin(spang1), 0);
+		ObjRender_SetPosition(ob2, ObjRender_GetX(ob2)+dist2*cos(spang2), ObjRender_GetY(ob2)+dist2*sin(spang2), 0);
+		yield;
+	}
+	Obj_Delete(ob1);
+	Obj_Delete(ob2);
+}
+
+
+
+// text - "dialouge"; stside - LEFT or RIGHT; type - bubble type
+task SetSpeechA1(text, stside, type){
+	IsAllowNextText = false;
+	//SetNewSpeechBubble(type, stside);
+	let objText = SetNewTextBubble(text, type, stside);
+	loop(35){yield;}
+	while(GetVirtualKeyState(VK_SHOT) != KEY_PUSH){yield;}
+	initial = 0;
+	IsAllowNextText = true;
+	Obj_Delete(objText);
+}
+
+//time - time before the text automatically moves (you can still use shot button to continue dialouge)
+task SetSpeechA2(text, stside, type, time){
+	IsAllowNextText = false;
+	SetNewSpeechBubble(type, stside);
+	let objText = SetNewTextBubble(text, type, stside);
+	while(GetVirtualKeyState(VK_SHOT) != KEY_PUSH && time>0){time--;yield;}
+	IsAllowNextText = true;
+	Obj_Delete(objText);
+}
+//time - time before the text automatically moves (you CANNOT use shot button to continue dialouge)
+task SetSpeechA3(text, stside, type, time){
+	IsAllowNextText = false;
+	SetNewSpeechBubble(type, stside);
+	let objText = SetNewTextBubble(text, type, stside);
+	ascent(i in 0..time){yield;}
+	IsAllowNextText = true;
+	Obj_Delete(objText);
+}
+
+task EndTextEventA1{
+	IsTextEventActive = false;
+}
+
+task SetNewSpeechBubble(type, stside){
+	GetActiveSide = stside;
+	let y1 = 0;
+	let y2 = 48;
+	if(type == BUBBLE_SHOCK){y1 = 48; y2 = y1+59;}
+	if(type == BUBBLE_THOUGHT){y1 = 107; y2 = y1+53;}
+	if(type == BUBBLE_NORMAL_LARGE){y1 = 160; y2 = y1+64;}
+	if(type == BUBBLE_SHOCK_LARGE){y1 = 224; y2 = y1+74;}
+	if(type == BUBBLE_THOUGHT_LARGE){y1 = 298; y2 = y1+70;}
+	
+	ObjRender_SetBlendType(LastSpeechBub, BLEND_ALPHA);
+	Obj_SetRenderPriority(LastSpeechBub, 0.86);
+	ObjRender_SetAlpha(LastSpeechBub, 255);
+	ObjPrim_SetTexture(LastSpeechBub, img_face_textballoon);
+	ObjSprite2D_SetSourceRect(LastSpeechBub, 0, y1, 452, y2);
+	ObjSprite2D_SetDestRect(LastSpeechBub, -226, 0, 226, (y2-y1));
+	ObjRender_SetPosition(LastSpeechBub, SCREEN_WIDTH/2, SCREEN_HEIGHT-180+glob_offset, 0);
+	ObjRender_SetScaleXYZ(LastSpeechBub, stside, 1, 1);
+}
+
+task SetSpeechBox(type, stside)
+{
+	//GetActiveSide = stside;
+	let x1 = 0;
+	let y1 = 0;
+	let x2 = 350;
+	let y2 = 49;
+	
+	
+	
+	if(type == BUBBLE_SHOCK){y1 = 48; y2 = y1+59;}
+	//if(type == BUBBLE_THOUGHT){y1 = 107; y2 = y1+53;}
+	//if(type == BUBBLE_NORMAL_LARGE){y1 = 160; y2 = y1+64;}
+	//if(type == BUBBLE_SHOCK_LARGE){y1 = 224; y2 = y1+74;}
+	//if(type == BUBBLE_THOUGHT_LARGE){y1 = 298; y2 = y1+70;}
+	
+	ObjRender_SetBlendType(LastSpeechBub, BLEND_ALPHA);
+	Obj_SetRenderPriority(LastSpeechBub, 0.86);
+	ObjRender_SetAlpha(LastSpeechBub, 255);
+	ObjPrim_SetTexture(LastSpeechBub, img_face_textbox);
+	ObjSprite2D_SetSourceRect(LastSpeechBub, 0, 0, 350, 48);
+	ObjSprite2D_SetDestRect(LastSpeechBub, 0, 0, 350, 48);
+	ObjRender_SetPosition(LastSpeechBub, 50, 370, 0);
+	ObjRender_SetScaleXYZ(LastSpeechBub, 1, 1, 1);
+	ObjRender_SetColor(LastSpeechBub, boxcolorR,boxcolorG,boxcolorB);
+}
+
+function SetNewTextBubble(text, type, stside)
+{
+	GetActiveSide = stside;
+	let objText = ObjText_Create;
+	let offset = -30;
+	let loc_offset = 0;
+	
+	let fontcolorR = 0;
+	let fontcolorG = 0;
+	let fontcolorB = 0;
+	
+	if(stside == RIGHT)
+	{
+		fontcolorR = 220;
+		fontcolorG = 120;
+		fontcolorB = 120;
+	}
+	if(stside == LEFT)
+	{
+		fontcolorR = 120;
+		fontcolorG = 240;
+		fontcolorB = 240;
+	}
+	ResizeText(objText);
+	ObjText_SetText(objText,text);
+	ObjText_SetHorizontalAlignment(objText, ALIGNMENT_LEFT);
+	ObjText_SetMaxWidth(objText, 250);
+	Obj_SetRenderPriority(objText, 0.87);
+	ObjRender_SetPosition(objText, 55, 378, 0);
+	ObjText_SetFontSize(objText, 14);
+	ObjText_SetFontBold(objText, true);
+	ObjText_SetFontColorTop(objText, fontcolorR, fontcolorG, fontcolorB);
+	ObjText_SetFontColorBottom(objText, fontcolorR, fontcolorG, fontcolorB);
+	ObjText_SetFontBorderColor(objText, 1, 1, 1);
+	ObjText_SetFontBorderWidth(objText, -0.5);
+	return objText;
+}
+
+task ResizeText(object)
+{
+	let scale = 0;
+	ObjRender_SetScaleXYZ(object,1,scale,1);
+	if(initial == 1)
+	{
+		loop(25){yield;}
+	}
+
+	while(scale < 1)
+	{
+		scale += 0.2;
+		ObjRender_SetScaleXYZ(object,1,scale,1);
+		yield;
+	}
+	scale = 1;
+	ObjRender_SetScaleXYZ(object,1,scale,1);
+}

@@ -1,0 +1,10 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	FPL Stage List Include (stagelist_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+#include"../stage/st00.dnh"
+#include"../stage/st01.dnh"

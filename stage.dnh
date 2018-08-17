@@ -1,0 +1,181 @@
+#include"./thlib/stage_lib.dnh"
+
+#include"./stage/aStageList.dnh"
+#include"./boss/aBossList.dnh"
+
+let renderTarget = [];
+let renderTargetVoid = 0;
+
+let test;
+
+@Loading
+{
+
+}
+
+@Initialize
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thStage_Initialize();
+	renderTarget = thStage_InitRenderTarget();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thStage_Timeline;
+	debug_InterpolateTest();
+}
+
+@MainLoop
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thStage_MainLoop(renderTarget);
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+}
+
+@Event
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thStage_Event();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+}
+
+@Finalize
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thStage_Finalize();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+}
+
+task thStage_Timeline()
+{
+	if(DEBUG_MODE)
+	{
+		Stage01_Handler();
+	}
+	else
+	{
+		Stage01_Handler();
+	}
+}
+
+function debug_InterpolateTest()
+{
+	ascent(i in 0..30){IPDebug(i);}
+}
+
+task IPDebug(method)
+{
+	let frame = 0;
+	let maxTime = 120;
+	let loc_x = 50;
+	let loc_y = 10 * (method + 1);
+	let objSpr = CreateShotA1(10, 10, 0, 0, SHOT_PELLET_RED, 0);
+	loop
+	{
+		while(frame <= maxTime)
+		{
+			alternative(method)
+			case(0)
+			{
+				loc_x = easeInQuad(10, MaxX - 10, frame, maxTime);
+			}
+			case(1)
+			{
+				loc_x = easeInCubic(10, MaxX - 10, frame, maxTime);
+			}
+			case(2)
+			{
+				loc_x = easeInQuart(10, MaxX - 10, frame, maxTime);
+			}
+			case(3)
+			{
+				loc_x = easeInQuint(10, MaxX - 10, frame, maxTime);
+			}
+			case(4)
+			{
+				loc_x = easeOutQuad(10, MaxX - 10, frame, maxTime);
+			}
+			case(5)
+			{
+				loc_x = easeOutCubic(10, MaxX - 10, frame, maxTime);
+			}
+			case(6)
+			{
+				loc_x = easeOutQuart(10, MaxX - 10, frame, maxTime);
+			}
+			case(7)
+			{
+				loc_x = easeOutQuint(10, MaxX - 10, frame, maxTime);
+			}
+			case(8)
+			{
+				loc_x = easeInOutQuad(10, MaxX - 10, frame, maxTime);
+			}
+			case(9)
+			{
+				loc_x = easeInOutCubic(10, MaxX - 10, frame, maxTime);
+			}
+			case(10)
+			{
+				loc_x = easeInOutQuart(10, MaxX - 10, frame, maxTime);
+			}
+			case(11)
+			{
+				loc_x = easeInOutQuint(10, MaxX - 10, frame, maxTime);
+			}
+			case(12)
+			{
+				loc_x = easeInSine(10, MaxX - 10, frame, maxTime);
+			}
+			case(13)
+			{
+				loc_x = easeOutSine(10, MaxX - 10, frame, maxTime);
+			}
+			case(14)
+			{
+				loc_x = easeInOutSine(10, MaxX - 10, frame, maxTime);
+			}
+			case(15)
+			{
+				loc_x = easeInExpo(10, MaxX - 10, frame, maxTime);
+			}
+			case(16)
+			{
+				loc_x = easeOutExpo(10, MaxX - 10, frame, maxTime);
+			}
+			others
+			{
+				loc_x = easeInQuad(10, MaxX - 10, frame, maxTime);
+			}
+			ObjMove_SetPosition(objSpr, loc_x, loc_y);
+			frame++;
+			yield;
+		}
+		frame = 0;
+		wait(60);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

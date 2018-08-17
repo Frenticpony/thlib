@@ -1,0 +1,45 @@
+#TouhouDanmakufu[Package]
+#Title["thlib Main Package"]
+#Text[""]
+#System[""]
+
+#include"./thlib/package_lib.dnh"
+
+let __addFix;
+
+@Initialize
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	Package_Init();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	
+	//Necessary for correct ADD blending in bstorm.
+	__addFix = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjSprite2D_SetSourceRect(__addFix, 0, 0, 1, 1);
+	ObjSprite2D_SetDestRect(__addFix, 0, 0, 640, 480);
+	Obj_SetRenderPriorityI(__addFix, 100);
+	ObjRender_SetColor(__addFix, 0, 0, 0);
+	ObjRender_SetBlendType(__addFix, BLEND_ADD_RGB);
+	
+}
+
+@MainLoop
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	Package_MainLoop();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+}
+
+@Finalize
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	Package_Finalize();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+}
+
+@Event
+{
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	Package_Event();
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+}

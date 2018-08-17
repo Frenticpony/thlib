@@ -1,0 +1,908 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Effect Library (effect_lib.dnh)
+	
+	Author: Frenticpony
+	Version 1.0
+	
+	to do: move effects into event scripts (maybe), effects from games beyond th10
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+function thEffect_Play(n_obj, c_type)
+{
+	let _effX = ObjMove_GetX(n_obj);
+	let _effY = ObjMove_GetY(n_obj);
+	alternative(c_type)
+	case(EFF_CHARGE)
+	{
+		__eff_charge_th10(_effX, _effY);
+	}
+	case(EFF_DISCHARGE)
+	{
+		__eff_discharge_th10(_effX, _effY);
+	}
+	case(EFF_EXPLODE)
+	{
+		__eff_explode_th10(_effX, _effY);
+	}
+	case(EFF_EXPLODE2)
+	{
+		__eff_explodeB_th10(_effX, _effY);
+	}
+	case(EFF_ENEOFF)
+	{
+		__eff_eneDown_th10(n_obj, _effX, _effY);
+	}
+}
+
+function thEffect_PlayB(n_x, n_y, c_type)
+{
+	alternative(c_type)
+	case(EFF_CHARGE)
+	{
+		__eff_charge_th10(n_x, n_y);
+	}
+	case(EFF_DISCHARGE)
+	{
+		__eff_discharge_th10(n_x, n_y);
+	}
+	case(EFF_EXPLODE)
+	{
+		__eff_explode_th10(n_x, n_y);
+	}
+	case(EFF_EXPLODE2)
+	{
+		__eff_explodeB_th10(n_x, n_y);
+	}
+	case(EFF_ENEOFF)
+	{
+		//__thEffect_EneExplode_th10(n_obj, n_x, n_y);
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Internal Use Functions -=-=-=-=-=-=-=-=-=-=-
+
+task __eff_bossName(ene, texture, red, green, blue)
+{
+	let alpha = 0;
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjSprite2D_SetSourceRect(obj, 0, 0, 128, 16);
+	ObjSprite2D_SetDestRect(obj, 0, 0, 128, 16);
+	ObjRender_SetColor(obj, red, green, blue);
+	ObjRender_SetPosition(obj, 4, 12, 0);
+	ObjRender_SetAlpha(obj, alpha);
+	while(alpha < 255)
+	{
+		alpha += 10;
+		ObjRender_SetAlpha(obj, alpha);
+		yield;
+	}
+	while(isBossActive)
+	{
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task __eff_laserLightBase(obj, type, x, y, delay, speed, time, graphic, scale)
+{
+	time = time/speed;
+	let flag = false;
+	let loc_time = 0;
+	let loc_angle = rand(0, 360);
+	let colorArray = [];
+	let effScale = 0;
+	let effAlpha = 0;
+	let rectarray = [];
+	let useColor = false;
+	alternative(graphic)
+	case(SHOT_LASER_GREY, ST_LASER_GREY, ST_LASER_WHITE)
+	{
+		rectarray = [1, 416, 33, 448];
+	}
+	case(SHOT_LASER_DRED, SHOT_LASER_RED, ST_LASER_DRED, ST_LASER_RED)
+	{
+		rectarray = [33, 416, 65, 448];
+	}
+	case(SHOT_LASER_PURPLE, SHOT_LASER_PINK, ST_LASER_PURPLE, ST_LASER_PINK)
+	{
+		rectarray = [65, 416, 97, 448];
+	}
+	case(SHOT_LASER_DBLUE, SHOT_LASER_BLUE, ST_LASER_DBLUE, ST_LASER_BLUE)
+	{
+		rectarray = [97, 416, 129, 448];
+	}
+	case(SHOT_LASER_SKY, ST_LASER_SKY, ST_LASER_ICE)
+	{
+		rectarray = [129, 416, 161, 448];
+	}
+	case(ST_LASER_DGREEN, ST_LASER_LIME, ST_LASER_GREEN)
+	{
+		rectarray = [161, 416, 193, 448];
+	}
+	case(ST_LASER_GOLD, ST_LASER_YELLOW, ST_LASER_ORANGE)
+	{
+		rectarray = [193, 416, 225, 448];
+	}
+	others
+	{
+		rectarray = [1, 416, 33, 448];
+		colorArray = GetShotDataInfoA1(graphic, TARGET_ENEMY, INFO_DELAY_COLOR);
+		useColor = true;
+	}
+
+	loop(delay)
+	{
+		yield;
+	}
+
+	let eff = Create2DSpriteObjectB(img_shot_bullet1, rectarray[0], rectarray[1], rectarray[2], rectarray[3], -14.5, -14.5, 15.5, 15.5);
+	ObjRender_SetPosition(eff, x, y, 0);
+	ObjRender_SetBlendType(eff, BLEND_ADD_ARGB);
+	ObjRender_SetScaleXYZ(eff, effScale, effScale, 1);
+
+	if(useColor)
+	{
+		ObjRender_SetColor(obj,110 + colorArray[0],110 + colorArray[1],110 + colorArray[2]);
+	}
+
+	while(loc_time < time)
+	{
+		if(Obj_IsDeleted(obj))
+		{
+			if(type == 1 && !flag)
+			{
+				loc_time = 0;
+				time = 1;
+				flag = true;
+			}
+			else if(type == 0)
+			{
+				break;
+			}
+		}
+		if(effScale < scale)
+		{
+			effScale += 0.2;
+		}
+		if(effAlpha < 255)
+		{
+			effAlpha += 40;
+		}
+		loc_angle += 31;
+		ObjRender_SetAngleZ(eff, loc_angle);
+		ObjRender_SetAlpha(eff, effAlpha);
+		ObjRender_SetScaleXYZ(eff, effScale, effScale, 1);
+		loc_time++;
+		yield;
+	}
+	Obj_Delete(eff);
+}
+
+task __eff_bossPentagram(SnowEnemyObject)
+{
+	let objStar = ObjPrim_Create(OBJ_SPRITE_2D);
+	let objxpos = ObjMove_GetX(SnowEnemyObject);
+	let objypos = ObjMove_GetY(SnowEnemyObject);
+	let object_time = 30;
+	let obj_angle = 330;
+	let osize = 0;
+	let obj_sizeset = 0;
+	let sizeinc = 5;
+	let angleinc = 5;
+	let fullsize = 0;
+
+	ObjRender_SetBlendType(objStar, BLEND_ADD_ARGB);
+	Obj_SetRenderPriority(objStar, 0.39);
+	ObjPrim_SetTexture(objStar, img_effect_magicsquare00);
+	ObjSprite2D_SetSourceRect(objStar, 0, 0, 128, 128);
+	ObjSprite2D_SetDestRect(objStar, -63.5, -63.5, 64.5, 64.5);
+	ObjRender_SetColor(objStar, 150,150,150);
+	ObjRender_SetAlpha(objStar, 205);
+
+	while(!Obj_IsDeleted(SnowEnemyObject))
+	{
+		objxpos = ObjMove_GetX(SnowEnemyObject);
+		objypos = ObjMove_GetY(SnowEnemyObject);
+
+		StarSize;
+		ObjRender_SetX(objStar, objxpos);
+		ObjRender_SetY(objStar, objypos);
+		ObjRender_SetScaleXYZ(objStar, osize/95, osize/95, 1);
+		ObjRender_SetAngleZ(objStar, obj_angle);
+		yield;
+	}
+	Obj_Delete(objStar);
+
+	task StarSize
+	{
+		let ax2 = 0.04;
+		let bx2 = 1.35;
+		if(fullsize == 2)
+		{
+			if(obj_sizeset == 0)
+			{
+				sizeinc += ax2;
+			}
+			if(obj_sizeset == 1)
+			{
+				sizeinc -= ax2;
+			}
+
+			if(sizeinc < -bx2)
+			{
+				obj_sizeset = 0;
+			}
+			if(sizeinc > bx2)
+			{
+				obj_sizeset = 1;
+			}
+
+			obj_angle -= angleinc;
+
+			if(angleinc < 5)
+			{
+				angleinc += 0.5;
+			}
+			else
+			{
+				angleinc = 5;
+			}
+
+			osize += sizeinc;
+		}
+		if(fullsize!=2)
+		{
+			obj_angle -= angleinc;
+			angleinc -= 0.06;
+		}
+		if(osize<145&&fullsize == 0)
+		{
+			osize += 5;
+		}
+		if(osize>144&&fullsize == 0)
+		{
+			fullsize = 1;
+			loop(55){yield;}
+			sizeinc = 0;
+			angleinc = 0;
+			fullsize = 2;
+		}
+	}
+}
+
+task __eff_bossAura(EnemyObject, colorR, colorG, colorB)
+{
+	task WAura(EnemyObject, colorR, colorG, colorB)
+	{
+		let objxpos = ObjMove_GetX(EnemyObject);
+		let objypos = ObjMove_GetY(EnemyObject);
+
+		let randomx = rand(-6,6);
+		let randomy = rand(0,-12);
+
+		let yscale = 1;
+		let alpha = 0;
+
+		let timestofade = 0;
+
+		let colorRP = colorR;
+		let colorGP = colorG;
+		let colorBP = colorB;
+
+		let colorRPlus = 0;
+		let colorGPlus = 0;
+		let colorBPlus = 0;
+
+		timestofade = 255 / 4;
+		colorRPlus = colorR / timestofade;
+		colorGPlus = colorG / timestofade;
+		colorBPlus = colorB / timestofade;
+
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		Obj_SetRenderPriority(obj, 0.4);
+		ObjPrim_SetTexture(obj, img_effect_aura00);
+		ObjSprite2D_SetSourceRect(obj, 9, 4, 42, 44);
+		ObjSprite2D_SetDestRect(obj, -21, -44, 21, 0);
+		ObjSprite2D_SetDestCenter(obj);
+		ObjRender_SetScaleXYZ(obj, rand(0.5, 1.4), rand(0.5, 1.4), 1);
+		ObjRender_SetPosition(obj, objxpos + rand(-6,6), objypos + 20 + rand(0,-12), 0);
+		//ObjRender_SetAngleXYZ(obj, angX, angY, angZ);
+		while(!Obj_IsDeleted(EnemyObject))
+		{
+			objxpos = ObjMove_GetX(EnemyObject) + randomx;
+			objypos = ObjMove_GetY(EnemyObject) + randomy;
+
+			colorRP -= colorRPlus;
+			colorGP -= colorGPlus;
+			colorBP -= colorBPlus;
+			ObjRender_SetPosition(obj, objxpos, objypos + 20, 0);
+
+			ObjSprite2D_SetDestRect(obj, -21, -12 - yscale, 21, 0);
+			ObjRender_SetColor(obj, colorRP, colorGP, colorBP);
+			yscale += 2;
+			if(alpha <= 255)
+			{
+				alpha += 4;
+			}
+			if(alpha >= 255)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+
+	task OAura(EnemyObject, colorR, colorG, colorB)
+	{
+		let objxpos = ObjMove_GetX(EnemyObject);
+		let objypos = ObjMove_GetY(EnemyObject);
+
+		let xscale = rand(2,2.6);
+		let yscale = rand(2,2.6);
+		let alpha = 0;
+
+		let timestofade = 0;
+
+		let colorRP = colorR;
+		let colorGP = colorG;
+		let colorBP = colorB;
+
+		let colorRPlus = 0;
+		let colorGPlus = 0;
+		let colorBPlus = 0;
+
+		timestofade = 255 / 5;
+		colorRPlus = colorR / timestofade;
+		colorGPlus = colorG / timestofade;
+		colorBPlus = colorB / timestofade;
+
+		loop(10)
+		{
+			colorRP -= colorRPlus;
+			colorGP -= colorGPlus;
+			colorBP -= colorBPlus;
+		}
+
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		Obj_SetRenderPriority(obj, 0.4);
+		ObjPrim_SetTexture(obj, img_effect_aura00);
+		ObjSprite2D_SetSourceRect(obj, 53, 6, 90, 43);
+		ObjSprite2D_SetDestRect(obj, -19, -19, 19, 19);
+		//ObjSprite2D_SetDestCenter(obj);
+		ObjRender_SetScaleXYZ(obj, 2, 2, 1);
+		ObjRender_SetAngleZ(obj, rand(0,360));
+		ObjRender_SetPosition(obj, objxpos, objypos, 0);
+		//ObjRender_SetAngleXYZ(obj, angX, angY, angZ);
+		while(!Obj_IsDeleted(EnemyObject))
+		{
+			objxpos = ObjMove_GetX(EnemyObject);
+			objypos = ObjMove_GetY(EnemyObject);
+
+			ObjRender_SetScaleXYZ(obj, xscale, yscale, 1);
+
+			colorRP -= colorRPlus;
+			colorGP -= colorGPlus;
+			colorBP -= colorBPlus;
+			//ObjRender_SetPosition(obj, objxpos, objypos, 0);
+
+			//ObjSprite2D_SetDestRect(obj, -21, -12 - yscale, 21, 0);
+			ObjRender_SetColor(obj, colorRP, colorGP, colorBP);
+			xscale -= 0.05;
+			yscale -= 0.05;
+			if(alpha <= 255)
+			{
+				alpha += 5;
+			}
+			if(alpha >= 255)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	yield;
+	while(!Obj_IsDeleted(EnemyObject))
+	{
+		WAura(EnemyObject, colorR, colorG, colorB);
+		OAura(EnemyObject, colorR, colorG, colorB);
+		loop(5){yield;}
+	}
+}
+
+task __eff_enemyMarker(EneObject)
+{
+	let enemark = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(enemark, img_front_front00);
+	ObjSprite2D_SetSourceRect(enemark, 466, 496, 512, 512);
+	ObjSprite2D_SetDestRect(enemark,0, 0, 46, 16);
+	ObjRender_SetPosition(enemark, 0, 464, 0);
+	Obj_SetRenderPriorityI(enemark, 82);
+	while(!Obj_IsDeleted(EneObject))
+	{
+		ObjRender_SetX(enemark, round(ObjMove_GetX(EneObject) + 8));
+		ObjRender_SetAlpha(enemark, 100);
+		yield;
+	}
+	Obj_Delete(enemark);
+}
+
+task __se_hitBoss(EnemyObject, maxLife)
+{
+	let life = ObjEnemy_GetInfo(EnemyObject, INFO_LIFE);
+	while(ObjEnemy_GetInfo(EnemyObject, INFO_LIFE) > 0)
+	{
+		if(ObjEnemy_GetInfo(EnemyObject,INFO_LIFE) != life)
+		{
+			life = ObjEnemy_GetInfo(EnemyObject,INFO_LIFE);
+			if(life < (maxLife * 15 / 100) || life < 50)
+			{
+				thSE_Play(se_damage01);
+			}
+			else
+			{
+				thSE_Play(se_damage00);
+			}
+		}
+		loop(5){yield;}
+	}
+}
+
+/* --------------------------------
+----                           ----
+----     Touhou 10 Effects     ----
+----                           ----
+-------------------------------- */
+
+task __eff_eneDown_th10(enemyObj, x, y)
+{
+	let effType = Obj_GetValueD(enemyObj, "T", 0);
+	let effRect = [0, 0, 64, 64];
+	let effFrame = 0;
+	let loc_scaleA = 0.5;//0.5 - 2 and the other is like 1 - 3 and 0.5 - 0.25 or something
+	let loc_scaleB = 0.5;//0.5 - 2 and the other is like 1 - 3 and 0.5 - 0.25 or something
+	let loc_alpha = 200;
+
+	let objEffA = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(objEffA, img_effect_deadcircle);
+
+	let objEffB = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(objEffB, img_effect_deadcircle);
+
+	alternative(effType)
+	case(ENE_FAIRY00_RED, ENE_FAIRY02_RED, ENE_FAIRY03_RED, ENE_YINYANG00_RED, ENE_YINYANG01_RED, ENE_WISP00_RED)
+	{
+		effRect = [0, 0, 64, 64];
+	}
+	case(ENE_FAIRY00_BLUE, ENE_FAIRY02_BLUE, ENE_FAIRY03_BLUE, ENE_YINYANG00_BLUE, ENE_YINYANG01_BLUE, ENE_WISP00_BLUE, ENE_FAIRY01_WHITE, ENE_ROCK_S)
+	{
+		effRect = [64, 0, 128, 64];
+	}
+	case(ENE_FAIRY00_YELLOW, ENE_YINYANG00_PURPLE, ENE_YINYANG01_PURPLE, ENE_WISP00_YELLOW, ENE_ROCK_B, ENE_ROCK_M)
+	{
+		effRect = [0, 64, 64, 128];
+	}
+	case(ENE_FAIRY00_GREEN, ENE_YINYANG00_GREEN, ENE_YINYANG01_GREEN, ENE_WISP00_GREEN)
+	{
+		effRect = [64, 64, 128, 128];
+	}
+
+	ObjSprite2D_SetSourceRect(objEffA, effRect[0], effRect[1], effRect[2], effRect[3]);
+	ObjSprite2D_SetDestCenter(objEffA);
+	ObjRender_SetBlendType(objEffA, BLEND_ALPHA);
+
+	ObjSprite2D_SetSourceRect(objEffB, effRect[0], effRect[1], effRect[2], effRect[3]);
+	ObjSprite2D_SetDestCenter(objEffB);
+	ObjRender_SetBlendType(objEffB, BLEND_ADD_ARGB);
+
+	ObjRender_SetAlpha(objEffA, 200);
+	ObjRender_SetScaleXYZ(objEffA, 0.5, 0.5, 1);
+	ObjRender_SetPosition(objEffA, x, y, 1);
+
+	ObjRender_SetAlpha(objEffB, 200);
+	ObjRender_SetScaleXYZ(objEffB, 0.5, 1, 1);
+	ObjRender_SetAngleZ(objEffB, rand(0, 360));
+	ObjRender_SetPosition(objEffB, x, y, 1);
+
+	while(effFrame < 25)
+	{
+		//loc_scale = InterpolateValue(0.5, 2, effFrame, IP_DECELERATE, 25);
+		//loc_alpha = InterpolateValue(200, 0, effFrame, IP_LINEAR, 25);
+
+		ObjRender_SetAlpha(objEffA, InterpolateLinear(200, 0, effFrame, 25));
+		ObjRender_SetAlpha(objEffB, InterpolateLinear(200, 0, effFrame, 25));
+
+		ObjRender_SetScale(objEffA, InterpolateDecelerate(0.5, 2, effFrame, 25));
+		ObjRender_SetScaleX(objEffB, InterpolateDecelerate(0.5, 0.25, effFrame, 25));
+		ObjRender_SetScaleY(objEffB, InterpolateDecelerate(1, 3, effFrame, 25));
+		effFrame++;
+		yield;
+	}
+	Obj_Delete(objEffA);
+	Obj_Delete(objEffB);
+}
+
+function __eff_finishEnemy_th10(FPEnemy, isOutside)
+{
+	if(isOutside == false)
+	{
+		thEffect_Play(FPEnemy, 4);
+		thSE_Play(se_enep00);
+	}
+
+	Obj_Delete(FPEnemy);
+}
+
+task __eff_charge_th10(x, y)
+{
+	let effDistance = 256;
+	let effFrames = 50;
+	task loc_Particle(angle)
+	{
+		let effFrame = 0;
+		let loc_distance = effDistance;
+		let loc_speed = effDistance/effFrames;
+		let loc_speedMod = loc_speed/(effFrames*2);
+		let loc_scale = rand(1.5, 3.5);
+		let loc_angle = rand(0, 360);
+		let loc_angMod = rand(-5, 5);
+		let loc_alpha = 1;
+
+		let loc_scaleMod = loc_scale / 25;
+		//let loc_scaleMod = 0;
+
+		let loc_effX = x + effDistance * cos(angle);
+		let loc_effY = y + effDistance * sin(angle);
+		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objEff, img_effect_maple);
+		ObjSprite2D_SetSourceRect(objEff, 0, 0, 32, 32);
+		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
+		ObjRender_SetAlpha(objEff, loc_alpha);
+
+		ObjRender_SetAngleZ(objEff, loc_angle);
+		ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+		ObjRender_SetPosition(objEff, loc_effX, loc_effY, 1);
+
+		while(loc_scale > 0)
+		{
+			if(loc_distance > 45)
+			{
+				if(loc_alpha < 120)
+				{
+					loc_alpha += 6;
+				}
+			}
+			else
+			{
+				if(loc_distance < 35)
+				{
+					loc_alpha -= 2;
+				}
+				loc_scale -= loc_scaleMod;
+				if(loc_scale < 0)
+				{
+					loc_scale = 0;
+				}
+			}
+
+			loc_distance = InterpolateDecelerate(256, 0, effFrame, 60);
+
+			loc_angle += loc_angMod;
+			ObjRender_SetAngleZ(objEff, loc_angle);
+			ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+			ObjRender_SetAlpha(objEff, loc_alpha);
+			ObjRender_SetPosition(objEff, x + loc_distance * cos(angle), y + loc_distance * sin(angle), 1);
+			effFrame++;
+			yield;
+		}
+		Obj_Delete(objEff);
+	}
+
+	loop(25)
+	{
+		loc_Particle(rand(0, 360));
+		yield;
+		yield;
+	}
+}
+
+task __eff_discharge_th10(x, y)
+{
+	let effDistance = 256;
+	let effFrames = 50;
+	task loc_Particle(angle)
+	{
+		let effFrame = 0;
+		let loc_distance = effDistance;
+		let loc_speed = effDistance/effFrames;
+		let loc_speedMod = loc_speed/(effFrames*2);
+		let loc_scale = rand(1.5, 3.5);
+		let loc_angle = rand(0, 360);
+		let loc_angMod = rand(-5, 5);
+		let loc_alpha = 1;
+
+		let loc_scaleMod = loc_scale / 30;
+		//let loc_scaleMod = 0;
+
+		let loc_effX = x + effDistance * cos(angle);
+		let loc_effY = y + effDistance * sin(angle);
+		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objEff, img_effect_maple);
+		ObjSprite2D_SetSourceRect(objEff, 0, 0, 32, 32);
+		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
+		ObjRender_SetAlpha(objEff, loc_alpha);
+
+		ObjRender_SetAngleZ(objEff, loc_angle);
+		ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+		ObjRender_SetPosition(objEff, loc_effX, loc_effY, 1);
+
+		while(loc_scale > 0)
+		{
+			if(loc_distance > 35)
+			{
+				if(loc_alpha < 120)
+				{
+					loc_alpha += 6;
+				}
+			}
+			else
+			{
+				if(loc_distance < 25)
+				{
+					loc_alpha -= 2;
+				}
+				loc_scale -= loc_scaleMod;
+				if(loc_scale < 0)
+				{
+					loc_scale = 0;
+				}
+			}
+
+			loc_distance = InterpolateDecelerate(256, 0, effFrame, 60);
+
+			loc_angle += loc_angMod;
+			ObjRender_SetAngleZ(objEff, loc_angle);
+			ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+			ObjRender_SetAlpha(objEff, loc_alpha);
+			ObjRender_SetPosition(objEff, x + (loc_distance - effDistance) * cos(angle), y + (loc_distance - effDistance) * sin(angle), 1);
+			effFrame++;
+			yield;
+		}
+		Obj_Delete(objEff);
+	}
+
+	loop(32)
+	{
+		loc_Particle(rand(0, 360));
+		yield;
+		yield;
+	}
+}
+
+task __eff_explode_th10(x, y)
+{
+	let effDistance = 256;
+	let effFrames = 50;
+	task loc_Particle(angle)
+	{
+		let effFrame = 0;
+		let loc_distance = effDistance;
+		let loc_speed = effDistance/effFrames;
+		let loc_speedMod = loc_speed/(effFrames*2);
+		let loc_scale = rand(1.5, 3.5);
+		let loc_angle = rand(0, 360);
+		let loc_angMod = rand(-5, 5);
+		let loc_alpha = 1;
+
+		let loc_scaleMod = loc_scale / 30;
+		//let loc_scaleMod = 0;
+
+		let loc_effX = x + effDistance * cos(angle);
+		let loc_effY = y + effDistance * sin(angle);
+		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objEff, img_effect_maple);
+		ObjSprite2D_SetSourceRect(objEff, 0, 0, 32, 32);
+		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
+		ObjRender_SetAlpha(objEff, loc_alpha);
+
+		ObjRender_SetAngleZ(objEff, loc_angle);
+		ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+		ObjRender_SetPosition(objEff, loc_effX, loc_effY, 1);
+
+		while(loc_scale > 0)
+		{
+			if(loc_distance > 45)
+			{
+				if(loc_alpha < 120)
+				{
+					loc_alpha += 6;
+				}
+			}
+			else
+			{
+				if(loc_distance < 35)
+				{
+					loc_alpha -= 2;
+				}
+				loc_scale -= loc_scaleMod;
+				if(loc_scale < 0)
+				{
+					loc_scale = 0;
+				}
+			}
+
+			loc_distance = InterpolateDecelerate(256, 0, effFrame, 60);
+
+			loc_angle += loc_angMod;
+			ObjRender_SetAngleZ(objEff, loc_angle);
+			ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+			ObjRender_SetAlpha(objEff, loc_alpha);
+			ObjRender_SetPosition(objEff, x + (loc_distance - effDistance) * cos(angle), y + (loc_distance - effDistance) * sin(angle), 1);
+			effFrame++;
+			yield;
+		}
+		Obj_Delete(objEff);
+	}
+
+	loop(45)
+	{
+		loc_Particle(rand(0, 360));
+	}
+}
+
+task __eff_explodeB_th10(x, y)
+{
+	let effFrame = 0;
+	let loc_scale = 1;
+	let loc_alpha = 200;
+
+	let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(objEff, img_effect_deadcircle);
+	ObjSprite2D_SetSourceRect(objEff, 0, 0, 64, 64);
+	ObjSprite2D_SetDestCenter(objEff);
+	ObjRender_SetBlendType(objEff, BLEND_ALPHA);
+
+	ObjRender_SetAlpha(objEff, loc_alpha);
+	ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+	ObjRender_SetPosition(objEff, x, y, 1);
+
+	while(effFrame < 25)
+	{
+		loc_scale = InterpolateDecelerate(1, 5, effFrame, 25);
+		loc_alpha = InterpolateLinear(200, 0, effFrame, 25);
+
+		ObjRender_SetAlpha(objEff, loc_alpha);
+		ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+		effFrame++;
+		yield;
+	}
+	Obj_Delete(objEff);
+}
+
+/*
+function FinishNon_th10(FPEnemy)
+{
+	useAtkAnim = 0;
+	bossAttackState++;
+	thStage_ClearShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy), 60, 500);
+}
+
+function FinishSpell_th10(FPEnemy)
+{
+	useAtkAnim = 0;
+	bossAttackState++;
+	endSpellcard = true;
+	isBossSpell = false;
+	thStage_ClearAllShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy));
+	thSE_Play(se_tan00);
+	__thStage_GetSpellCardScore();
+}
+
+function EscapeMid_th10(FPEnemy, x, y, time)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		thStage_ClearAllShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy));
+		thEnemy_SetMovePosition(FPEnemy, IP_DECELERATE, x, y, time, true);
+		
+		canSpawnBoss = true;
+		isBossActive = false;
+		Obj_Delete(FPEnemy);
+	}
+}
+
+function EscapeMidSpell_th10(FPEnemy, x, y, time)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		endSpellcard = true;
+		isBossSpell = false;
+		thStage_ClearAllShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy));
+		//__thStage_GetSpellCardScore();
+		thEnemy_SetMovePosition(FPEnemy, IP_DECELERATE, x, y, time, true);
+		Obj_Delete(FPEnemy);
+	}
+}
+
+function FinishMid_th10(FPEnemy)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		thEffect_Play(FPEnemy, 3);
+		thEffect_Play(FPEnemy, 2);
+		thSE_Play(se_enep01);
+		
+		ScreenShake(90,42,GetCameraFocusX,GetCameraFocusY,GetCameraFocusZ);
+		thStage_ClearAllShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy));
+		
+		canSpawnBoss = true;
+		isBossActive = false;
+		Obj_Delete(FPEnemy);
+	}
+}
+
+function FinishBoss_th10(FPEnemy)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		ObjMove_SetSpeed(FPEnemy, 0.5);
+		ObjMove_SetAngle(FPEnemy, rand(0, 360));
+		let finalframe = 0;
+		let finalframeb = 0;
+
+		thEffect_Play(FPEnemy, 3);
+		thEffect_Play(FPEnemy, 1);
+		thSE_Play(se_enep01);
+		FinishNon_th10(FPEnemy);
+		wait(64);
+
+		thEffect_Play(FPEnemy, 3);
+		thEffect_Play(FPEnemy, 2);
+		ScreenShake(90, 42, GetCameraFocusX,GetCameraFocusY,GetCameraFocusZ);
+		thSE_Play(se_enep01);
+		Obj_Delete(FPEnemy);
+		//__thStage_GetSpellCardScore();
+	}
+}
+
+*/
+
+/* --------------------------------
+----                           ----
+----     Touhou 11 Effects     ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 12 Effects     ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 13 Effects     ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 14 Effects     ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 15 Effects     ----
+----                           ----
+-------------------------------- */

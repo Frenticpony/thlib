@@ -1,0 +1,994 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Cutin Library (cutin_lib.dnh)
+	
+	Author: gtBot, modifications by Frenticpony
+	Version -
+	
+	to do: add in other cutin types, **rewrite, clean up, and consolidate code**
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+//let img_glob_effect01 = GetMainStgScriptDirectory ~ "/img/Global/effect/effect.png"; // Effect Sheet
+//let img_glob_effect02 = GetMainStgScriptDirectory ~ "/img/Global/effect/effect2.png"; // Effect2 Sheet
+//let img_glob_effect37 = GetMainStgScriptDirectory ~ "/img/Global/effect/effect37.png"; // Spell Declare
+//let img_glob_ascii = GetMainStgScriptDirectory ~ "/img/Global/ascii/ascii.png"; // Spell Declare
+
+let CTGetCenterX = GetStgFrameWidth/2;
+let CTGetCenterY = GetStgFrameHeight/2;
+
+/*
+SnowEnemyObject = boss object id (or control obj; when this obj is deleted the spelltext deletes)
+CutType = 
+	"YOUMU"		-	Fades and moves slowly upwards (anchored on the right side, classic cutin)
+	"KYOUKO" 	- 	Fades in, moves slow-fast-slow upwards (anchored on the middle)
+	"NAZRIN"	-	Flies in from top right, slows, and continues down the path at original speed
+	"KANAKO"	-	Flies in from middle right, slows to a stop, and moves upwards in a slow-fast-slow manner
+	"BYAKURAN"	-	Flies in from the left, slows, and continues to the right at original speed
+CutSpellName = "Name of spellcard in string"
+CutSpellImage = path to boss portrait
+CutX1, CutY1, CutX2, CutY2 = Left Top Right Bottom of cutin image, (respectively)
+
+Most of the cutins can be easily copied and pasted and then edited, and I plan on doing a mix 
+and match sort of thing with the various cutins, spell effects, and spell texts.
+Along this will also include those optimizations
+
+If you do add a new cutin type, make sure that you add/ it to the checker list (or remove the list)
+*/
+
+function SpellCutIn(FPEnemy, CutType, CutSpellName)
+{
+	YCutIn(FPEnemy, CutType, CutSpellName, img_ct_current, 0, 0, Obj_GetValue(FPEnemy, "CT_X"), Obj_GetValue(FPEnemy, "CT_Y"), Obj_GetValueD(FPEnemy, "CT_XO", 0), Obj_GetValueD(FPEnemy, "CT_YO", 0));
+}
+
+
+task YCutIn(SnowEnemyObject, CutType, CutSpellName, CutSpellImage, CutX1, CutY1, CutX2, CutY2, CTXOffset, CTYOffset)
+{	
+	let objSpellCutIn = ObjPrim_Create(OBJ_SPRITE_2D);
+	let objSpellBG = ObjPrim_Create(OBJ_SPRITE_2D);
+	let objSpellBonus = ObjPrim_Create(OBJ_SPRITE_2D);
+	let objTxt = ObjText_Create;
+	let objBonusTxt = ObjText_Create;
+	
+	let SpellTextX = 0;
+	let SpellTextX2 = 0;
+	let SpellTextY = 0;
+	let SpellTextSet = 0;
+	let SpellTextXInterpolate = 0;
+	let SpellTextXFrames = 0;
+	
+	let spellMoveX = 0;
+	
+	let SpellTextSize = 0;
+	let SpellTextSizeInc = 0;
+	
+	let SpellBGAlpha = 0;
+	
+	let CutInAlpha = 0;
+	let CutInScale = 0;
+	let CutInX = 0;
+	let CutInY = 0;
+	let CutInPosInc = 0;
+	
+	let CutInTime = 0;
+	let CutInitialize = false;
+	
+	let endFlag = false;
+	
+	SetTextProperties;
+	SetBonusTextProperties;
+	SetBonusImageProperties;
+	SetSpellCutInProperties;
+	SetSpellBGProperties;
+	
+	// Checker List
+	if(CutType!="YOUMU" && CutType!="DAIYOUSEI" && CutType!="KYOUKO"
+	&& CutType!="KANAKO" && CutType!="NAZRIN" && CutType!="BYAKUREN" && CutType!="AYA"
+	&& CutType!="OKUU"){
+		CutType++;
+		// You are seeing this error because you put an invalid
+		// cutin type
+	}
+	
+	if(CutType=="YOUMU"){TextYoumu;}
+	if(CutType=="DAIYOUSEI"){TextDaiyousei;}
+	if(CutType=="KYOUKO"){TextKyouko;}
+	if(CutType=="NAZRIN"){TextNazrin;}
+	if(CutType=="AYA"){TextAya;}
+	if(CutType=="OKUU"){TextOkuu;}
+	if(CutType=="KANAKO"){TextKanako;}
+	if(CutType=="BYAKUREN"){TextByakuren;}
+	
+	while(CutInTime < 450 && ObjEnemy_GetInfo(SnowEnemyObject, INFO_LIFE) > 0){
+		CutInTime++;					
+		yield;
+	}
+	CutInTime = 450;
+	Obj_Delete(objSpellCutIn);
+	while(ObjEnemy_GetInfo(SnowEnemyObject, INFO_LIFE) > 0){yield;}
+	endFlag = true;
+	
+	let locposxA = ObjRender_GetX(objSpellBG);
+	let locposxB = ObjRender_GetX(objTxt);
+	let locposxC = ObjRender_GetX(objBonusTxt);
+	let locposxD = ObjRender_GetX(objSpellBonus);
+	
+	while(SpellTextXFrames < 30)
+	{
+		SpellTextXInterpolate = InterpolateValue(0, 256, SpellTextXFrames, IP_DECELERATE, 30);
+		ObjRender_SetPosition(objSpellBG,    round(locposxA + SpellTextXInterpolate), round(ObjRender_GetY(objSpellBG)), 0);
+		ObjRender_SetPosition(objTxt,        round(locposxB + SpellTextXInterpolate), round(ObjRender_GetY(objTxt)), 0);
+		ObjRender_SetPosition(objBonusTxt,   round(locposxC + SpellTextXInterpolate), round(ObjRender_GetY(objBonusTxt)), 0);
+		ObjRender_SetPosition(objSpellBonus, round(locposxD + SpellTextXInterpolate), round(ObjRender_GetY(objSpellBonus)), 0);
+		SpellTextXFrames++;
+		yield;
+	}
+	Obj_Delete(objTxt);
+	Obj_Delete(objBonusTxt);
+	Obj_Delete(objSpellBG);
+	Obj_Delete(objSpellBonus);
+		
+	task TextYoumu{
+		CutInY = -60;
+		SpellTextY = GetStgFrameHeight/4*3;
+		SpellTextX = 310;
+		SpellTextX2 = 310;
+		BorderOfSpiritEffect;
+		while(SpellTextSet!=4){			
+			if(CutInTime<120&&CutInAlpha<255){CutInAlpha+=3;}
+			if(CutInTime>119&&CutInAlpha>0){CutInAlpha-=3;}
+			
+			ObjRender_SetPosition(objSpellCutIn, 384, CutInY, 0);
+			
+			ObjRender_SetPosition(objSpellBG, 384+SpellTextX, SpellTextY, 0);
+			ObjRender_SetPosition(objTxt, 70+SpellTextX2, SpellTextY+15, 0);
+			
+			ObjRender_SetAlpha(objSpellCutIn, CutInAlpha);
+			
+			if(SpellTextSet==0){
+				SpellTextX-=10;
+				if(SpellTextX==0){SpellTextSet=1;}
+			}
+			if(SpellTextSet==0 || SpellTextSet==1){
+				SpellTextX2-=5;
+				if(SpellTextX2==0){SpellTextSet=2;}
+			}
+			if(CutInTime==100){SpellTextSet=3;}
+			if(SpellTextSet==3){
+				SpellTextY-=10;
+				if(SpellTextY<25){SpellTextSet=4;}
+			}			
+			CutInY+=0.9;
+			yield;
+		}
+	}
+	
+	task TextDaiyousei{
+		CutInY = 120;
+		SpellTextY = GetStgFrameHeight/6*4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		BorderOfSpiritEffect;
+		ObjSprite2D_SetDestRect(objSpellCutIn, -CutX2/2, 0, CutX2/2, CutY2);
+		while(CutInTime<119||CutInAlpha>0){
+			if(CutInTime<120&&CutInAlpha<255){CutInAlpha+=3;CutInPosInc+=0.03;}
+			if(CutInTime>119&&CutInAlpha>0){CutInAlpha-=3;CutInPosInc-=0.028;}
+			
+			ObjRender_SetPosition(objSpellCutIn, CTGetCenterX, CutInY, 0);
+			ObjRender_SetAlpha(objSpellCutIn, CutInAlpha);
+			
+			ObjRender_SetPosition(objSpellBG, 384+SpellTextX, SpellTextY, 0);
+			ObjRender_SetPosition(objTxt, 70+SpellTextX2, SpellTextY+15, 0);
+			
+			
+			if(SpellTextSize>0){
+				SpellTextSize-=4.45;
+				ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 36);
+				if(SpellTextY>20 && CutInTime > 85){SpellTextY-=10;}
+			}
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			
+			CutInY-=CutInPosInc;
+			yield;
+		}
+	}
+	
+	task TextKanako{
+		ObjSprite2D_SetDestCenter(objSpellCutIn);
+		CutInX = CTGetCenterX*2+180;
+		CutInY = CTGetCenterY-190;
+		SpellTextY = GetStgFrameHeight/6*4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		SpellAttackEffect(180, 1.5);
+		CutInPosInc = 18;
+		CutInAlpha = 20;
+		while(CutInTime<=206){
+		
+			if(CutInTime<31){CutInX-=CutInPosInc; CutInY+=CutInPosInc; CutInAlpha+=2;if(CutInTime>8){CutInPosInc-=0.85;}}
+			if(CutInTime==30){CutInPosInc = 0.35;}
+			if(CutInTime>=31 && CutInTime<130){CutInY-=CutInPosInc;CutInPosInc+=0.0225;if(CutInAlpha<235){CutInAlpha+=5;}}
+			if(CutInTime>=130){CutInY-=CutInPosInc;CutInPosInc-=0.035;CutInAlpha-=3;}
+			
+			ObjRender_SetPosition(objSpellCutIn, CutInX, CutInY, 0);
+			ObjRender_SetAlpha(objSpellCutIn, CutInAlpha);
+			
+			ObjRender_SetPosition(objSpellBG, 384+SpellTextX, SpellTextY, 0);
+			ObjRender_SetPosition(objTxt, 70+SpellTextX2, SpellTextY+15, 0);
+			
+			
+			if(SpellTextSize>0){
+				SpellTextSize-=4.45;
+				ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 36);
+				if(SpellTextY>20 && CutInTime > 85){SpellTextY-=10;}
+			}
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			
+			yield;
+		}
+	}
+
+	task TextNazrin
+	{
+		CutInX = (CTGetCenterX*2)+256;
+		CutInY = CTGetCenterY-128;
+		SpellTextY = GetStgFrameHeight/6*4;
+		let SpellTextYMod = 0;
+		let thisVar = 0;
+		let textScale = 4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		SpellAttackEffect(100, 1.5);
+		let loc_frame = 0;
+		let loc_alpha = 0;
+		ObjSprite2D_SetDestCenter(objSpellCutIn);
+		while(!Obj_IsDeleted(SnowEnemyObject))
+		{
+			if(CutInTime<21){CutInX-=20; CutInY+=5}
+			if(CutInTime>=21 && CutInTime<110){CutInX--; CutInY+=0.5;}
+			if(CutInTime>=110){CutInX-=20; CutInY+=5;}
+			
+			ObjRender_SetPosition(objSpellCutIn, CutInX, CutInY, 0);
+			
+			ObjRender_SetPosition(objSpellBG, round(388+SpellTextX), round(SpellTextY), 0);
+			ObjRender_SetPosition(objTxt, 74+SpellTextX2, SpellTextY+15, 0);
+			ObjRender_SetPosition(objBonusTxt, SpellTextX - 2, 20, 0);
+			
+			
+			if(SpellTextSize>0)
+			{
+				SpellTextSize-=3.45;
+				if(textScale > 1)
+				{
+					textScale -= 0.08;
+				}
+				else
+				{
+					textScale = 1;
+				}
+				//ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else
+			{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 64);
+				if(SpellTextY > -10 && CutInTime > 100)
+				{
+					
+					if(SpellTextYMod < 10 && thisVar == 0)
+					{
+						SpellTextYMod += 0.2;
+					}
+					if(SpellTextYMod >= 8)
+					{	
+						thisVar = 1;
+					}
+					if(SpellTextYMod > 0 && thisVar == 1)
+					{
+						SpellTextYMod -= 0.2;
+					}
+					if(SpellTextYMod < 0 && thisVar == 1)
+					{
+						SpellTextYMod -= 0;
+					}
+					SpellTextY -= SpellTextYMod;
+				}
+			}
+			if(loc_frame >= 160 && loc_alpha < 255)
+			{
+				loc_alpha += 10;
+				ObjRender_SetAlpha(objBonusTxt, loc_alpha);
+				ObjRender_SetAlpha(objSpellBonus, loc_alpha);
+			}
+			
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			ObjRender_SetScaleXYZ(objSpellBG, textScale, textScale, 1);
+	
+			if(GetCommonData("FP_IS_SPELLCARD_GET", false) == true)
+			{
+				ObjText_SetText(objBonusTxt, IntToString(GetCommonData("FP_SPELLCARD_BONUS", 50)));
+			}
+			if(GetCommonData("FP_IS_SPELLCARD_GET", false) == false)
+			{
+				ObjText_SetText(objBonusTxt, "Failed");
+			}
+			
+			loc_frame++;
+			yield;
+		}
+	}
+	
+	task TextAya
+	{
+		CutInX = (CTGetCenterX*2)+256 + CTXOffset;
+		CutInY = CTGetCenterY-128 + CTYOffset;
+		SpellTextY = GetStgFrameHeight/6*4;
+		let loc_StartSpellY = SpellTextY;
+		let loc_yuptime = 60;
+		let loc_yframe = 0;
+		let SpellTextYMod = 0;
+		let thisVar = 0;
+		let textScale = 4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		SpellAttackEffect(100, 1.5);
+		let loc_frame = 0;
+		let loc_alpha = 0;
+		ObjSprite2D_SetDestCenter(objSpellCutIn);
+		while(!Obj_IsDeleted(objSpellBonus))
+		{
+			if(CutInTime<21)
+			{
+				CutInX-=20; CutInY+=5
+			}
+			if(CutInTime>=21 && CutInTime<110)
+			{
+				CutInX--; CutInY+=0.5;
+			}
+			if(CutInTime>=110)
+			{
+				CutInX-=20; CutInY+=5;
+			}
+			ObjRender_SetPosition(objSpellCutIn, CutInX, CutInY, 0);
+			
+			if(!endFlag)
+			{
+				ObjRender_SetPosition(objSpellBG,    round(388+SpellTextX),                       round(SpellTextY), 0);
+				ObjRender_SetPosition(objTxt,        round(74+SpellTextX2),                       round(SpellTextY+15), 0);
+				ObjRender_SetPosition(objBonusTxt,   round(SpellTextX - 2),                       round(SpellTextY+31), 0);
+				ObjRender_SetPosition(objSpellBonus, round(SpellTextX + (GetStgFrameWidth - 89)), round(SpellTextY+38), 0);
+			}
+			
+			if(SpellTextSize > 0)
+			{
+				SpellTextSize-=3.45;
+				if(textScale > 1)
+				{
+					textScale -= 0.08;
+				}
+				else
+				{
+					textScale = 1;
+				}
+				//ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else
+			{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 64);
+				if(loc_yframe < loc_yuptime)
+				{
+					SpellTextY = InterpolateValue(loc_StartSpellY, 5, loc_yframe, IP_SMOOTHSTEP, loc_yuptime);
+					loc_yframe++;
+				}
+			}
+			if(loc_frame >= 130 && loc_alpha < 255)
+			{
+				loc_alpha += 10;
+				ObjRender_SetAlpha(objBonusTxt, loc_alpha);
+				ObjRender_SetAlpha(objSpellBonus, loc_alpha);
+			}
+			
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			ObjRender_SetScaleXYZ(objSpellBG, textScale, textScale, 1);
+	
+			if(GetCommonData("FP_IS_SPELLCARD_GET", false) == true)
+			{
+				ObjText_SetText(objBonusTxt, IntToString(GetCommonData("FP_SPELLCARD_BONUS", 50)));
+			}
+			if(GetCommonData("FP_IS_SPELLCARD_GET", false) == false)
+			{
+				ObjText_SetText(objBonusTxt, "Failed");
+			}
+			
+			loc_frame++;
+			yield;
+		}
+	}
+
+	task TextOkuu
+	{
+		CutInX = CTGetCenterX;
+		CutInY = 700;
+		CutInAlpha = 255;
+		CutInScale = 1;
+		SpellTextY = GetStgFrameHeight/6*4;
+		let SpellTextYMod = 0;
+		let thisVar = 0;
+		let textScale = 4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		SpellAttackEffectOkuu(100, 1.5);
+		let loc_frame = 0;
+		let loc_alpha = 0;
+		ObjSprite2D_SetDestCenter(objSpellCutIn);
+		while(!Obj_IsDeleted(SnowEnemyObject))
+		{
+			if(CutInTime < 25)
+			{
+				CutInY -= 20;
+			}
+			if(CutInTime >= 35 && CutInTime < 180)
+			{
+				CutInY -= 0.5;
+			}
+			if(CutInTime >= 180 && CutInAlpha > 0)
+			{
+				CutInY -= 0.5;
+				CutInAlpha -= 10;
+				CutInScale += 0.05;
+			}
+			
+			ObjRender_SetPosition(objSpellCutIn, CutInX, CutInY, 0);
+			ObjRender_SetAlpha(objSpellCutIn, CutInAlpha);
+			ObjRender_SetScaleXYZ(objSpellCutIn, CutInScale, CutInScale, 1);
+			
+			ObjRender_SetPosition(objSpellBG, round(388+SpellTextX), round(SpellTextY), 0);
+			ObjRender_SetPosition(objTxt, round(74+SpellTextX2), round(SpellTextY+15), 0);
+			ObjRender_SetPosition(objBonusTxt, round(SpellTextX - 2), round(SpellTextY+31), 0);
+			ObjRender_SetPosition(objSpellBonus, round(GetStgFrameWidth - 89), round(SpellTextY+38), 0);
+			
+			
+			if(SpellTextSize>0)
+			{
+				SpellTextSize-=3.45;
+				if(textScale > 1)
+				{
+					textScale -= 0.08;
+				}
+				else
+				{
+					textScale = 1;
+				}
+				//ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else
+			{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 64);
+				if(SpellTextY > 5 && CutInTime > 70)
+				{
+					if(SpellTextYMod < 12 && thisVar == 0)
+					{
+						SpellTextYMod += 0.245;
+					}
+					if(SpellTextYMod >= 8.37)
+					{	
+						thisVar = 1;
+					}
+					if(SpellTextYMod > 0 && thisVar == 1)
+					{
+						SpellTextYMod -= 0.245;
+					}
+					if(SpellTextYMod < 0 && thisVar == 1)
+					{
+						SpellTextYMod = 0;
+					}
+					SpellTextY -= SpellTextYMod;
+				}
+				
+				if(SpellTextY < 5)
+				{
+					SpellTextY = 5;
+					SpellTextYMod = 0;
+				}
+			}
+			if(loc_frame >= 130 && loc_alpha < 255)
+			{
+				loc_alpha += 10;
+				ObjRender_SetAlpha(objBonusTxt, loc_alpha);
+				ObjRender_SetAlpha(objSpellBonus, loc_alpha);
+			}
+			
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			ObjRender_SetScaleXYZ(objSpellBG, textScale, textScale, 1);
+	
+			if(GetCommonData("FP_IS_SPELLCARD_GET", false) == true)
+			{
+				ObjText_SetText(objBonusTxt, IntToString(GetCommonData("FP_SPELLCARD_BONUS", 50)));
+			}
+			if(GetCommonData("FP_IS_SPELLCARD_GET", false) == false)
+			{
+				ObjText_SetText(objBonusTxt, "Failed");
+			}
+			
+			loc_frame++;
+			yield;
+		}
+	}
+
+	task TextByakuren{
+		CutInX = -256;
+		CutInY = CTGetCenterY;
+		SpellTextY = GetStgFrameHeight/6*4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		SpellAttackEffect(100, 1.5);
+		ObjSprite2D_SetDestCenter(objSpellCutIn);
+		while(CutInTime<=206){
+		
+			if(CutInTime<21){CutInX+=20;}
+			if(CutInTime>=21 && CutInTime<110){CutInX++;}
+			if(CutInTime>=110){CutInX+=20;}
+			
+			ObjRender_SetPosition(objSpellCutIn, CutInX, CutInY, 0);
+			
+			ObjRender_SetPosition(objSpellBG, 384+SpellTextX, SpellTextY, 0);
+			ObjRender_SetPosition(objTxt, 70+SpellTextX2, SpellTextY+15, 0);
+			
+			
+			if(SpellTextSize>0){
+				SpellTextSize-=4.45;
+				ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 36);
+				if(SpellTextY>20 && CutInTime > 85){SpellTextY-=10;}
+			}
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			
+			yield;
+		}
+	}
+
+	
+	task TextKyouko{
+		CutInY = 120;
+		SpellTextY = GetStgFrameHeight/6*4;
+		SpellTextX = 0;
+		SpellTextX2 = 0;
+		SpellTextSize = 164;
+		SpellAttackEffect(180, 1);
+		ObjSprite2D_SetDestRect(objSpellCutIn, -CutX2/2, 0, CutX2/2, CutY2);
+		
+		while(CutInTime<119||CutInAlpha>0){
+			if(CutInTime<120&&CutInAlpha<255){CutInAlpha+=3;CutInPosInc+=0.03;}
+			if(CutInTime>119&&CutInAlpha>0){CutInAlpha-=3;CutInPosInc-=0.028;}
+			
+			ObjRender_SetPosition(objSpellCutIn, CTGetCenterX, CutInY, 0);
+			ObjRender_SetAlpha(objSpellCutIn, CutInAlpha);
+			
+			ObjRender_SetPosition(objSpellBG, 384+SpellTextX, SpellTextY, 0);
+			ObjRender_SetPosition(objTxt, 70+SpellTextX2, SpellTextY+15, 0);
+			
+			
+			if(SpellTextSize>0){
+				SpellTextSize-=4.45;
+				ObjSprite2D_SetDestRect(objSpellBG, -256-SpellTextSize, -SpellTextSize, 0, 36);
+			}
+			else{
+				ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 36);
+				if(SpellTextY>20 && CutInTime > 85){SpellTextY-=10;}
+			}
+			
+			if(SpellBGAlpha<255){SpellBGAlpha+=4.5}
+			ObjRender_SetAlpha(objTxt, SpellBGAlpha);
+			ObjRender_SetAlpha(objSpellBG, SpellBGAlpha);
+			
+			CutInY-=CutInPosInc;
+			yield;
+		}
+	}
+	
+	function SetSpellBorderProperties
+	{
+		let SSBPtemp = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjRender_SetBlendType(SSBPtemp, BLEND_ALPHA);
+		Obj_SetRenderPriority(SSBPtemp, 0.77);
+		ObjPrim_SetTexture(SSBPtemp, img_cutin_eff00);
+		ObjSprite2D_SetSourceRect(SSBPtemp, 0, 0, 1280, 80);
+		ObjRender_SetPosition(SSBPtemp, GetStgFrameWidth, SpellTextY, 0);
+		ObjSprite2D_SetDestRect(SSBPtemp, -280, -40, 1080, 40); //1.7
+		return SSBPtemp;
+	}	
+	
+	function SetSpellAttackProperties
+	{
+		let SSBPtemp = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjRender_SetBlendType(SSBPtemp, BLEND_ALPHA);
+		Obj_SetRenderPriority(SSBPtemp, 0.76);
+		ObjPrim_SetTexture(SSBPtemp, img_cutin_eff01);
+		ObjSprite2D_SetSourceRect(SSBPtemp, -768, 0, 768, 16);
+		ObjSprite2D_SetDestCenter(SSBPtemp);
+		return SSBPtemp;
+	}
+	
+	task SetSpellCutInProperties
+	{
+		ObjRender_SetBlendType(objSpellCutIn, BLEND_ALPHA);
+		ObjRender_SetAlpha(objSpellCutIn, 225);
+		Obj_SetRenderPriority(objSpellCutIn, 0.75);
+		ObjPrim_SetTexture(objSpellCutIn, CutSpellImage);
+		ObjSprite2D_SetSourceRect(objSpellCutIn, CutX1, CutY1, CutX2, CutY2);
+		ObjRender_SetPosition(objSpellCutIn, GetStgFrameWidth-30, 0, 0);
+		while(CutX1>0){CutX1--;CutX2--;}
+		while(CutY1>0){CutY1--;CutY2--;}
+		ObjSprite2D_SetDestRect(objSpellCutIn, -CutX2, 0, 0, CutY2);
+	}
+	
+	task SetSpellBGProperties
+	{
+		ObjRender_SetBlendType(objSpellBG, BLEND_ALPHA);
+		Obj_SetRenderPriority(objSpellBG, 0.78);
+		ObjPrim_SetTexture(objSpellBG, img_cutin_eff02);
+		ObjSprite2D_SetSourceRect(objSpellBG, 0, 0, 256, 64);
+		ObjRender_SetPosition(objSpellBG, GetStgFrameWidth, SpellTextY, 0);
+		ObjSprite2D_SetDestRect(objSpellBG, -256, 0, 0, 64);
+	}
+	
+	task SetBonusImageProperties
+	{
+		ObjRender_SetBlendType(objSpellBonus, BLEND_ALPHA);
+		Obj_SetRenderPriority(objSpellBonus, 0.78);
+		ObjPrim_SetTexture(objSpellBonus, img_ascii_ascii);
+		ObjSprite2D_SetSourceRect(objSpellBonus, 0, 191, 192, 203);
+		ObjRender_SetPosition(objSpellBonus, GetStgFrameWidth - 89, SpellTextY + 28, 0);
+		ObjSprite2D_SetDestCenter(objSpellBonus);
+		ObjRender_SetAlpha(objSpellBonus, 0);
+	}
+	
+	task SetTextProperties
+	{
+		ObjText_SetText(objTxt,CutSpellName);
+		ObjText_SetFontSize(objTxt,12);
+		ObjText_SetFontColorTop(objTxt,254,254,254);
+		ObjText_SetFontColorBottom(objTxt,255,255,255);
+		ObjText_SetFontBorderType(objTxt,BORDER_FULL);
+		ObjText_SetFontBorderColor(objTxt,0,0,0);
+		ObjText_SetFontBorderWidth(objTxt,1);
+		ObjText_SetHorizontalAlignment(objTxt, ALIGNMENT_RIGHT);
+		ObjText_SetMaxWidth(objTxt, 300);
+		ObjRender_SetPosition(objTxt, 70, SpellTextY+15, 0);
+		Obj_SetRenderPriority(objTxt, 0.79);
+	}
+	
+	task SetBonusTextProperties
+	{
+		ObjText_SetText(objBonusTxt, IntToString(GetCommonData("FP_SPELLCARD_BONUS", 9000000)));
+		ObjText_SetFontSize(objBonusTxt,12);
+		ObjText_SetFontColorTop(objBonusTxt,254,254,254);
+		ObjText_SetFontColorBottom(objBonusTxt,255,255,255);
+		ObjText_SetFontBorderType(objBonusTxt,BORDER_FULL);
+		ObjText_SetFontBorderColor(objBonusTxt,0,0,0);
+		ObjText_SetFontBorderWidth(objBonusTxt,1);
+		ObjText_SetHorizontalAlignment(objBonusTxt, ALIGNMENT_RIGHT);
+		ObjText_SetMaxWidth(objBonusTxt, 300);
+		ObjRender_SetPosition(objBonusTxt, 6, SpellTextY + 40, 0);
+		Obj_SetRenderPriority(objBonusTxt, 0.79);
+		ObjRender_SetAlpha(objBonusTxt, 0);
+	}
+
+	task BorderOfSpiritEffect
+	{
+		let objSpellBorder = SetSpellBorderProperties;
+		let objSpellBorder2 = SetSpellBorderProperties;
+		let BorderAlpha = 0;
+		let BorderPos = 0;
+		ObjRender_SetAngleXYZ(objSpellBorder2, 0, 0, 90);
+		while(Obj_IsDeleted(objSpellBorder) == false){
+			BorderPos+=0.9;
+			ObjRender_SetAlpha(objSpellBorder, BorderAlpha);
+			ObjRender_SetAlpha(objSpellBorder2, BorderAlpha);
+			ObjRender_SetPosition(objSpellBorder, BorderPos*2.4-500, 326-BorderPos*0.4, 0);
+			ObjRender_SetPosition(objSpellBorder2, 256-BorderPos*0.5, -BorderPos*2.4, 0);
+			if(CutInTime<120&&BorderAlpha<255){BorderAlpha+=3;}
+			if(CutInTime>119&&BorderAlpha>0){BorderAlpha-=3;}
+			if(CutInTime>119 && BorderAlpha == 0){Obj_Delete(objSpellBorder);Obj_Delete(objSpellBorder2);}
+			yield;
+		}
+	}
+	
+	task SpellAttackEffect(speed, alphamod)
+	{
+		let alpha = 0;
+		Octagon(CTGetCenterX*2, CTGetCenterY*2, -1.15, 190, 0);
+		Octagon(CTGetCenterX*2, CTGetCenterY*2, 1.05, 240, 0);
+		Octagon(CTGetCenterX*2, CTGetCenterY*2, 1.05, 295, 0);
+		Octagon(CTGetCenterX/5, CTGetCenterY/5, 0.75, 150, 1);
+		
+		ascent (i in 0..5){
+			Line(CTGetCenterX, CTGetCenterY+i*75-75-95, 1.5);
+		}
+		ascent (i in 0..5){
+			Line(CTGetCenterX, CTGetCenterY+i*75-37.5-95, -1.5);
+		}
+		while(CutInTime<speed||alpha>0){
+			if(CutInTime<speed && CutInTime>15 && alpha<145){alpha+=5*alphamod}
+			if(CutInTime>=speed && alpha>0){alpha-=5*alphamod}
+			yield;
+		}
+		
+		task Line(mx, my, posinc){
+			let objSpellAttack = SetSpellAttackProperties;
+			let LineX = 0;
+			let LineY = 0;
+			ObjRender_SetAngleZ(objSpellAttack, -35);
+			while(CutInTime<180 || alpha>0){
+				LineX = LineX+posinc*cos(-35);
+				LineY = LineY+posinc*sin(-35);
+				ObjRender_SetPosition(objSpellAttack, mx+LineX, my+LineY, 0);
+				ObjRender_SetAlpha(objSpellAttack, alpha);
+				yield;
+			}
+			Obj_Delete(objSpellAttack);
+		}
+	
+		task Octagon(mx, my, spininc, dist, size){
+		
+			let countVertex = 16;
+			let listRadius = [];
+			loop(countVertex){
+				listRadius = listRadius ~ [0];
+			}
+
+			let objOutline = ObjPrim_Create(OBJ_PRIMITIVE_2D);
+			ObjPrim_SetPrimitiveType(objOutline, PRIMITIVE_TRIANGLESTRIP);
+			ObjPrim_SetVertexCount(objOutline, countVertex);
+			ObjRender_SetBlendType(objOutline, BLEND_ALPHA);
+			Obj_SetRenderPriority(objOutline, 0.76);
+			ObjPrim_SetTexture(objOutline, img_cutin_eff01);
+	
+			ascent (iVert in 0..countVertex/2){
+				let left = iVert * 128;
+				let indexVert = iVert * 2;
+				ObjPrim_SetVertexUVT(objOutline, indexVert + 0, left, 0);
+				ObjPrim_SetVertexUVT(objOutline, indexVert + 1, left, 16);
+			}			
+	
+			let frame = 0;
+			let rRate = 1;
+			let spin = 0;
+	
+			while(CutInTime<180 || alpha>0){
+				spin+=spininc;
+				VertexSize;
+				ObjRender_SetPosition(objOutline, mx, my, 0);
+				ObjRender_SetAngleZ(objOutline, spin);
+				ObjRender_SetAlpha(objOutline, alpha);
+				frame++;
+				yield;
+			}
+			Obj_Delete(objOutline);
+			
+			task VertexSize{	
+				if(frame>=35){return;}
+				ascent (iVert in 0..countVertex/2){
+					let indexVert = iVert * 2;
+					let angle = (360 / (countVertex / 2 - 1) * iVert);
+
+					let vx1 = listRadius[indexVert] * cos(angle);
+					let vy1 = listRadius[indexVert] * sin(angle);
+					ObjPrim_SetVertexPosition(objOutline, indexVert + 0, vx1, vy1, 0);
+
+					let vx2 = listRadius[indexVert+1] * cos(angle);
+					let vy2 = listRadius[indexVert+1] * sin(angle);
+					ObjPrim_SetVertexPosition(objOutline, indexVert + 1, vx2, vy2, 0);
+
+					let dr = (dist * rRate - listRadius[indexVert]) / 16;
+					listRadius[indexVert] = listRadius[indexVert] + dr;
+					if(frame>size){
+						listRadius[indexVert + 1] = listRadius[indexVert + 1] + dr;
+					}
+				}
+			}
+		}
+	}
+	
+	task SpellAttackEffectOkuu(speed, alphamod)
+	{
+		let alpha = 0;
+		Octagon(CTGetCenterX*2, CTGetCenterY*2, -1.15, 190, 0);
+		Octagon(CTGetCenterX*2, CTGetCenterY*2, 1.05, 240, 0);
+		Octagon(CTGetCenterX*2, CTGetCenterY*2, 1.05, 295, 0);
+		Octagon(CTGetCenterX/5, CTGetCenterY/5, 0.75, 150, 1);
+		
+		ascent (i in 0..5){
+			Line(CTGetCenterX, CTGetCenterY+i*75-75-95, 1.5);
+		}
+		ascent (i in 0..5){
+			Line(CTGetCenterX, CTGetCenterY+i*75-37.5-95, -1.5);
+		}
+		while(CutInTime<speed||alpha>0){
+			if(CutInTime<speed && CutInTime>15 && alpha<145){alpha+=5*alphamod}
+			if(CutInTime>=speed && alpha>0){alpha-=5*alphamod}
+			yield;
+		}
+		
+		task Line(mx, my, posinc){
+			let objSpellAttack = SetSpellAttackProperties;
+			let LineX = 0;
+			let LineY = 0;
+			ObjRender_SetAngleZ(objSpellAttack, -35);
+			while(CutInTime<250 || alpha>0){
+				LineX = LineX+posinc*cos(-35);
+				LineY = LineY+posinc*sin(-35);
+				ObjRender_SetPosition(objSpellAttack, mx+LineX, my+LineY, 0);
+				ObjRender_SetAlpha(objSpellAttack, alpha);
+				yield;
+			}
+			Obj_Delete(objSpellAttack);
+		}
+	
+		task Octagon(mx, my, spininc, dist, size){
+		
+			let countVertex = 16;
+			let listRadius = [];
+			loop(countVertex){
+				listRadius = listRadius ~ [0];
+			}
+
+			let objOutline = ObjPrim_Create(OBJ_PRIMITIVE_2D);
+			ObjPrim_SetPrimitiveType(objOutline, PRIMITIVE_TRIANGLESTRIP);
+			ObjPrim_SetVertexCount(objOutline, countVertex);
+			ObjRender_SetBlendType(objOutline, BLEND_ALPHA);
+			Obj_SetRenderPriority(objOutline, 0.76);
+			ObjPrim_SetTexture(objOutline, img_cutin_eff01);
+	
+			ascent (iVert in 0..countVertex/2){
+				let left = iVert * 128;
+				let indexVert = iVert * 2;
+				ObjPrim_SetVertexUVT(objOutline, indexVert + 0, left, 0);
+				ObjPrim_SetVertexUVT(objOutline, indexVert + 1, left, 16);
+			}			
+	
+			let frame = 0;
+			let rRate = 1;
+			let spin = 0;
+	
+			while(CutInTime<250 || alpha>0){
+				spin+=spininc;
+				VertexSize;
+				ObjRender_SetPosition(objOutline, mx, my, 0);
+				ObjRender_SetAngleZ(objOutline, spin);
+				ObjRender_SetAlpha(objOutline, alpha);
+				frame++;
+				yield;
+			}
+			Obj_Delete(objOutline);
+			
+			task VertexSize{	
+				if(frame>=35){return;}
+				ascent (iVert in 0..countVertex/2){
+					let indexVert = iVert * 2;
+					let angle = (360 / (countVertex / 2 - 1) * iVert);
+
+					let vx1 = listRadius[indexVert] * cos(angle);
+					let vy1 = listRadius[indexVert] * sin(angle);
+					ObjPrim_SetVertexPosition(objOutline, indexVert + 0, vx1, vy1, 0);
+
+					let vx2 = listRadius[indexVert+1] * cos(angle);
+					let vy2 = listRadius[indexVert+1] * sin(angle);
+					ObjPrim_SetVertexPosition(objOutline, indexVert + 1, vx2, vy2, 0);
+
+					let dr = (dist * rRate - listRadius[indexVert]) / 16;
+					listRadius[indexVert] = listRadius[indexVert] + dr;
+					if(frame>size){
+						listRadius[indexVert + 1] = listRadius[indexVert + 1] + dr;
+					}
+				}
+			}
+		}
+	}
+
+}
+
+task FP_CautionCutIn()
+{
+	task CAUTIONtext(y)
+	{
+		let sourceplus = 0;
+		let alpha = 0;
+		let time = 0;
+		let cautiontexts = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(cautiontexts, img_ct_caution);
+		Obj_SetRenderPriority(cautiontexts, 0.77);
+		ObjSprite2D_SetSourceRect(cautiontexts, 0, 220, 255*3, 256);
+		ObjSprite2D_SetDestRect(cautiontexts, 0, 220, 255*3, 256);
+		ObjSprite2D_SetDestCenter(cautiontexts);
+		ObjRender_SetPosition(cautiontexts, CTGetCenterX, y, 0);
+		while(!Obj_IsDeleted(cautiontexts) && time < 160)
+		{
+			ObjRender_SetAlpha(cautiontexts, alpha);
+			ObjSprite2D_SetSourceRect(cautiontexts, 0 + sourceplus, 220, 255*3 + sourceplus, 256);
+			sourceplus -= 0.7;
+			if(alpha < 255)
+			{
+				alpha += 5;
+			}
+			time++;
+			yield;
+		}
+		while(alpha >= 0)
+		{
+			ObjRender_SetAlpha(cautiontexts, alpha);
+			alpha -= 5;
+			ObjSprite2D_SetSourceRect(cautiontexts, 0 + sourceplus, 220, 255*3 + sourceplus, 256);
+			sourceplus -= 0.7;
+			yield;
+		}
+		Obj_Delete(cautiontexts);
+	}
+	task CAUTIONsymb(y)
+	{
+		let sourceplus = 0;
+		let alpha = 0;
+		let time = 0;
+		let cautiontexts = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(cautiontexts, img_ct_caution);
+		Obj_SetRenderPriority(cautiontexts, 0.77);
+		ObjSprite2D_SetSourceRect(cautiontexts, 0, 0, 255*3, 133);
+		ObjSprite2D_SetDestRect(cautiontexts, 0, 0, 255*3, 133);
+		ObjSprite2D_SetDestCenter(cautiontexts);
+		ObjRender_SetPosition(cautiontexts, CTGetCenterX, y, 0);
+		while(!Obj_IsDeleted(cautiontexts) && time < 160)
+		{
+			ObjRender_SetAlpha(cautiontexts, alpha);
+			ObjSprite2D_SetSourceRect(cautiontexts, 0 + sourceplus, 0, 255*3 + sourceplus, 133);
+			sourceplus += 0.7;
+			if(alpha < 255)
+			{
+				alpha += 5;
+			}
+			time++;
+			yield;
+		}
+		while(alpha >= 0)
+		{
+			ObjRender_SetAlpha(cautiontexts, alpha);
+			alpha -= 5;
+			ObjSprite2D_SetSourceRect(cautiontexts, 0 + sourceplus, 0, 255*3 + sourceplus, 133);
+			sourceplus += 0.7;
+			yield;
+		}
+	}
+	thSE_Play(se_alert);
+	CAUTIONtext(CTGetCenterY + 80);
+	CAUTIONtext(CTGetCenterY - 80);
+	CAUTIONsymb(CTGetCenterY)
+}

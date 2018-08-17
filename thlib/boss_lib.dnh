@@ -1,0 +1,347 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Boss Library (boss_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+	to do: clean up
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Functions -=-=-=-=-=-=-=-=-=-=-
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Initialization -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_Init(n_obj)
+{
+	bossID = n_obj;
+	bossAttackState = 0;
+	bossEnd = false;
+}
+
+function thBoss_SetUpA(n_obj, c_id, n_x, n_y)
+{
+	ObjEnemy_Regist(n_obj);
+	ObjEnemy_SetDamageRate(n_obj, 0, 0);
+	ObjMove_SetPosition(n_obj, CenX + n_x, n_y);
+	Obj_SetValue(n_obj, "DR", [0, 0]);
+	
+	thEnemy_ClearDrops(n_obj);
+	thBoss_SetBossMoveField(n_obj, 96, 280, 100);
+	InitBoss(n_obj, c_id);
+}
+
+function thBoss_SetUpB(n_obj)
+{
+	//__eff_bossName(n_obj, img_ename_current, 112, 240, 128); //th10 - MoF
+	__eff_bossName(n_obj, img_ename_current, 112, 240, 240);   //th11 - SA
+	//__eff_bossName(n_obj, img_ename_current, 112, 208, 144);   //th12 - UFO
+	__thStage_DrawBossStars_th10(n_obj, 0);
+	__eff_bossC(n_obj);
+	//TDistortion(n_obj, 50, 150, 50);
+	__thStage_BossTimer_th10(n_obj);
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Attack Initialization -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_InitTalkEvent(n_obj)
+{
+	ObjEnemy_SetLife(n_obj, 9999);
+	bossTimer = 1;
+	isTimerPaused = true;
+	isBossInvincible = true;
+}
+
+function thBoss_InitPattern(n_obj, n_life, n_time)
+{
+	ObjEnemy_SetLife(n_obj, n_life);
+	__se_hitBoss(n_obj, n_life);
+	GetPlayerDeathCountCurrent = 0;
+	isTimerPaused = false;
+	thBoss_SetBossTimer(n_time);
+	__thStage_DrawBossLife_th10(n_obj, "Normal");
+	//SetCommonData("FP_IS_SPELLCARD", false);
+	isBossSpell = false;
+	isBossInvincible = true;
+}
+
+function thBoss_InitSpellcard(n_obj, n_life, n_time, n_score, s_title)
+{
+	//let spScore = 1000000 * (1 + 1);
+	
+	//SetCommonData("FP_SPELLCARD_BONUS", spScore);
+	
+	ObjEnemy_SetLife(n_obj, n_life);
+	__se_hitBoss(n_obj, n_life);
+	GetPlayerDeathCountCurrent = 0;
+	isTimerPaused = false;
+	thBoss_SetBossTimer(n_time);
+	__thStage_DrawBossLife_th10(n_obj, "Spell");
+	__thStage_SpellCardGetCheck(n_obj, n_time);
+	__eff_bossRingA(n_obj);
+	__eff_bossRingB(n_obj);
+	SpellCutIn(n_obj, "AYA", s_title);
+	isBossSpell = true;
+	isBossInvincible = true;
+	thSE_Play(se_cat00);
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Value Set -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_SetBossMoveField(n_obj, loc_centerY, loc_width, loc_height)
+{
+	let fastX = loc_width/2;
+	let fastY = loc_height/2;
+	Obj_SetValue(n_obj, "BX1", CenX - fastX);
+	Obj_SetValue(n_obj, "BY1", loc_centerY - fastY);
+	Obj_SetValue(n_obj, "BX2", CenX + fastX);
+	Obj_SetValue(n_obj, "BY2", loc_centerY + fastY);
+}
+
+function thBoss_SetBossTimer(n_time)
+{
+	//SetCommonData("FP_BOSS_TIMER", val * 60);
+	bossTimer = n_time * 60;
+}
+
+function thBoss_SetDamageRate(n_obj, rateA, rateB)
+{
+	Obj_SetValue(n_obj, "DR", [rateA, rateB]);
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Value Get -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_GetBossMoveField(n_obj)
+{
+	return [Obj_GetValueD(n_obj, "BX1", 0), Obj_GetValueD(n_obj, "BY1", 0), Obj_GetValueD(n_obj, "BX2", GetStgFrameWidth), Obj_GetValueD(n_obj, "BY2", GetStgFrameHeight)];
+}
+
+function thBoss_GetBossTimer()
+{
+	//return GetCommonData("FP_BOSS_TIMER", 0);
+	return bossTimer;
+}
+
+function thBoss_GetDamageRate(n_obj)
+{
+	return Obj_GetValueD(n_obj, "DR", [100, 100]);
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Main Loop -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_MainLoop(n_obj)
+{
+	let damageRate = thBoss_GetDamageRate(n_obj);
+	GetBossX = ObjMove_GetX(n_obj);
+	GetBossY = ObjMove_GetY(n_obj);
+	
+	ObjEnemy_SetIntersectionCircleToShot(n_obj, GetBossX, GetBossY, 25);
+
+	if(isBossInvincible == true)
+	{
+		ObjEnemy_SetDamageRate(n_obj, 0, 0);
+	}
+	else
+	{
+		ObjEnemy_SetDamageRate(n_obj, damageRate[0], damageRate[1]);
+		ObjEnemy_SetIntersectionCircleToPlayer(n_obj, GetBossX, GetBossY, 10);
+	}
+
+	//if(GetCommonData("FP_BOSS_TIMER", 0) > 0 && isTimerPaused == false)
+	if(bossTimer > 0 && isTimerPaused == false)
+	{
+		bossTimeout = false;
+		bossGetSpell = true;
+		bossTimer -= 1;
+		//SetCommonData("FP_BOSS_TIMER", GetCommonData("FP_BOSS_TIMER", 0) - 1);
+	}
+	//else if(GetCommonData("FP_BOSS_TIMER", 0) == 0)
+	else if(bossTimer == 0)
+	{
+		bossTimeout = true;
+		bossGetSpell = false;
+		//SetCommonData("FP_IS_SPELLCARD_GET", false);
+		ObjEnemy_SetLife(n_obj, 0);
+	}
+	
+	if(ObjEnemy_GetInfo(n_obj, INFO_LIFE) == 0)
+	{
+		Obj_SetValue(n_obj, "NA", true);
+		//bossAttackState++;
+	}
+
+	SetCommonData("FP_BOSSID", n_obj);
+	bossID = n_obj;
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Progression Functions -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_Pause(n_time)
+{
+	isTimerPaused = true;
+	isBossInvincible = true;
+	wait(n_time);
+}
+
+function thBoss_FinishA(n_obj)
+{
+	if(!isFinalBossAttack)
+	{
+		if(isBossSpell)
+		{
+			endSpellcard = true;
+			isBossSpell = false;
+			thSE_Play(se_tan00);
+			__thStage_GetSpellCardScore();
+		}
+		
+		thStage_ClearAllShots(ObjMove_GetX(n_obj), ObjMove_GetY(n_obj));
+	}
+	useAtkAnim = 0;
+	bossAttackState++;
+}
+
+function thBoss_FinishB(n_obj, n_state)
+{
+	if(!isFinalBossAttack)
+	{
+		if(isBossSpell)
+		{
+			endSpellcard = true;
+			isBossSpell = false;
+			thSE_Play(se_tan00);
+			__thStage_GetSpellCardScore();
+		}
+		
+		thStage_ClearAllShots(ObjMove_GetX(n_obj), ObjMove_GetY(n_obj));
+	}
+	useAtkAnim = 0;
+	bossAttackState = n_state;
+}
+
+function thBoss_FinishC(n_obj)
+{
+	if(!isFinalBossAttack)
+	{
+		if(isBossSpell)
+		{
+			endSpellcard = true;
+			isBossSpell = false;
+			thSE_Play(se_tan00);
+			__thStage_GetSpellCardScore();
+		}
+		
+		thStage_ClearAllShots(ObjMove_GetX(n_obj), ObjMove_GetY(n_obj));
+	}
+	useAtkAnim = 0;
+}
+
+function thBoss_EscapeMid(FPEnemy, x, y, time)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		thStage_ClearAllShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy));
+		thEnemy_SetMovePosition(FPEnemy, IP_DECELERATE, x, y, time, true);
+		
+		canSpawnBoss = true;
+		isBossActive = false;
+		Obj_Delete(FPEnemy);
+	}
+}
+
+function thBoss_FinishMid(FPEnemy)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		thEffect_Play(FPEnemy, 3);
+		thEffect_Play(FPEnemy, 2);
+		thSE_Play(se_enep01);
+		
+		ScreenShake(90,42,GetCameraFocusX,GetCameraFocusY,GetCameraFocusZ);
+		thStage_ClearAllShots(ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy));
+		
+		canSpawnBoss = true;
+		isBossActive = false;
+		Obj_Delete(FPEnemy);
+	}
+}
+
+function thBoss_FinishBoss(n_obj)
+{
+	if(ObjEnemy_GetInfo(n_obj, INFO_LIFE) <= 0)
+	{
+		ObjMove_SetSpeed(n_obj, 0.5);
+		ObjMove_SetAngle(n_obj, rand(0, 360));
+		let finalframe = 0;
+		let finalframeb = 0;
+
+		thEffect_Play(n_obj, 3);
+		thEffect_Play(n_obj, 1);
+		thSE_Play(se_enep01);
+		//FinishNon_th10(FPEnemy);
+		wait(20);
+		thStage_ClearShots(ObjMove_GetX(n_obj), ObjMove_GetY(n_obj), 120, 900);
+		wait(44);
+
+		thEffect_Play(n_obj, 3);
+		thEffect_Play(n_obj, 2);
+		ScreenShake(90, 42, GetCameraFocusX,GetCameraFocusY,GetCameraFocusZ);
+		thSE_Play(se_enep01);
+		
+		canSpawnBoss = true;
+		isBossActive = false;
+		isFinalBossAttack = false;
+		Obj_Delete(n_obj);
+		wait(60);
+		
+		if(isBossSpell)
+		{
+			endSpellcard = true;
+			isBossSpell = false;
+			__thStage_GetSpellCardScore();
+		}
+	}
+}
+
+function debug_FinishMid_th10(FPEnemy)
+{
+	if(ObjEnemy_GetInfo(FPEnemy, INFO_LIFE) <= 0)
+	{
+		if(isBossSpell)
+		{
+			endSpellcard = true;
+			isBossSpell = false;
+		}
+		
+		canSpawnBoss = true;
+		isBossActive = false;
+		Obj_Delete(FPEnemy);
+	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- Boss Other -=-=-=-=-=-=-=-=-=-=-
+
+function thBoss_Delay(n_time, b_condition)
+{
+	let loc_timer = 0;
+	while(!b_condition && loc_timer < n_time)
+	{
+		loc_timer++;
+		yield;
+	}
+	isBossInvincible = false;
+}
+
+function thBoss_IsZeroLife(n_obj)
+{
+	if (ObjEnemy_GetInfo(n_obj, INFO_LIFE) > 0){return true;}
+	else{return false;}
+}
+
+function thBoss_WaitForZeroLife(n_obj)
+{
+	while(ObjEnemy_GetInfo(n_obj, INFO_LIFE) > 0)
+	{
+		yield;
+	}
+}

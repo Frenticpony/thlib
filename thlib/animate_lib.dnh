@@ -1,0 +1,4993 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Animation Library (animate_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+	to do: animation library: ease of use- replace and rework old code down to one animate task, use arrays to store frame data and rects
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+//let useAtkAnim = false;
+//let useAltAtkAnim = false;
+
+let useAtkAnim = 0;
+
+let nitori_useCamo = false;
+
+let byakuren_useLotus = false;
+let byakuren_lotusEyeA = 0;
+let byakuren_lotusEyeAngleA = 0;
+
+let byakuren_lotusEyeB = 0;
+let byakuren_lotusEyeAngleB = 0;
+
+let byakuren_lotusEyeC = 0;
+let byakuren_lotusEyeAngleC = 0;
+
+let byakuren_lotusEyeD = 0;
+let byakuren_lotusEyeAngleD = 0;
+
+let yuyuko_UseFan = false;
+
+let sukuna_UseTeaCup = false;
+let sukuna_isBreakTeacup = false;
+
+task ObjBoss_UseAttackAnimationA(obj, type)
+{
+	let loc_flag = false;
+	let loc_cancel = false;
+	
+	if(useAtkAnim == 1)
+	{
+		loc_flag = true;;
+	}
+	
+	if(!loc_flag)
+	{
+		while(!loc_cancel)
+		{
+			useAtkAnim = 1;
+			if(ObjMove_GetSpeed(obj) > 0)
+			{
+				loc_cancel = true;
+			}
+			yield;
+		}
+		useAtkAnim = 0;
+	}
+}
+
+task AnimateTemplate(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_sanae);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[8];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[9];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[10];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[11];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+
+task AnimateShizuha(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_aki);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+				if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+				if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+				if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+				if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+				if(f >= 4*fpsA && f < 5*fpsA){rowCol = rowColArray[2];}
+				if(f >= 5*fpsA && f < 6*fpsA){rowCol = rowColArray[1];}
+				if(f >= 6*fpsA){f = 0;}
+				f++;
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateMinoriko(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 2], //0
+		[1, 2], //1
+		[2, 2], //2
+		[3, 2], //3
+		
+		[0, 3], //4
+		[1, 3], //5
+		[2, 3], //6
+		[3, 3]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_aki);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[2];}
+					//if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[5];}
+					//if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[6];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+					if(f >= 1*fpsA){f = 0;}
+					movecos = cos(f4*2)*3;
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					//if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					//if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					//if(f >= 4*fpsA && f < 5*fpsA){rowCol = rowColArray[2];}
+					//if(f >= 5*fpsA && f < 6*fpsA){rowCol = rowColArray[1];}
+					if(f >= 1*fpsA){f = 0;}
+					movecos = cos(f4*2)*7;
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateHina(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_hina);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[4];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[5];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[6];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+					if(f >= 4*fpsA && f < 5*fpsA){rowCol = rowColArray[8];}
+					if(f >= 5*fpsA && f < 6*fpsA){rowCol = rowColArray[9];}
+					if(f >= 6*fpsA && f < 7*fpsA){rowCol = rowColArray[10];}
+					if(f >= 7*fpsA && f < 8*fpsA){rowCol = rowColArray[11];}
+					if(f >= 8*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateNitori(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 80;
+	
+	let offsetX = 64;
+	let offsetY = 80;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_nitori00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(nitori_useCamo)
+		{
+			ObjRender_SetAlpha(obj, 150);
+			ObjPrim_SetTexture(obj, img_enm_nitori01);
+		}
+		else
+		{
+			ObjRender_SetAlpha(obj, 255);
+			ObjPrim_SetTexture(obj, img_enm_nitori00);
+		}
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+				if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+				if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+				if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+				if(f >= 4*fpsA){f = 0;}
+				f++;
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateAya(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_aya);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateSanae(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let frames_idle = [[], []];
+	let frames_move = [];
+	let frames_atk = [];
+	
+	let rectOverride = false;
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_sanae);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		rectOverride = false;
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					rectOverride = true;
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f5 >= 0*fpsA && f5 < 1*fpsA){ObjSprite2D_SetSourceRect(obj, 0, 128, 64, 224);}
+					if(f5 >= 1*fpsA && f5 < 2*fpsA){ObjSprite2D_SetSourceRect(obj, 64, 128, 128, 224);}
+					if(f5 >= 2*fpsA && f5 < 3*fpsA){ObjSprite2D_SetSourceRect(obj, 128, 128, 192, 224);}
+					//if(f >= 3*fpsA && f < 4*fpsA){}
+					//if(f >= 4*fpsA){f = 0;}
+					f4 = 0;
+					f5++;
+				}
+				else //Idle
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f4++;
+				}
+				f2 = 0;
+				f3 = 0;
+				
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		if(!rectOverride)
+		{
+			ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		}
+		ObjSprite2D_SetDestCenter(obj);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateKanako(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2], //11
+		
+		[0, 3], //12
+		[1, 3], //13
+		[2, 3], //14
+		[3, 3]  //15
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	let fpsC = 5;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_kanako00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsC && f < 1*fpsC){rowCol = rowColArray[8];}
+					if(f >= 1*fpsC && f < 2*fpsC){rowCol = rowColArray[9];}
+					if(f >= 2*fpsC && f < 3*fpsC){rowCol = rowColArray[10];}
+					if(f >= 3*fpsC && f < 4*fpsC){rowCol = rowColArray[11];}
+					
+					if(f >= 4*fpsC && f < 5*fpsC){rowCol = rowColArray[12];}
+					if(f >= 5*fpsC && f < 6*fpsC){rowCol = rowColArray[13];}
+					if(f >= 6*fpsC && f < 7*fpsC){rowCol = rowColArray[14];}
+					if(f >= 7*fpsC && f < 8*fpsC){rowCol = rowColArray[15];}
+					if(f >= 8*fpsC){f = 4*fpsC;}
+					f++;
+				}
+				else if(useAtkAnim == 2) //alternate Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[8];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[9];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[10];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[11];}
+					if(f >= 4*fpsA){f = 3;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateSuwako(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2], //11
+		
+		[0, 3], //12
+		[1, 3], //13
+		[2, 3], //14
+		[3, 3]  //15
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	let fpsC = 5;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_suwako00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsC && f < 1*fpsC){rowCol = rowColArray[8];}
+					if(f >= 1*fpsC && f < 2*fpsC){rowCol = rowColArray[9];}
+					if(f >= 2*fpsC && f < 3*fpsC){rowCol = rowColArray[10];}
+					if(f >= 3*fpsC && f < 4*fpsC){rowCol = rowColArray[11];}
+					
+					if(f >= 4*fpsC && f < 5*fpsC){rowCol = rowColArray[12];}
+					if(f >= 5*fpsC && f < 6*fpsC){rowCol = rowColArray[13];}
+					if(f >= 6*fpsC && f < 7*fpsC){rowCol = rowColArray[14];}
+					if(f >= 7*fpsC && f < 8*fpsC){rowCol = rowColArray[15];}
+					if(f >= 8*fpsC){f = 4*fpsC;}
+					f++;
+				}
+				else if(useAtkAnim == 2) //alternate Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[8];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[9];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[10];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[11];}
+					if(f >= 4*fpsA){f = 3;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+
+task AnimateKisume(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_kisumeyamame);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[0];}
+		if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+		if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+		if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+		
+		if(f >= 4*fpsA && f < 5*fpsA){rowCol = rowColArray[4];}
+		if(f >= 5*fpsA && f < 6*fpsA){rowCol = rowColArray[5];}
+		if(f >= 6*fpsA && f < 7*fpsA){rowCol = rowColArray[6];}
+		if(f >= 7*fpsA && f < 8*fpsA){rowCol = rowColArray[7];}
+		
+		if(f == 8*fpsA){f = 0;}
+		else{f++;}
+
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateYamame(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 2], //0
+		[1, 2], //1
+		[2, 2], //2
+		[3, 2], //3
+		
+		[0, 3], //4
+		[1, 3], //5
+		[2, 3], //6
+		[3, 3]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_kisumeyamame);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[3];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[2];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[1];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[0];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[3];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[2];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[1];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[0];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[4];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[5];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[6];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+					//if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					//if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					//if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 1*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[0];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[1];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[2];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[3];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[0];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[1];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[2];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[3];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateParsee(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_parsee);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[4];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[5];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[6];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					//if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					//if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 1*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateYuugi(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1]  //7
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 80;
+	
+	let offsetX = 64;
+	let offsetY = 80;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_yuugi);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[1];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[2];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[3];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+					//if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					//if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					//if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 1*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateSatori(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 48;
+	let y_max = 64;
+	
+	let offsetX = 48;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_satori);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[11];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[10];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[9];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[8];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[11];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[10];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[9];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[8];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				//if(useAtkAnim == 1) //Idle attack anim
+				//{
+				//	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+				//	if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[4];}
+				//	if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[5];}
+				//	if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[6];}
+				//	if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+				//	if(f >= 4*fpsA){f = 0;}
+				//	f++;
+				//}
+				//else //Idle
+				//{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA && f < 5*fpsA){rowCol = rowColArray[4];}
+					if(f >= 5*fpsA && f < 6*fpsA){rowCol = rowColArray[5];}
+					if(f >= 6*fpsA && f < 7*fpsA){rowCol = rowColArray[6];}
+					if(f >= 7*fpsA && f < 8*fpsA){rowCol = rowColArray[7];}
+					if(f >= 8*fpsA){f = 0;}
+					f++;
+				//}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[8];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[9];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[10];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[11];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[8];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[9];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[10];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[11];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+//add effect thing
+task AnimateOrin(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_orin);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[5];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[1];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[0];}
+				if(f3 == 2*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[1];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[0];}
+				if(f3 == 2*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[8];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[9];}
+					//if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[6];}
+					//if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[7];}
+					//if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[1];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			//if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[2];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[3];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			//if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[2];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[3];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+//add effect thing
+task AnimateUtsuho(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2], //11
+
+		[0, 3], //12
+		[1, 3], //13
+		[2, 3], //14
+		[3, 3], //15
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 96;
+	let y_max = 96;
+	
+	let offsetX = 96;
+	let offsetY = 96;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_utsuho);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[6];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[4];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[0];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[10];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[9];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[8];}
+				//if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[0];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){rowCol = rowColArray[12];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[13];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[14];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[15];}
+					if(f >= 4*fpsA){f = 2*fpsA;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[3];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[8];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[9];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[10];}
+			//if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[3];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateKoishi(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	let fpsC = 5;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_koishi);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsC && f < 1*fpsC){rowCol = rowColArray[8];}
+					if(f >= 1*fpsC && f < 2*fpsC){rowCol = rowColArray[9];}
+					if(f >= 2*fpsC && f < 3*fpsC){rowCol = rowColArray[10];}
+					if(f >= 3*fpsC && f < 4*fpsC){rowCol = rowColArray[11];}
+					//if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA && f < 5*fpsA){rowCol = rowColArray[2];}
+					if(f >= 5*fpsA && f < 6*fpsA){rowCol = rowColArray[1];}
+					//if(f >= 6*fpsA && f < 7*fpsA){rowCol = rowColArray[6];}
+					//if(f >= 7*fpsA && f < 8*fpsA){rowCol = rowColArray[7];}
+					if(f >= 6*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+
+task AnimateNazrin(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 80;
+	
+	let offsetX = 64;
+	let offsetY = 80;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 3;
+	let fpsC = 10;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_nazrin00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f5 >= 0*fpsA && f5 < 1*fpsA){rowCol = rowColArray[8];}
+					if(f5 >= 1*fpsA && f5 < 2*fpsA){rowCol = rowColArray[9];}
+					if(f5 >= 2*fpsA && f5 < 3*fpsA){rowCol = rowColArray[10];}
+					if(f5 >= 3*fpsA && f5 < 5*fpsA){rowCol = rowColArray[11];}
+					//if(f >= 5*fpsA){f = 0;}
+					f5++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[1];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f5 = 0;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateIchirin(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2]  //11
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 98;
+	
+	let offsetX = 64;
+	let offsetY = 98;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 10;
+	let fpsB = 3;
+	let fpsC = 7;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_ichirin00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f5 >= 0*fpsC && f5 < 1*fpsC){rowCol = rowColArray[8];}
+					if(f5 >= 1*fpsC && f5 < 2*fpsC){rowCol = rowColArray[9];}
+					if(f5 >= 2*fpsC && f5 < 3*fpsC){rowCol = rowColArray[10];}
+					if(f5 >= 3*fpsC && f5 < 5*fpsC){rowCol = rowColArray[11];}
+					//if(f >= 5*fpsA){f = 0;}
+					f5++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f5 = 0;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateMurasa(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		
+		[0, 3], //11
+		[1, 3], //12
+		[2, 3]  //13
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 98;
+	
+	let offsetX = 64;
+	let offsetY = 98;
+	
+	let xFix = 0;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 10;
+	let fpsB = 3;
+	let fpsC = 7;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_murasa00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				xFix = 0;
+				offsetX = 64;
+				x_max = 64;
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				offsetX = 64;
+				x_max = 64;
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					xFix = -8;
+					offsetX = 80;
+					x_max = 80;
+					if(f5 >= 0*fpsC && f5 < 1*fpsC){rowCol = rowColArray[8];}
+					if(f5 >= 1*fpsC && f5 < 2*fpsC){rowCol = rowColArray[9];}
+					if(f5 >= 2*fpsC && f5 < 3*fpsC){rowCol = rowColArray[10];}
+					if(f5 >= 3*fpsC && f5 < 5*fpsC){rowCol = rowColArray[11];}
+					if(f5 >= 3*fpsC && f5 < 5*fpsC){rowCol = rowColArray[12];}
+					if(f5 >= 3*fpsC && f5 < 5*fpsC){rowCol = rowColArray[13];}
+					//if(f >= 5*fpsA){f = 0;}
+					f5++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					xFix = 0;
+					offsetX = 64;
+					x_max = 64;
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f5 = 0;
+					movecos = cos(f4*2)*7;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			xFix = 0;
+			offsetX = 64;
+			x_max = 64;
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			xFix = 0;
+			offsetX = 64;
+			x_max = 64;
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)) + xFix,round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		ObjSprite2D_SetDestCenter(obj);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateShou(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2], //11
+		
+		[0, 3], //12
+		[1, 3], //13
+		[2, 3]  //14
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let rectOverride = false;
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 112;
+	
+	let offsetX = 64;
+	let offsetY = 112;
+	
+	let xFix = 0;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 10;
+	let fpsB = 3;
+	let fpsC = 5;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_shou00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		rectOverride = false;
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				offsetX = 64;
+				x_max = 64;
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f5 >= 0*fpsC && f5 < 1*fpsC){rowCol = rowColArray[8];}
+					if(f5 >= 1*fpsC && f5 < 2*fpsC){rowCol = rowColArray[9];}
+					if(f5 >= 2*fpsC && f5 < 3*fpsC){rowCol = rowColArray[10];}
+					if(f5 >= 3*fpsC && f5 < 4*fpsC){rowCol = rowColArray[11];}
+					if(f5 >= 4*fpsC && f5 < 5*fpsC){rowCol = rowColArray[12];}
+					
+					if(f5 >= 5*fpsC && f5 < 6*fpsC)
+					{
+						rectOverride = true;
+						ObjSprite2D_SetSourceRect(obj, 64, 336, 160, 448);
+						ObjSprite2D_SetDestCenter(obj);
+					}
+					if(f5 >= 6*fpsC && f5 < 7*fpsC)
+					{
+						rectOverride = true;
+						ObjSprite2D_SetSourceRect(obj, 160, 336, 256, 448);
+						ObjSprite2D_SetDestCenter(obj);
+					}
+					
+					if(f5 >= 7*fpsC){f5 = 5 * fpsC; rectOverride = true;}
+					f5++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[1];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f5 = 0;
+					movecos = cos(f4*2)*7;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)) + xFix,round(ObjMove_GetY(FPEnemy) + movecos),1);
+		if(!rectOverride)
+		{
+			ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+			ObjSprite2D_SetDestCenter(obj);
+		}
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateByakuren(FPEnemy)
+{
+	task DoLotus(FPEnemy)
+	{
+		let objB = ObjPrim_Create(OBJ_SPRITE_2D); //Part B
+		ObjPrim_SetTexture(objB, img_enm_byakuren02);
+		Obj_SetRenderPriorityI(objB, 39);
+		ObjSprite2D_SetSourceRect(objB, 0, 0, 256, 256);
+		ObjSprite2D_SetDestCenter(objB);
+		ObjRender_SetScaleXYZ(objB, 1, 1, 1);
+		
+		let objA = ObjPrim_Create(OBJ_SPRITE_2D); //Part A
+		ObjPrim_SetTexture(objA, img_enm_byakuren01);
+		Obj_SetRenderPriorityI(objA, 40);
+		ObjSprite2D_SetSourceRect(objA, 0, 0, 384, 256);
+		ObjSprite2D_SetDestCenter(objA);
+		ObjRender_SetScaleXYZ(objA, 1, 1, 1);
+		
+		let objIrisA = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objIrisA, img_enm_byakuren01);
+		Obj_SetRenderPriorityI(objIrisA, 40);
+		ObjSprite2D_SetSourceRect(objIrisA, 384, 160, 416, 192);
+		ObjSprite2D_SetDestRect(objIrisA, -14.5, -14.5, 15.5, 15.5);
+		byakuren_lotusEyeA = ObjEnemy_Create(OBJ_ENEMY);
+		ObjEnemy_Regist(byakuren_lotusEyeA);
+		Obj_SetRenderPriorityI(byakuren_lotusEyeA, 40);
+		ObjMove_SetPosition(byakuren_lotusEyeA, ObjMove_GetX(FPEnemy) - 64, ObjMove_GetY(FPEnemy) - 80);
+		ObjPrim_SetTexture(byakuren_lotusEyeA, img_enm_byakuren01);
+		ObjSprite2D_SetSourceRect(byakuren_lotusEyeA, 384, 80, 464, 160);
+		ObjSprite2D_SetDestCenter(byakuren_lotusEyeA);
+		
+		let objIrisB = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objIrisB, img_enm_byakuren01);
+		Obj_SetRenderPriorityI(objIrisB, 40);
+		ObjSprite2D_SetSourceRect(objIrisB, 384, 160, 416, 192);
+		ObjSprite2D_SetDestRect(objIrisB, -14.5, -14.5, 15.5, 15.5);
+		byakuren_lotusEyeB = ObjEnemy_Create(OBJ_ENEMY);
+		ObjEnemy_Regist(byakuren_lotusEyeB);
+		Obj_SetRenderPriorityI(byakuren_lotusEyeB, 40);
+		ObjMove_SetPosition(byakuren_lotusEyeB, ObjMove_GetX(FPEnemy) + 64, ObjMove_GetY(FPEnemy) - 80);
+		ObjPrim_SetTexture(byakuren_lotusEyeB, img_enm_byakuren01);
+		ObjSprite2D_SetSourceRect(byakuren_lotusEyeB, 384, 80, 464, 160);
+		ObjSprite2D_SetDestCenter(byakuren_lotusEyeB);
+		
+		let objIrisC = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objIrisC, img_enm_byakuren01);
+		Obj_SetRenderPriorityI(objIrisC, 40);
+		ObjSprite2D_SetSourceRect(objIrisC, 384, 160, 416, 192);
+		ObjSprite2D_SetDestRect(objIrisC, -14.5, -14.5, 15.5, 15.5);
+		byakuren_lotusEyeC = ObjEnemy_Create(OBJ_ENEMY);
+		ObjEnemy_Regist(byakuren_lotusEyeC);
+		Obj_SetRenderPriorityI(byakuren_lotusEyeC, 40);
+		ObjMove_SetPosition(byakuren_lotusEyeC, ObjMove_GetX(FPEnemy) + 64, ObjMove_GetY(FPEnemy) - 80);
+		ObjPrim_SetTexture(byakuren_lotusEyeC, img_enm_byakuren01);
+		ObjSprite2D_SetSourceRect(byakuren_lotusEyeC, 384, 0, 464, 80);
+		ObjSprite2D_SetDestCenter(byakuren_lotusEyeC);
+		
+		let objIrisD = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objIrisD, img_enm_byakuren01);
+		Obj_SetRenderPriorityI(objIrisD, 40);
+		ObjSprite2D_SetSourceRect(objIrisD, 384, 160, 416, 192);
+		ObjSprite2D_SetDestRect(objIrisD, -14.5, -14.5, 15.5, 15.5);
+		byakuren_lotusEyeD = ObjEnemy_Create(OBJ_ENEMY);
+		ObjEnemy_Regist(byakuren_lotusEyeD);
+		Obj_SetRenderPriorityI(byakuren_lotusEyeD, 40);
+		ObjMove_SetPosition(byakuren_lotusEyeD, ObjMove_GetX(FPEnemy) - 64, ObjMove_GetY(FPEnemy) - 80);
+		ObjPrim_SetTexture(byakuren_lotusEyeD, img_enm_byakuren01);
+		ObjSprite2D_SetSourceRect(byakuren_lotusEyeD, 384, 0, 464, 80);
+		ObjSprite2D_SetDestCenter(byakuren_lotusEyeD);
+		
+		let pFrame = 0;
+		
+		let pScaleA = 1;
+		let pScaleB = 1;
+		
+		let pDifference = 0;
+		//let pGoal = 0.5;
+		let pActual = 2;
+		
+		let pMaxSpeed = 1;
+		let pSpeed = 0;
+		let pDistance = 0;
+		let pGoal = 0.05;
+		let pWeight = 16;
+		
+		let eyeCos = 0;
+		
+		while(byakuren_useLotus)
+		{
+			if(pFrame == 45)
+			{
+				pGoal = -pGoal;
+				pDistance = pGoal;
+				pFrame = -1;
+			}
+			
+			pSpeed = pDistance / pWeight;
+			if(pSpeed > pMaxSpeed)
+			{
+				pSpeed = pMaxSpeed;
+			}
+			pDistance -= pSpeed;
+			pScaleA += pSpeed;
+			pScaleB -= pSpeed*1.5;
+			
+			ObjRender_SetPosition(objA, ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy) + movecos, 0); // + movecos
+			ObjRender_SetPosition(objB, ObjMove_GetX(FPEnemy), ObjMove_GetY(FPEnemy) + movecos, 0); // + movecos
+			
+			ObjRender_SetPosition(objIrisA, (ObjMove_GetX(FPEnemy) - 64) + (6 * cos(byakuren_lotusEyeAngleA)), ((ObjMove_GetY(FPEnemy) - 80) + movecos) + (6 * sin(byakuren_lotusEyeAngleA)), 0);
+			ObjRender_SetPosition(objIrisB, (ObjMove_GetX(FPEnemy) + 64) + (6 * cos(byakuren_lotusEyeAngleB)), ((ObjMove_GetY(FPEnemy) - 80) + movecos) + (6 * sin(byakuren_lotusEyeAngleB)), 0);
+			ObjRender_SetPosition(objIrisC, (ObjMove_GetX(FPEnemy) - 112) + (6 * cos(byakuren_lotusEyeAngleC)), ((ObjMove_GetY(FPEnemy) + 54) + movecos) + (6 * sin(byakuren_lotusEyeAngleC)), 0);
+			ObjRender_SetPosition(objIrisD, (ObjMove_GetX(FPEnemy) + 112) + (6 * cos(byakuren_lotusEyeAngleD)), ((ObjMove_GetY(FPEnemy) + 54) + movecos) + (6 * sin(byakuren_lotusEyeAngleD)), 0);
+			
+			ObjMove_SetPosition(byakuren_lotusEyeA, ObjMove_GetX(FPEnemy) - 64, (ObjMove_GetY(FPEnemy) - 80) + movecos);
+			ObjRender_SetAngleZ(byakuren_lotusEyeA, cos(eyeCos * 3.25) * 3.5);
+			ObjMove_SetPosition(byakuren_lotusEyeB, ObjMove_GetX(FPEnemy) + 64, (ObjMove_GetY(FPEnemy) - 80) + movecos);
+			ObjRender_SetAngleZ(byakuren_lotusEyeB, -cos(eyeCos * 3.25) * 3.5);
+			ObjMove_SetPosition(byakuren_lotusEyeC, ObjMove_GetX(FPEnemy) - 112, (ObjMove_GetY(FPEnemy) + 54) + movecos);
+			ObjRender_SetAngleZ(byakuren_lotusEyeC, cos(eyeCos * 3.25) * 3.5);
+			ObjMove_SetPosition(byakuren_lotusEyeD, ObjMove_GetX(FPEnemy) + 112, (ObjMove_GetY(FPEnemy) + 54) + movecos);
+			ObjRender_SetAngleZ(byakuren_lotusEyeD, -cos(eyeCos * 3.25) * 3.5);
+			
+			ObjRender_SetScaleXYZ(objA, pScaleA, 1, 1);
+			ObjRender_SetScaleXYZ(objB, pScaleB, pScaleB, 1);
+			
+			byakuren_lotusEyeAngleA = GetAngleToPlayer(byakuren_lotusEyeA);
+			byakuren_lotusEyeAngleB = GetAngleToPlayer(byakuren_lotusEyeB);
+			byakuren_lotusEyeAngleC = GetAngleToPlayer(byakuren_lotusEyeC);
+			byakuren_lotusEyeAngleD = GetAngleToPlayer(byakuren_lotusEyeD);
+			pFrame++;
+			eyeCos++;
+			yield;
+		}
+		isLotus = false;
+	}
+	
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2], //11
+		
+		[0, 3], //12
+		[1, 3], //13
+		[2, 3], //14
+		[3, 3]  //15
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 96;
+	let y_max = 128;
+	
+	let offsetX = 96;
+	let offsetY = 128;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 10;
+	let fpsB = 3;
+	let fpsC = 7;
+	
+	let isLotus = false;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_byakuren00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(byakuren_useLotus && !isLotus)
+		{
+			isLotus = true;
+			DoLotus(FPEnemy);
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[11];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[10];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[9];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[8];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f5 >= 0*fpsC && f5 < 1*fpsC){rowCol = rowColArray[12];}
+					if(f5 >= 1*fpsC && f5 < 2*fpsC){rowCol = rowColArray[13];}
+					if(f5 >= 2*fpsC && f5 < 3*fpsC){rowCol = rowColArray[14];}
+					if(f5 >= 3*fpsC && f5 < 4*fpsC){rowCol = rowColArray[15];}
+					if(f5 >= 4*fpsC){f5 = 2*fpsC;}
+					f5++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f5 = 0;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[8];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[9];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[10];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[11];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateNue(FPEnemy)
+{
+	let rowColArray =
+	[
+		[0, 0], //0
+		[1, 0], //1
+		[2, 0], //2
+		[3, 0], //3
+		
+		[0, 1], //4
+		[1, 1], //5
+		[2, 1], //6
+		[3, 1], //7
+		
+		[0, 2], //8
+		[1, 2], //9
+		[2, 2], //10
+		[3, 2],  //11
+		
+		[0, 3], //12
+		[1, 3], //13
+		[2, 3], //14
+		[3, 3], //15
+		[4, 3]  //16
+	];
+	
+	let rowCol = rowColArray[0];
+	
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let f5 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 96;
+	let y_max = 112;
+	
+	let offsetX = 96;
+	let offsetY = 112;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 10;
+	let fpsB = 3;
+	let fpsC = 7;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_nue00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1) //Reverse move anim to idle
+			{
+				if(f3 >= 0 && f3 < 1*fpsB)     {rowCol = rowColArray[11];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[10];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[9];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[8];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2) //Reverse move anim to idle
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){rowCol = rowColArray[7];}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){rowCol = rowColArray[6];}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){rowCol = rowColArray[5];}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){rowCol = rowColArray[4];}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0) //Idle animation loops
+			{
+				if(useAtkAnim == 1) //Idle attack anim
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f5 >= 0*fpsC && f5 < 1*fpsC){rowCol = rowColArray[12];}
+					if(f5 >= 1*fpsC && f5 < 2*fpsC){rowCol = rowColArray[13];}
+					if(f5 >= 2*fpsC && f5 < 3*fpsC){rowCol = rowColArray[14];}
+					if(f5 >= 3*fpsC && f5 < 4*fpsC){rowCol = rowColArray[15];}
+					if(f5 >= 4*fpsC && f5 < 5*fpsC){rowCol = rowColArray[16];}
+					if(f >= 5*fpsA){f = 3*fpsC;}
+					f5++;
+				}
+				else //Idle
+				{
+					//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA)     {rowCol = rowColArray[0];}
+					if(f >= 1*fpsA && f < 2*fpsA){rowCol = rowColArray[1];}
+					if(f >= 2*fpsA && f < 3*fpsA){rowCol = rowColArray[2];}
+					if(f >= 3*fpsA && f < 4*fpsA){rowCol = rowColArray[3];}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+					f5 = 0;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0) //Moving right
+		{
+			//ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[8];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[9];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[10];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[11];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0) //Moving left
+		{
+			//ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB)     {rowCol = rowColArray[4];}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){rowCol = rowColArray[5];}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){rowCol = rowColArray[6];}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){rowCol = rowColArray[7];}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			f5 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjRender_GetScaleZ(FPEnemy) == 1)
+		{
+			f2 = 0;
+			ObjRender_SetScaleZ(FPEnemy, 0);
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+
+
+task AnimateYukari(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 192;
+	let x_max = 80;
+	let y_max = 288;
+	
+	let offsetX = 80;
+	let offsetY = 96;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_yukari_ran);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 2; spriteRow = 2;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 1; spriteRow = 2;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 0; spriteRow = 2;}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 2*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 2;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 2;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 2;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateYuyuko(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let fanscale = 0;
+	let fanup = 0.03;
+	let movecos = 0;
+	let moved = 0;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_yuyuko);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, 0, 0, 48, 80);
+	ObjSprite2D_SetDestRect(obj, 0, 0, 48, 80);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	let fan = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(fan, img_enm_yuyuko);
+	ObjRender_SetBlendType(fan, BLEND_ADD_RGB);
+	Obj_SetRenderPriority(fan, 0.41);
+	ObjSprite2D_SetSourceRect(fan, 0, 256, 512, 512);
+	ObjSprite2D_SetDestRect(fan, 0, 256, 512, 512);
+	ObjSprite2D_SetDestCenter(fan);
+	ObjRender_SetScaleXYZ(fan, 1, 0, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(frame == 61 && yuyuko_UseFan == true)
+		{
+			PlaySE(se_boon01);
+		}
+		if(frame > 60 && frame <= 120 && yuyuko_UseFan == true)
+		{
+			fanscale += 0.001;
+			ObjRender_SetScaleXYZ(fan, 1, fanscale, 1);
+		}
+		if(frame > 120 && fanscale < 1 && yuyuko_UseFan == true)
+		{
+			fanscale += fanup;
+			fanup -= 0.00045;
+			ObjRender_SetScaleXYZ(fan, 1, fanscale, 1);
+		}
+		if(fanscale > 1 && yuyuko_UseFan == true)
+		{
+			fanscale = 1;
+			ObjRender_SetScaleXYZ(fan, 1, fanscale, 1);
+		}
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 4){ObjSprite2D_SetSourceRect(obj, 96, 80, 144, 160);}
+				if(f3 >= 4 && f3 < 8){ObjSprite2D_SetSourceRect(obj, 48, 80, 96, 160);}
+				if(f3 >= 8 && f3 < 12){ObjSprite2D_SetSourceRect(obj, 0, 80, 48, 160);}
+				if(f3 == 12){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0 && f3 < 4){ObjSprite2D_SetSourceRect(obj, 96, 80, 144, 160);}
+				if(f3 >= 4 && f3 < 8){ObjSprite2D_SetSourceRect(obj, 48, 80, 96, 160);}
+				if(f3 >= 8 && f3 < 12){ObjSprite2D_SetSourceRect(obj, 0, 80, 48, 160);}
+				if(f3 == 12){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				ObjRender_SetScaleXYZ(FPEnemy, 1, 1, 1);
+				if(useAtkAnim == 1)
+				{
+					if(f >= 0 && f < 6){ObjSprite2D_SetSourceRect(obj, 0, 160, 48, 240);}
+					if(f >= 6 && f < 12){ObjSprite2D_SetSourceRect(obj, 48, 160, 96, 240);}
+					if(f >= 12 && f < 18){ObjSprite2D_SetSourceRect(obj, 96, 160, 144, 240);}
+					if(f >= 18 && f < 24){ObjSprite2D_SetSourceRect(obj, 144, 160, 192, 240);}
+					if(f >= 24){f = 18;}
+					f++;
+				}
+				else
+				{
+					if(f >= 0 && f < 6){ObjSprite2D_SetSourceRect(obj, 0, 0, 48, 80);}
+					if(f >= 6 && f < 12){ObjSprite2D_SetSourceRect(obj, 48, 0, 96, 80);}
+					if(f >= 12 && f < 18){ObjSprite2D_SetSourceRect(obj, 96, 0, 144, 80);}
+					if(f >= 18 && f < 24){ObjSprite2D_SetSourceRect(obj, 144, 0, 192, 80);}
+					if(f >= 24){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 4){ObjSprite2D_SetSourceRect(obj, 0, 80, 48, 160);}
+			if(f2 >= 4 && f2 < 8){ObjSprite2D_SetSourceRect(obj, 48, 80, 96, 160);}
+			if(f2 >= 8 && f2 < 16){ObjSprite2D_SetSourceRect(obj, 96, 80, 144, 160);}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 4){ObjSprite2D_SetSourceRect(obj, 0, 80, 48, 160);}
+			if(f2 >= 4 && f2 < 8){ObjSprite2D_SetSourceRect(obj, 48, 80, 96, 160);}
+			if(f2 >= 8 && f2 < 16){ObjSprite2D_SetSourceRect(obj, 96, 80, 144, 160);}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjRender_SetPosition(fan,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		if(yuyuko_UseFan == true)
+		{
+			frame++;
+		}
+		yield;
+	}
+	Obj_Delete(obj);
+	Obj_Delete(fan);
+}
+
+task AnimateSeiga(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 80;
+	let y_max = 80;
+	
+	let offsetX = 80;
+	let offsetY = 80;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_seiga);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 5; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 4; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 == 3*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 4; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 5; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+
+task AnimateSanae_old(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_sanae);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateSuwako_old(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_suwako00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateMamizou(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 48;
+	let y_max = 80;
+	
+	let offsetX = 48;
+	let offsetY = 80;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_mamizou);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateSukuna(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 96;
+	let y_max = 96;
+	
+	let offsetX = 96;
+	let offsetY = 96;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	let fpsC = 3;
+	
+	let sukunaOffset = 0;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_sukuna);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 3; sukunaOffset = 2;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 3;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 3;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 3;}
+				if(f3 >= 4*fpsB && f3 < 5*fpsB){spriteCol = 4; spriteRow = 2;}
+				if(f3 >= 5*fpsB && f3 < 6*fpsB){spriteCol = 3; spriteRow = 2;}
+				if(f3 >= 6*fpsB && f3 < 7*fpsB){spriteCol = 2; spriteRow = 2;}
+				if(f3 >= 7*fpsB && f3 < 8*fpsB){spriteCol = 1; spriteRow = 2;}
+				if(f3 >= 8*fpsB && f3 < 9*fpsB){spriteCol = 0; spriteRow = 2;}
+				if(f3 == 9*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 5; sukunaOffset = 12;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 5;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 5;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 5;}
+				if(f3 >= 4*fpsB && f3 < 5*fpsB){spriteCol = 4; spriteRow = 4;}
+				if(f3 >= 5*fpsB && f3 < 6*fpsB){spriteCol = 3; spriteRow = 4;}
+				if(f3 >= 6*fpsB && f3 < 7*fpsB){spriteCol = 2; spriteRow = 4;}
+				if(f3 >= 7*fpsB && f3 < 8*fpsB){spriteCol = 1; spriteRow = 4;}
+				if(f3 >= 8*fpsB && f3 < 9*fpsB){spriteCol = 0; spriteRow = 4;}
+				if(f3 == 9*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0*fpsC && f < 1*fpsC){spriteCol = 0; spriteRow = 4; sukunaOffset = 12;}
+					if(f >= 1*fpsC && f < 2*fpsC){spriteCol = 1; spriteRow = 4;}
+					if(f >= 2*fpsC && f < 3*fpsC){spriteCol = 2; spriteRow = 4;}
+					if(f >= 3*fpsC && f < 4*fpsC){spriteCol = 3; spriteRow = 4;}
+					if(f >= 4*fpsC && f < 5*fpsC){spriteCol = 4; spriteRow = 4;}
+					if(f >= 5*fpsC && f < 6*fpsC){spriteCol = 0; spriteRow = 5;}
+					if(f >= 6*fpsC && f < 7*fpsC){spriteCol = 1; spriteRow = 5;}
+					if(f >= 7*fpsC && f < 8*fpsC){spriteCol = 2; spriteRow = 5;}
+					if(f >= 8*fpsC && f < 9*fpsC){spriteCol = 3; spriteRow = 5;}
+					
+					if(f >= 9*fpsC && f < 10*fpsC){spriteCol = 3; spriteRow = 5;}
+					if(f >= 10*fpsC && f < 11*fpsC){spriteCol = 3; spriteRow = 5;}
+					
+					if(f >= 11*fpsC && f < 12*fpsC){spriteCol = 3; spriteRow = 5;}
+					if(f >= 12*fpsC && f < 13*fpsC){spriteCol = 2; spriteRow = 5;}
+					if(f >= 13*fpsC && f < 14*fpsC){spriteCol = 1; spriteRow = 5;}
+					if(f >= 14*fpsC && f < 15*fpsC){spriteCol = 0; spriteRow = 5;}
+					if(f >= 15*fpsC && f < 16*fpsC){spriteCol = 4; spriteRow = 4;}
+					if(f >= 16*fpsC && f < 17*fpsC){spriteCol = 3; spriteRow = 4;}
+					if(f >= 17*fpsC && f < 18*fpsC){spriteCol = 2; spriteRow = 4;}
+					if(f >= 18*fpsC && f < 19*fpsC){spriteCol = 1; spriteRow = 4;}
+					if(f >= 19*fpsC && f < 20*fpsC){spriteCol = 0; spriteRow = 4; sukunaOffset = 12;}
+					
+					if(f >= 20*fpsC && f < 21*fpsC){spriteCol = 0; spriteRow = 2; sukunaOffset = 2;}
+					if(f >= 21*fpsC && f < 22*fpsC){spriteCol = 1; spriteRow = 2;}
+					if(f >= 22*fpsC && f < 23*fpsC){spriteCol = 2; spriteRow = 2;}
+					if(f >= 23*fpsC && f < 24*fpsC){spriteCol = 3; spriteRow = 2;}
+					if(f >= 24*fpsC && f < 25*fpsC){spriteCol = 4; spriteRow = 2;}
+					if(f >= 25*fpsC && f < 26*fpsC){spriteCol = 0; spriteRow = 3;}
+					if(f >= 26*fpsC && f < 27*fpsC){spriteCol = 1; spriteRow = 3;}
+					if(f >= 27*fpsC && f < 28*fpsC){spriteCol = 2; spriteRow = 3;}
+					if(f >= 28*fpsC && f < 29*fpsC){spriteCol = 3; spriteRow = 3;}
+					
+					if(f >= 29*fpsC && f < 30*fpsC){spriteCol = 3; spriteRow = 3;}
+					if(f >= 30*fpsC && f < 31*fpsC){spriteCol = 3; spriteRow = 3;}
+					
+					if(f >= 31*fpsC && f < 32*fpsC){spriteCol = 3; spriteRow = 3;}
+					if(f >= 32*fpsC && f < 33*fpsC){spriteCol = 2; spriteRow = 3;}
+					if(f >= 33*fpsC && f < 34*fpsC){spriteCol = 1; spriteRow = 3;}
+					if(f >= 34*fpsC && f < 35*fpsC){spriteCol = 0; spriteRow = 3;}
+					if(f >= 35*fpsC && f < 36*fpsC){spriteCol = 4; spriteRow = 2;}
+					if(f >= 36*fpsC && f < 37*fpsC){spriteCol = 3; spriteRow = 2;}
+					if(f >= 37*fpsC && f < 38*fpsC){spriteCol = 2; spriteRow = 2;}
+					if(f >= 38*fpsC && f < 39*fpsC){spriteCol = 1; spriteRow = 2;}
+					if(f >= 39*fpsC && f < 40*fpsC){spriteCol = 0; spriteRow = 2; sukunaOffset = 2;}
+					if(f >= 40*fpsC){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0; sukunaOffset = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;sukunaOffset = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;sukunaOffset = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;sukunaOffset = 0;}
+					if(f >= 4*fpsA && f < 5*fpsA){spriteCol = 4; spriteRow = 0;sukunaOffset = 0;}
+					if(f >= 5*fpsA && f < 6*fpsA){spriteCol = 0; spriteRow = 1;sukunaOffset = 0;}
+					if(f >= 6*fpsA && f < 7*fpsA){spriteCol = 1; spriteRow = 1;sukunaOffset = 0;}
+					if(f >= 7*fpsA && f < 8*fpsA){spriteCol = 2; spriteRow = 1;sukunaOffset = 0;}
+					if(f >= 8*fpsA && f < 9*fpsA){spriteCol = 3; spriteRow = 1;sukunaOffset = 0;}
+					if(f >= 9*fpsA && f < 10*fpsA){spriteCol = 4; spriteRow = 1;sukunaOffset = 0;}
+					if(f >= 10*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				//movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0*fpsB && f2 < 1*fpsB){spriteCol = 0; spriteRow = 2; sukunaOffset = 2;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 2;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 2;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 2;}
+			if(f2 >= 4*fpsB && f2 < 5*fpsB){spriteCol = 4; spriteRow = 2;}
+			if(f2 >= 5*fpsB && f2 < 6*fpsB){spriteCol = 0; spriteRow = 3;}
+			if(f2 >= 6*fpsB && f2 < 7*fpsB){spriteCol = 1; spriteRow = 3;}
+			if(f2 >= 7*fpsB && f2 < 8*fpsB){spriteCol = 2; spriteRow = 3;}
+			if(f2 >= 8*fpsB && f2 < 9*fpsB){spriteCol = 3; spriteRow = 3;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0*fpsB && f2 < 1*fpsB){spriteCol = 0; spriteRow = 4; sukunaOffset = 12;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 4;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 4;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 4;}
+			if(f2 >= 4*fpsB && f2 < 5*fpsB){spriteCol = 4; spriteRow = 4;}
+			if(f2 >= 5*fpsB && f2 < 6*fpsB){spriteCol = 0; spriteRow = 5;}
+			if(f2 >= 6*fpsB && f2 < 7*fpsB){spriteCol = 1; spriteRow = 5;}
+			if(f2 >= 7*fpsB && f2 < 8*fpsB){spriteCol = 2; spriteRow = 5;}
+			if(f2 >= 8*fpsB && f2 < 9*fpsB){spriteCol = 3; spriteRow = 5;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy) + sukunaOffset),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateReimu(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 80;
+	
+	let offsetX = 64;
+	let offsetY = 80;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_reimu);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateByakuren_old(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 96;
+	let y_max = 128;
+	
+	let offsetX = 96;
+	let offsetY = 128;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_byakuren00);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					if(f >= 0*fpsA && f < 1*fpsA){spriteCol = 0; spriteRow = 2;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 2;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 2;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 2;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimatePatchouli(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_patchouli);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					spriteCol = 0; spriteRow = 2;
+					f = 0;
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateMeiling(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+	
+	let offsetX = 64;
+	let offsetY = 64;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_meiling);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					spriteCol = 0; spriteRow = 2;
+					f = 0;
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+
+task AnimateSeiran(FPEnemy)
+{
+	let f = 0;
+	let f2 = 0;
+	let f3 = 0;
+	let f4 = 0;
+	let frame = 0;
+	let movecos = 0;
+	let moved = 0;
+	
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 96;
+	
+	let offsetX = 64;
+	let offsetY = 96;
+	
+	let spriteRow = 0;
+	let spriteCol = 0;
+	
+	let fpsA = 8;
+	let fpsB = 4;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(obj, img_enm_seiran);
+	Obj_SetRenderPriority(obj, 0.41);
+	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
+	ObjSprite2D_SetDestCenter(obj);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	
+	while(!Obj_IsDeleted(FPEnemy))
+	{
+		if(ObjMove_GetSpeed(FPEnemy) == 0)
+		{
+			if(moved == 1)
+			{
+				if(f3 >= 0 && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 2)
+			{
+				if(f3 >= 0*fpsB && f3 < 1*fpsB){spriteCol = 3; spriteRow = 1;}
+				if(f3 >= 1*fpsB && f3 < 2*fpsB){spriteCol = 2; spriteRow = 1;}
+				if(f3 >= 2*fpsB && f3 < 3*fpsB){spriteCol = 1; spriteRow = 1;}
+				if(f3 >= 3*fpsB && f3 < 4*fpsB){spriteCol = 0; spriteRow = 1;}
+				if(f3 == 4*fpsB){moved = 0;}
+				f3++;
+			}
+			if(moved == 0)
+			{
+				if(useAtkAnim == 1)
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					spriteCol = 0; spriteRow = 2;
+					f = 0;
+					f++;
+				}
+				else
+				{
+					ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+					if(f >= 0 && f < 1*fpsA){spriteCol = 0; spriteRow = 0;}
+					if(f >= 1*fpsA && f < 2*fpsA){spriteCol = 1; spriteRow = 0;}
+					if(f >= 2*fpsA && f < 3*fpsA){spriteCol = 2; spriteRow = 0;}
+					if(f >= 3*fpsA && f < 4*fpsA){spriteCol = 3; spriteRow = 0;}
+					if(f >= 4*fpsA){f = 0;}
+					f++;
+				}
+				f2 = 0;
+				f3 = 0;
+				f4++;
+				movecos = cos(f4*2)*7;
+			}
+		}
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) > 0)
+		{
+			ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 1;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		
+		if(ObjMove_GetSpeed(FPEnemy)*cos(ObjMove_GetAngle(FPEnemy)) < 0)
+		{
+			ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+			if(f2 >= 0 && f2 < 1*fpsB){spriteCol = 0; spriteRow = 1;}
+			if(f2 >= 1*fpsB && f2 < 2*fpsB){spriteCol = 1; spriteRow = 1;}
+			if(f2 >= 2*fpsB && f2 < 3*fpsB){spriteCol = 2; spriteRow = 1;}
+			if(f2 >= 3*fpsB && f2 < 4*fpsB){spriteCol = 3; spriteRow = 1;}
+			f = 0;
+			f2++;
+			f3 = 0;
+			moved = 2;
+			f4 = 0;
+			movecos = cos(f4*2)*7;
+		}
+		ObjRender_SetPosition(obj,round(ObjMove_GetX(FPEnemy)),round(ObjMove_GetY(FPEnemy) + movecos),1);
+		ObjSprite2D_SetSourceRect(obj, x_min + offsetX*spriteCol, y_min + offsetY*spriteRow, x_max + offsetX*spriteCol, y_max + offsetY*spriteRow);
+		yield;
+	}
+	Obj_Delete(obj);
+}
+

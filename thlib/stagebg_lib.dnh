@@ -1,0 +1,3651 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Stage Background Library (stagebg_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+	to do: clean up, remove and replace old code, more BGs
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+let cameraDebug = false;
+
+let stageBGPart = 0;
+
+let BG_TH10_01 = 0;
+let BG_TH10_02 = 1;
+let BG_TH10_03 = 2;
+let BG_TH10_04 = 3;
+let BG_TH10_05 = 4;
+let BG_TH10_06 = 5;
+let BG_TH10_07 = 6;
+
+let BG_TH11_01 = 7;
+let BG_TH11_02 = 8;
+let BG_TH11_03 = 9;
+let BG_TH11_04 = 10;
+let BG_TH11_05 = 11;
+let BG_TH11_06 = 12;
+let BG_TH11_07 = 13;
+
+let BG_TH12_01 = 14;
+let BG_TH12_02 = 15;
+let BG_TH12_03 = 16;
+let BG_TH12_04 = 17;
+let BG_TH12_05 = 18;
+let BG_TH12_06 = 19;
+let BG_TH12_07 = 20;
+
+let BG_TH13_01 = 21;
+let BG_TH13_02 = 22;
+let BG_TH13_03 = 23;
+let BG_TH13_04 = 24;
+let BG_TH13_05 = 25;
+let BG_TH13_06 = 26;
+let BG_TH13_07 = 27;
+
+let BG_TH14_01 = 28;
+let BG_TH14_02 = 29;
+let BG_TH14_03 = 30;
+let BG_TH14_04 = 31;
+let BG_TH14_05 = 32;
+let BG_TH14_06 = 33;
+let BG_TH14_07 = 34;
+
+let BG_TH15_01 = 35;
+let BG_TH15_02 = 36;
+let BG_TH15_03 = 37;
+let BG_TH15_04 = 38;
+let BG_TH15_05 = 39;
+let BG_TH15_06 = 40;
+let BG_TH15_07 = 41;
+
+/*
+task StageBGYoukaiMountain00()
+{
+	let modifierZ = 0.5;
+	let offsetZ = 0;
+	let offsetZ2 = 0;
+	let offsetZ3 = 0;
+	let cameraZ = 0;
+	let checkZ = 0;
+	let checkZ2 = 0;
+	let checkZ3 = 0;
+	
+	SetCameraRadius(180);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(50);
+	
+	SetFogEnable(true);
+	SetFogParam(600, 1280, 250, 200, 200);
+	
+	task GroundBack(x, y, z, priority)
+	{
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, "none");
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*8, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128*8, -128*2, 128*8, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ > z - 256*4)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground(x, y, z, priority)
+	{
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain00_00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*8, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128*8, -128*2, 128*8, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ > z - 256*4)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground2(x, y, z, priority)
+	{
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain00_01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*8, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128*8, -128*2, 128*8, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetAlpha(obj, 75);
+		while(objZ > z - 256*4)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	ascent(i in 0..5)
+	{
+		GroundBack(110, -360, -256*(i*2), 20);
+		Ground(110, -350, -256*(i*2), 21);
+		Ground2(150, -300, -256*(i*2), 22);
+		Ground2(80, -250, -256*(i*2), 23);
+	}
+	offsetZ = -256*10;
+	
+	loop
+	{
+		cameraZ -= modifierZ;
+		checkZ += modifierZ;
+		checkZ2 += modifierZ;
+		checkZ3 += modifierZ;
+		
+		if(checkZ >= 256)
+		{
+			GroundBack(110, -360, offsetZ, 20);
+			Ground(110, -350, offsetZ, 21);
+			Ground2(150, -300, offsetZ, 22);
+			Ground2(80, -250, offsetZ, 23);
+			offsetZ += -256*2;
+			checkZ = 0;
+		}
+		
+		SetCameraFocusZ(cameraZ);
+		yield;
+	}
+}
+*/
+
+task StageBG_TEMPLATE() //Template
+{	
+	SetCameraRadius(180);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraElevationAngle(0);
+	SetCameraAzimuthAngle(0);
+	
+	
+	SetFogEnable(false);
+	SetFogParam(000, 1880, 16, 0, 0);
+	
+	task Ground(x, y, z)
+	{
+		let yOffset = 0;
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain01_00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256, 256);
+		ObjSprite3D_SetDestRect(obj, -128, -128, 128, 128);
+		ObjRender_SetAngleXYZ(obj, 0, 90, 0);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 2);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ > z - 256*4)
+		{
+			ObjSprite3D_SetSourceRect(obj, 0, 0 + yOffset, 256, (256) + yOffset);
+			yOffset++;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	Ground(-580, 0, 0);
+	
+	loop
+	{
+		yield;
+	}
+}
+
+function StartStageBG(bgConst)
+{
+	alternative(bgConst)
+	case(0) //BG_TH10_01
+	{
+		StageBG_YoukaiMountain00();
+		//StageBG_Mansion00();
+	}
+	case(1) //BG_TH10_02
+	{
+		StageBG_YoukaiMountain01();
+	}
+	case(2) //incomplete BG_TH10_03
+	{
+		
+	}
+	case(3) //incomplete BG_TH10_04
+	{
+		
+	}
+	case(4) //BG_TH10_05
+	{
+		StageBG_MoriyaShrine00();
+	}
+	case(5) //incomplete BG_TH10_06
+	{
+		
+	}
+	case(6) //incomplete BG_TH10_07
+	{
+		
+	}
+	case(7) //incomplete BG_TH11_01
+	{
+		
+	}
+	case(8) //incomplete BG_TH11_02
+	{
+		
+	}
+	case(9) //incomplete BG_TH11_03
+	{
+		
+	}
+	case(10) //incomplete BG_TH11_04
+	{
+		
+	}
+	case(11) //incomplete BG_TH11_05
+	{
+		
+	}
+	case(12) //incomplete BG_TH11_06
+	{
+		
+	}
+	case(13) //incomplete BG_TH11_07
+	{
+		
+	}
+	case(14) //incomplete BG_TH12_01
+	{
+		
+	}
+	case(15) //incomplete BG_TH12_02
+	{
+		
+	}
+	case(16) //incomplete BG_TH12_03
+	{
+		
+	}
+	case(17) //incomplete BG_TH12_04
+	{
+		
+	}
+	case(18) //incomplete BG_TH12_05
+	{
+		
+	}
+	case(19) //incomplete BG_TH12_06
+	{
+		
+	}
+	case(20) //incomplete BG_TH12_07
+	{
+		
+	}
+	case(21) //incomplete BG_TH13_01
+	{
+		
+	}
+	case(22) //incomplete BG_TH13_02
+	{
+		
+	}
+	case(23) //incomplete BG_TH13_03
+	{
+		
+	}
+	case(24) //incomplete BG_TH13_04
+	{
+		
+	}
+	case(25) //incomplete BG_TH13_05
+	{
+		
+	}
+	case(26) //incomplete BG_TH13_06
+	{
+		
+	}
+	case(27) //incomplete BG_TH13_07
+	{
+		
+	}
+	case(28) //incomplete BG_TH14_01
+	{
+		
+	}
+	case(29) //incomplete BG_TH14_02
+	{
+		
+	}
+	case(30) //incomplete BG_TH14_03
+	{
+		
+	}
+	case(31) //incomplete BG_TH14_04
+	{
+		
+	}
+	case(32) //incomplete BG_TH14_05
+	{
+		
+	}
+	case(33) //incomplete BG_TH14_06
+	{
+		
+	}
+	case(34) //incomplete BG_TH14_07
+	{
+		
+	}
+	case(35) //BG_TH15_01
+	{
+		StageBG_YoukaiMountain07();
+	}
+	case(36) //incomplete BG_TH15_02
+	{
+		
+	}
+	case(37) //incomplete BG_TH15_03
+	{
+		
+	}
+	case(38) //incomplete BG_TH15_04
+	{
+		
+	}
+	case(39) //incomplete BG_TH15_05
+	{
+		
+	}
+	case(40) //incomplete BG_TH15_06
+	{
+		
+	}
+	case(41) //incomplete BG_TH15_07
+	{
+		
+	}
+}
+
+task StageBGPonyville()
+{
+	let part = 0;
+	let azimuth = 0;
+	let counter = 0;
+	let createY = 512;
+	let globalSpeed = 1;
+	let focusX = -512;
+	let focusY = 970;
+	let focusZ = -1030;
+	SetCameraFocusX(-512);
+	SetCameraFocusY(970);
+	SetCameraFocusZ(-1030);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(-60);
+	
+	SetFogParam(-300, 850, 20, 20, 30);
+	
+	task ParticleCreate
+	{
+		loop
+		{
+			CreateEffectParticle(-485 + rand(-165,200), 1000 - rand(150, 450) + (focusY - 770), -700, 12);
+			//CreateEffectParticle(-485 + rand(-165,200), 1000 - rand(0, 500) + (focusY - 770), -700, 12);
+			CreateEffectParticle(-485 + rand(-165,200), 1000 - rand(0, 200) + (focusY - 770), -700, 13);
+			//CreateEffectParticle(-485 + rand(-165,200), 1000 - rand(0, 200) + (focusY - 770), -700, 13);
+			CreateEffectParticle(-485 + rand(-165,200), 1000 - rand(0, 0) + (focusY - 770), -700, 14);
+			//CreateEffectParticle(-485 + rand(-165,200), 1000 - rand(0, 0) + (focusY - 770), -700, 14);
+			yield;
+		}
+	}
+	
+	task CreateEffectParticle(x, y, z, speed)
+	{
+		//let efftrail = GetMainStgScriptDirectory() ~ "img/background/st01/effectline2.png";
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjRender_SetBlendType(obj, BLEND_ALPHA);
+		Obj_SetRenderPriorityI(obj, 21);
+		ObjPrim_SetTexture(obj, img_stg01_bg03);
+		ObjSprite3D_SetSourceRect(obj, 0, 470, 10, 512);
+		ObjSprite3D_SetDestRect(obj, 0, 0, 10, 42);
+		//ObjRender_SetZWrite(obj, true);
+		//ObjRender_SetZTest(obj, true);
+		ObjRender_SetAlpha(obj, 150);
+		ObjRender_SetAngleXYZ(obj, 90, 10, 0);
+		ObjRender_SetColor(obj, 190, 190, 190);
+		ObjRender_SetScaleXYZ(obj, 0.5, 1, 1);
+		while(ObjRender_GetZ(obj) > -1050)
+		{
+			ObjRender_SetPosition(obj, x, y, z);
+			z -= speed;
+			//y -= globalSpeed;
+			x -= 3;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task CreatePvHouse(x, y, z, xang, yang, zang, side)
+	{
+		let zmod = 0;
+		let objWall = Create3DSpriteObject(img_stg01_bg03, 0, 0, 192, 185);
+		let objFront = Create3DSpriteObjectB(img_stg01_bg03, 0, 185, 192, 260, 0, 0, 192, 75);
+		let objRoof = Create3DSpriteObjectB(img_stg01_bg03, 0, 260, 132, 460, 0, 0, 134, 210);
+		let objRoof2 = Create3DSpriteObjectB(img_stg01_bg03, 0, 260, 132, 460, 0, 0, 134, 210);
+		Obj_SetRenderPriorityI(objWall, 5);
+		Obj_SetRenderPriorityI(objFront, 5);
+		Obj_SetRenderPriorityI(objRoof, 5);
+		Obj_SetRenderPriorityI(objRoof2, 5);
+		
+		
+		if(side == 0)
+		{
+			ObjRender_SetPosition(objWall, x, y, z);
+			ObjRender_SetPosition(objFront, x, y + 192/2, z - 43);
+			ObjRender_SetPosition(objRoof, x - 47, y - 18, z + 0);
+			ObjRender_SetPosition(objRoof2, x - 47, y - 18, z + 0);
+			
+			ObjRender_SetAngleXYZ(objWall, 90, 180, 0);
+			ObjRender_SetAngleXYZ(objFront, 180, 270, 90);
+			ObjRender_SetAngleXYZ(objRoof, 0, 41, 0);
+			ObjRender_SetAngleXYZ(objRoof2, 0, 180 + -43, 0);
+		}
+		if(side == 1)
+		{
+			ObjRender_SetPosition(objWall, x, y, z);
+			ObjRender_SetPosition(objFront, x - 64 - 32, y + 192/2, z - 43);
+			ObjRender_SetPosition(objRoof, x - 47, y - 18, z + 0);
+			ObjRender_SetPosition(objRoof2, x - 47, y - 18, z + 0);
+			
+			ObjRender_SetAngleXYZ(objWall, 90, 180, 0);
+			ObjRender_SetAngleXYZ(objFront, 180, 270, 90);
+			ObjRender_SetAngleXYZ(objRoof, 0, 43, 0);
+			ObjRender_SetAngleXYZ(objRoof2, 0, 180 + -41, 0);
+		}
+		
+		ObjRender_SetScaleXYZ(objWall, 0.5, 0.5, 0.5);
+		ObjRender_SetScaleXYZ(objFront, 0.5, 0.5, 0.5);
+		ObjRender_SetScaleXYZ(objRoof, 0.55, 0.55, 0.55);
+		ObjRender_SetScaleXYZ(objRoof2, 0.55, 0.55, 0.55);
+		
+		ObjRender_SetZWrite(objWall, true);
+		ObjRender_SetZTest(objWall, true);
+		ObjRender_SetZWrite(objFront, true);
+		ObjRender_SetZTest(objFront, true);
+		ObjRender_SetZWrite(objRoof, true);
+		ObjRender_SetZTest(objRoof, true);
+		ObjRender_SetZWrite(objRoof2, true);
+		ObjRender_SetZTest(objRoof2, true);
+		while(!Obj_IsDeleted(objWall))
+		{
+			if(ObjRender_GetY(objWall) <= GetCameraFocusY - 1024)
+			{
+				Obj_Delete(objWall);
+				Obj_Delete(objFront);
+				Obj_Delete(objRoof);
+				Obj_Delete(objRoof2);
+			}
+			yield;
+		}
+	}
+	
+	task CreateGroundBack(x, y, z, xang, yang, zang)
+	{
+		let zmod = 0;
+		let obj = Create3DSpriteObjectB("", 0, 0, 256*2, 256*12, 0, 0, 256*2, 256*12);
+		Obj_SetRenderPriorityI(obj, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		//ObjRender_SetColor(obj, 100, 255, 100);
+		ObjRender_SetAngleXYZ(obj, xang, yang, zang);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		while(!Obj_IsDeleted(obj))
+		{
+			if(ObjRender_GetY(obj) <= GetCameraFocusY - 1024)
+			{
+				Obj_Delete(obj);
+			}
+			yield;
+		}
+	}
+	
+	task CreateGroundTile(x, y, z, xang, yang, zang)
+	{
+		let zmod = 0;
+		let obj = Create3DSpriteObjectB(img_stg01_bg00, 0, 0, 256*2, 256*12, 0, 0, 256*2, 256*12);
+		Obj_SetRenderPriorityI(obj, 4);
+		ObjRender_SetPosition(obj, x, y, z);
+		//ObjRender_SetColor(obj, 100, 255, 100);
+		ObjRender_SetAngleXYZ(obj, xang, yang, zang);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		while(!Obj_IsDeleted(obj))
+		{
+			if(ObjRender_GetY(obj) <= GetCameraFocusY - 1024)
+			{
+				Obj_Delete(obj);
+			}
+			yield;
+		}
+	}
+	
+	task CreateGroundTileB(x, y, z, xang, yang, zang)
+	{
+		let zmod = 0;
+		let obj = Create3DSpriteObjectB(img_stg01_bg01, 0, 0, 256, 256*6, 0, 0, 256, 256*6);
+		Obj_SetRenderPriorityI(obj, 6);
+		ObjRender_SetAlpha(obj, 120);
+		ObjRender_SetColor(obj, 100, 255, 100);
+		ObjRender_SetPosition(obj, x, y, z);
+		ObjRender_SetAngleXYZ(obj, xang, yang, zang);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(!Obj_IsDeleted(obj))
+		{
+			if(ObjRender_GetY(obj) <= GetCameraFocusY - 1024)
+			{
+				Obj_Delete(obj);
+			}
+			yield;
+		}
+	}
+	
+	task CreateNull
+	{
+		let obj = Create3DSpriteObjectB("NULL", 0, 0, 256*7, 256*7, 0, 0, 256*7, 256*7);
+		Obj_SetRenderPriorityI(obj, 3);
+		ObjRender_SetPosition(obj, -465, 612, -938);
+		ObjRender_SetAngleXYZ(obj, 90, 180, 0);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(!Obj_IsDeleted(obj))
+		{
+			if(part == 5)
+			{
+				Obj_Delete(obj);
+			}
+			ObjRender_SetPosition(obj, 500, 612 + (focusY + 650), -500);
+			yield;
+		}
+	}
+	
+	task LightningFlash(intensity)
+	{
+		let time = round(rand(30,60));
+		while(time > 0)
+		{
+			SetFogParam(-300, 800 - time*6, 20 + time*intensity, 20 + time*intensity, 30 + time*intensity);
+			time--;
+			yield;
+		}
+	}
+	task LightningFlashLoop
+	{
+		let count = 0;
+		let doFlash = round(rand(60,800));
+		loop
+		{
+			if(count == doFlash)
+			{
+				LightningFlash(rand(1,5));
+				doFlash = round(rand(60,800));
+				count = 0;
+			}
+			count++;
+			yield;
+		}
+	}
+	ascent(i in 0..9)
+	{
+		CreateGroundTile(130, 512 + i*256, -1024, 0, 0, 90);
+		CreateGroundTileB(35, 512 + i*256, -1020, 0, 0, 90);
+		//CreateGroundBack(0, 512 + i*256, -1026, 0, 0, 90);
+		createY = 512 + i*256;
+	}
+	createY = 512 + 9*256;
+	ascent(i in 0..9)
+	{
+		CreatePvHouse(-465 + 140, 612 + i*256, -938, 0, 0, 90, 1);
+		CreatePvHouse(-465 - 140, 612 + i*256, -938, 0, 0, 90, 0);
+	}
+	LightningFlashLoop;
+	ParticleCreate;
+	CreateNull;
+	loop
+	{
+		SetCameraAzimuthAngle(90 + 5*sin(azimuth));
+		//SetCameraElevationAngle(-55 + 0.5*sin(azimuth*2));
+		SetCameraElevationAngle(-70 + 0.5*sin(azimuth*2));
+		SetCameraFocusY(focusY);
+		globalSpeed = 1;
+		azimuth += 0.5;
+		focusY += globalSpeed;
+		counter += globalSpeed;
+		if(counter >= 512)
+		{
+			CreateGroundTile(130, createY, -1024, 0, 0, 90);
+			CreateGroundTileB(35, createY, -1020, 0, 0, 90);
+			//CreateGroundBack(0, createY, -1026, 0, 0, 90);
+			CreatePvHouse(-465 + 140, createY, -938, 0, 0, 90, 1);
+			CreatePvHouse(-465 - 140, createY, -938, 0, 0, 90, 0);
+			
+			CreateGroundTile(130, createY + 256, -1024, 0, 0, 90);
+			CreateGroundTileB(35, createY + 256, -1020, 0, 0, 90);
+			//CreateGroundBack(0, createY + 256, -1026, 0, 0, 90);
+			CreatePvHouse(-465 + 140, createY + 256, -938, 0, 0, 90, 1);
+			CreatePvHouse(-465 - 140, createY + 256, -938, 0, 0, 90, 0);
+			createY += 512;
+			counter = 0;
+		}
+		yield;
+	}
+}
+
+task StageBG_YoukaiMountain00() //MoF Stage 1
+{
+	let modifierZ = 0.5;
+	let sineVal = 0;
+	let offsetZ = 0;
+	let offsetZ2 = 0;
+	let offsetZ3 = 0;
+	let cameraZ = -400;
+	let checkZ = -400;
+	let checkZ2 = 0;
+	let checkZ3 = 0;
+	
+	SetCameraRadius(180);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(50);
+	
+	SetFogEnable(false);
+	//SetFogParam(600, 1880, 250, 150, 150);
+	SetFogParam(460, 880, 20, 29, 53);
+	
+	task GroundBack(x, y, z, priority)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_null);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*8, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128*8, -128*2, 128*8, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground(x, y, z, priority)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain00_00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*8, -256*2, 256*8, 256*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground2(x, y, z, priority, alpha)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain00_01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*8, -256*2, 256*8, 256*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetAlpha(obj, alpha);
+		ObjRender_SetColor(obj, alpha, alpha, alpha);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task CreateClouds(zOffset)
+	{
+		task CreateCloud(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_youkaimountain00_02);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 128, 128);
+			ObjSprite3D_SetDestRect(objCloud, -64, -64, 64, 64);
+			ObjRender_SetAngleXYZ(objCloud, 140, 0, 0);
+			ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			//ObjRender_SetFogEnable(objCloud, true);
+			//ObjRender_SetBlendType(objCloud, BLEND_ADD_RGB);
+			ObjRender_SetAlpha(objCloud, 200);
+			
+			if(type == 0)
+			{
+				ObjPrim_SetTexture(objCloud, img_youkaimountain00_02);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			else if(type == 1)
+			{
+				ObjPrim_SetTexture(objCloud, img_youkaimountain00_03);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			
+			while(objZ < resetZ)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		task CreateShadow(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_youkaimountain00_02b);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 128, 128);
+			ObjSprite3D_SetDestRect(objCloud, -64, -64, 64, 64);
+			ObjRender_SetAngleXYZ(objCloud, 90, 90, 90);
+			ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			ObjRender_SetZWrite(objCloud, true);
+			ObjRender_SetZTest(objCloud, true);
+			ObjRender_SetAlpha(objCloud, 100);
+			
+			if(type == 0)
+			{
+				ObjPrim_SetTexture(objCloud, img_youkaimountain00_02b);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			else if(type == 1)
+			{
+				ObjPrim_SetTexture(objCloud, img_youkaimountain00_03b);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			
+			while(objZ < resetZ)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		CreateShadow(-50, -345, -585 - zOffset, 4, 2, 2);
+		CreateShadow(100, -345, -495 - zOffset, 4, 2, 2);
+		CreateShadow(-40, -345, -415 - zOffset, 4, 2, 2);
+		CreateShadow(-120, -345, -410 - zOffset, 4, 1, 2);
+		CreateShadow(0, -345, -300 - zOffset, 4, 1, 2);
+		CreateShadow(75, -345, -256 - zOffset, 4, 1, 2);
+		
+		CreateCloud(-50, -100, -585 - zOffset, 7, 2, 1);
+		CreateCloud(100, -100, -495 - zOffset, 7, 2, 1);
+		CreateCloud(-40, -100, -415 - zOffset, 7, 2, 1);
+		CreateCloud(-120, -100, -410 - zOffset, 7, 1, 1);
+		CreateCloud(0, -100, -300 - zOffset, 7, 1, 1);
+		CreateCloud(75, -100, -256 - zOffset, 7, 1, 1);
+	}
+	
+	ascent(i in 0..5)
+	{	
+		GroundBack(110, -360, -256*(i*2), 2);
+		Ground(110, -350, -256*(i*2), 3);
+		Ground2(150, -300, -256*(i*2), 5, 50);
+		Ground2(80, -250, -256*(i*2), 6, 130);
+	}
+	CreateClouds(0);
+	CreateClouds(420);
+	CreateClouds(840);
+	offsetZ = -256*10;
+	offsetZ2 = 1260;
+	loop
+	{
+		cameraZ -= modifierZ;
+		checkZ += modifierZ;
+		checkZ2 += modifierZ;
+		
+		if(checkZ >= 512)
+		{
+			GroundBack(110, -360, offsetZ, 2);
+			Ground(110, -350, offsetZ, 3);
+			Ground2(150, -300, offsetZ, 5, 50);
+			Ground2(80, -250, offsetZ, 6, 130);
+			offsetZ += -512;
+			checkZ = 0;
+		}
+		
+		if(checkZ2 >= 420)
+		{
+			CreateClouds(offsetZ2);
+			offsetZ2 += 420;
+			checkZ2 = 0;
+		}
+		
+		SetCameraFocusZ(cameraZ);
+		sineVal++;
+		yield;
+	}
+}
+
+task StageBG_YoukaiMountain01() //Template
+{
+	let offsetX = 256;
+	let offsetY = 256;
+	
+	let particleFrame = 0;
+	
+	let globalYOffset = 0;
+	
+	let offsetXValue = 5;
+	let offsetYValue = 5;
+	
+	
+	SetCameraRadius(120);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraElevationAngle(0);
+	SetCameraAzimuthAngle(0);
+	
+	
+	SetFogEnable(true);
+	SetFogParam(0, 1, 10, 10, 0);
+	
+	let bgPart = 0;
+	
+	let fogMin = 0;
+	let fogMax = 1;
+	
+	let fogColor = [0, 0, 0];
+	
+	task loc_Particle(x, y)
+	{
+		let effFrame = 0;
+		let loc_distance = 0;
+		let loc_speed = rand(1.5, 2);
+		let loc_scale = 0.75;
+		let loc_angle = 90 + (rand(-35, 35));
+		let loc_angMod = rand(-5, 5);
+		let loc_alpha = 1;
+		
+		let x_vel = loc_speed * cos(loc_angle);
+		let y_vel = loc_speed * sin(loc_angle);
+		
+		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(objEff, img_effect_maple);
+		Obj_SetRenderPriorityI(objEff, 3);
+		ObjSprite2D_SetSourceRect(objEff, 32, 0, 64, 32);
+		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjRender_SetColor(objEff, 255, 50, 0);
+		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
+		ObjRender_SetAlpha(objEff, loc_alpha);
+		
+		ObjRender_SetAngleZ(objEff, loc_angle);
+		ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+		ObjRender_SetPosition(objEff, x, y, 1);
+		
+		while(loc_alpha > 0)
+		{
+			x += x_vel;
+			y += y_vel;
+			if(loc_alpha < 100)
+			{
+				loc_alpha++;
+			}
+			
+			if(effFrame < 250)
+			{
+				if(loc_alpha < 100)
+				{
+					loc_alpha++;
+				}
+			}
+			else
+			{
+				loc_alpha -= 2;
+			}
+			
+			loc_angle += loc_angMod;
+			ObjRender_SetAngleZ(objEff, loc_angle);
+			ObjRender_SetScaleXYZ(objEff, loc_scale, loc_scale, 1);
+			ObjRender_SetAlpha(objEff, loc_alpha);
+			ObjRender_SetPosition(objEff, x, y, 1);
+			effFrame++;
+			yield;
+		}
+		Obj_Delete(objEff);
+	}
+	
+	task VoidCatcher(x, y, z)
+	{
+		let yOffset = 0;
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, "");
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*offsetXValue, 256*offsetYValue);
+		ObjSprite3D_SetDestRect(obj, -128*offsetXValue, -128*offsetYValue, 128*offsetXValue, 128*offsetYValue);
+		ObjRender_SetAngleXYZ(obj, 0, 90, 0);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		ObjRender_SetColor(obj, 0, 0, 0);
+		Obj_SetRenderPriorityI(obj, 2);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(true)
+		{
+			ObjSprite3D_SetSourceRect(obj, (0), (0) + yOffset, (256*offsetXValue), (256*offsetYValue) + yOffset);
+			yOffset++;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground(x, y, z)
+	{
+		let yOffset = 0;
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain01_00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*offsetXValue, 256*offsetYValue);
+		ObjSprite3D_SetDestRect(obj, -128*offsetXValue, -128*offsetYValue, 128*offsetXValue, 128*offsetYValue);
+		ObjRender_SetAngleXYZ(obj, 0, 90, 0);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 2);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(true)
+		{
+			ObjSprite3D_SetSourceRect(obj, (0), (0) + globalYOffset, (256*offsetXValue), (256*offsetYValue) + globalYOffset);
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Leaves(x, y, z, blend, alpha)
+	{
+		let yOffset = 0;
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain01_01);
+		ObjRender_SetBlendType(obj, blend);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512, 512*offsetYValue);
+		ObjSprite3D_SetDestRect(obj, -256, -256*offsetYValue, 256, 256*offsetYValue);
+		ObjRender_SetAngleXYZ(obj, 0, 90, 0);
+		ObjRender_SetScaleXYZ(obj, -1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 2);
+		ObjRender_SetAlpha(obj, alpha);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(true)
+		{
+			ObjSprite3D_SetSourceRect(obj, (0), (0) + globalYOffset, (512), (512*offsetYValue) + globalYOffset);
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	VoidCatcher(-781, 0, 0);
+	Ground(-780, 0, 0);
+	Leaves(-480, 0, -85, BLEND_ALPHA, 255);
+	Leaves(-479, 0, -85, BLEND_ADD_ARGB, 80);
+	
+	loop
+	{
+		alternative(stageBGPart)
+		case(0)
+		{
+			if(fogMax < 2500)
+			{
+				fogMax += 7;
+			}
+		}
+		case(1)
+		{
+			SetCameraFocusZ(-260);
+	
+			SetCameraYaw(20);
+			SetCameraPitch(-3.5);
+			fogColor = [0, 0, 230];
+			fogMin = 400;
+			fogMax = 1500;
+		}
+		
+
+	
+		if(particleFrame == 5)
+		{
+			loc_Particle(CenX + rand(-20, 20), rand(-90, MinY));
+			particleFrame = -1;
+		}
+		SetFogParam(fogMin, fogMax, fogColor[0], fogColor[1], fogColor[2]);
+		globalYOffset += 1.5;
+		particleFrame++;
+		yield;
+	}
+}
+
+task StageBG_YoukaiMountain02()
+{
+	
+}
+
+task StageBG_MoriyaShrine00() //MoF Stage 5 **
+{
+	let activeStage = GetCommonData("Stage", -1);
+	let finalize = false;
+	
+	let modifierZ = 0.5;
+	let sineVal = 0;
+	let offsetZ = 0;
+	let offsetZ2 = 0;
+	let offsetZ3 = 0;
+	let cameraZ = 0;
+	let checkZ = 0;
+	let checkZ2 = 0;
+	let checkZ3 = 0;
+	
+	SetCameraRadius(120);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(45);
+	
+	SetFogEnable(true);
+	SetFogParam(300, 880, 170, 159, 213);
+	
+	/*
+	let loc_black = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(loc_black, img_null);
+	Obj_SetRenderPriorityI(loc_black, 1);
+	ObjSprite2D_SetSourceRect(loc_black, 0, 0, 1, 1);
+	ObjSprite2D_SetDestRect(loc_black, 0, 0, 640, 480);
+	ObjRender_SetColor(loc_black, 0, 0, 0);
+	*/
+	
+	task GroundBack(x, y, z, priority)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_null);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*8, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128*8, -128*2, 128*8, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetColor(obj, 0, 0, 0);
+		while(objZ < resetZ && !finalize)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground(x, y, z, priority)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_moriyashrine00_01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128, -128*2, 128, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		//ObjRender_SetZWrite(obj, true);
+		//ObjRender_SetZTest(obj, true);
+		
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj2, img_moriyashrine00_01);
+		ObjSprite3D_SetSourceRect(obj2, 0, 0, 256, 256*2);
+		ObjSprite3D_SetDestRect(obj2, -128, -128*2, 128, 128*2);
+		ObjRender_SetAngleXYZ(obj2, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj2, -1, 1, 1);
+		ObjRender_SetPosition(obj2, x-253, y, z);
+		Obj_SetRenderPriorityI(obj2, priority);
+		//ObjRender_SetZWrite(obj2, true);
+		//ObjRender_SetZTest(obj2, true);
+		
+		let obj3 = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj3, img_moriyashrine00_01);
+		ObjSprite3D_SetSourceRect(obj3, 0, 0, 256, 256*2);
+		ObjSprite3D_SetDestRect(obj3, -128, -128*2, 128, 128*2);
+		ObjRender_SetAngleXYZ(obj3, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj3, 1, 1, 1);
+		ObjRender_SetPosition(obj3, x-506, y, z);
+		Obj_SetRenderPriorityI(obj3, priority);
+		//ObjRender_SetZWrite(obj3, true);
+		//ObjRender_SetZTest(obj3, true);
+		
+		let obj4 = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj4, img_moriyashrine00_01);
+		ObjSprite3D_SetSourceRect(obj4, 0, 0, 256, 256*2);
+		ObjSprite3D_SetDestRect(obj4, -128, -128*2, 128, 128*2);
+		ObjRender_SetAngleXYZ(obj4, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj4, -1, 1, 1);
+		ObjRender_SetPosition(obj4, x+253, y, z);
+		Obj_SetRenderPriorityI(obj4, priority);
+		//ObjRender_SetZWrite(obj4, true);
+		//ObjRender_SetZTest(obj4, true);
+		
+		while(objZ < resetZ && !finalize)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+		Obj_Delete(obj2);
+		Obj_Delete(obj3);
+		Obj_Delete(obj4);
+	}
+	
+	task Ground2(x, y, z, priority, alpha)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_moriyashrine00_00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128, -128*2, 128, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, -1, 1);
+		ObjRender_SetPosition(obj, x-128, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		//ObjRender_SetZWrite(obj, false);
+		//ObjRender_SetZTest(obj, false);
+		ObjRender_SetAlpha(obj, 255);
+		//ObjRender_SetColor(obj, alpha, alpha, alpha);
+		//ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		while(objZ < resetZ && !finalize)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task CreateClouds(zOffset)
+	{
+		task CreateCloud(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_moriyashrine00_02);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 128, 128);
+			ObjSprite3D_SetDestRect(objCloud, -64, -64, 64, 64);
+			ObjRender_SetAngleXYZ(objCloud, 140, 0, 0);
+			ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			ObjRender_SetFogEnable(objCloud, true);
+			//ObjRender_SetBlendType(objCloud, BLEND_ADD_RGB);
+			ObjRender_SetAlpha(objCloud, 55);
+			
+			if(type == 0)
+			{
+				ObjPrim_SetTexture(objCloud, img_moriyashrine00_02);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			else if(type == 1)
+			{
+				ObjPrim_SetTexture(objCloud, img_moriyashrine00_03);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			
+			while(objZ < resetZ && !finalize)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		task CreateShadow(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_moriyashrine00_02b);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 128, 128);
+			ObjSprite3D_SetDestRect(objCloud, -64, -64, 64, 64);
+			ObjRender_SetAngleXYZ(objCloud, 90, 90, 90);
+			ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			//ObjRender_SetZWrite(objCloud, true);
+			//ObjRender_SetZTest(objCloud, true);
+			ObjRender_SetAlpha(objCloud, 100);
+			
+			if(type == 0)
+			{
+				ObjPrim_SetTexture(objCloud, img_moriyashrine00_02b);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			else if(type == 1)
+			{
+				ObjPrim_SetTexture(objCloud, img_moriyashrine00_03b);
+				ObjRender_SetScaleXYZ(objCloud, -scale, scale, 1);
+			}
+			
+			while(objZ < resetZ && !finalize)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		CreateShadow(-70, -248, -585 - zOffset, 6, 2, 2);
+		CreateShadow(120, -248, -495 - zOffset, 6, 2, 2);
+		CreateShadow(-50, -248, -415 - zOffset, 6, 2, 2);
+		//CreateShadow(-120, -248, -410 - zOffset, 6, 1, 2);
+		CreateShadow(0, -248, -300 - zOffset, 6, 1, 2);
+		CreateShadow(95, -248, -256 - zOffset, 6, 1, 2);
+		
+		CreateCloud(-70, -100, -585 - zOffset, 7, 2, 1.5);
+		CreateCloud(120, -100, -495 - zOffset, 7, 2, 1.5);
+		CreateCloud(-50, -100, -415 - zOffset, 7, 2, 1.5);
+		//CreateCloud(-120, -100, -410 - zOffset, 7, 1, 1.5);
+		CreateCloud(0, -100, -300 - zOffset, 7, 1, 1.5);
+		CreateCloud(95, -100, -256 - zOffset, 7, 1, 1.5);
+	}
+	
+	ascent(i in 0..5)
+	{	
+		GroundBack(110, -360, -256*(i*2), 2);
+		Ground(125, -250, -256*(i*2), 3);
+		Ground2(125, -248, -256*(i*2), 5, 50);
+		////Ground2(80, -250, -256*(i*2), 6, 130);
+	}
+	CreateClouds(0);
+	CreateClouds(420);
+	CreateClouds(840);
+	offsetZ = -256*10;
+	offsetZ2 = 1260;
+	while(!unloadStage)
+	{
+		cameraZ -= modifierZ;
+		checkZ += modifierZ;
+		checkZ2 += modifierZ;
+		
+		if(checkZ >= 512)
+		{
+			GroundBack(110, -360, offsetZ, 2);
+			Ground(125, -250, offsetZ, 3);
+			Ground2(125, -248, offsetZ, 5, 50);
+			////Ground2(80, -250, offsetZ, 6, 130);
+			offsetZ += -512;
+			checkZ = 0;
+		}
+		
+		if(checkZ2 >= 420)
+		{
+			CreateClouds(offsetZ2);
+			offsetZ2 += 420;
+			checkZ2 = 0;
+		}
+		
+		SetCameraFocusZ(cameraZ);
+		sineVal++;
+		yield;
+	}
+	finalize = true;
+}
+
+task StageBG_YoukaiMountain07() //LoLK Stage 1
+{
+	let modifierZ = 1;
+	let sineVal = 0;
+	let offsetZ = 0;
+	let offsetZ2 = 0;
+	let offsetZ3 = 0;
+	let cameraZ = 00;
+	let checkZ = 0;
+	let checkZ2 = 0;
+	let checkZ3 = 0;
+	
+	SetCameraRadius(180);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(50);
+	
+	SetFogEnable(true);
+	SetFogParam(200, 1580, 250, 150, 150);
+	//SetFogParam(20, 180, 250, 150, 150);
+	
+	task GroundBack(x, y, z, priority)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 1024;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		//ObjPrim_SetTexture(obj, "none");
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*16, -256*4, 256*16, 256*4);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetFogEnable(obj, false);
+		//ObjRender_SetZWrite(obj, true);
+		//ObjRender_SetZTest(obj, true);
+		ObjRender_SetColor(obj, 0, 0, 0);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground(x, y, z, priority)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 1024;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain07_00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*16, -256*4, 256*16, 256*4);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetFogEnable(obj, true);
+		//ObjRender_SetZWrite(obj, true);
+		//ObjRender_SetZTest(obj, true);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Ground2(x, y, z, priority, alpha)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain00_01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*8, -256*2, 256*8, 256*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetAlpha(obj, alpha);
+		ObjRender_SetColor(obj, alpha, alpha, alpha);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task CreateClouds(zOffset)
+	{
+		task CreateCloud(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_youkaimountain07_01);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 256, 256);
+			ObjSprite3D_SetDestRect(objCloud, -128, -128, 128, 128);
+			ObjRender_SetAngleXYZ(objCloud, 140, 0, 0);
+			ObjRender_SetScaleXYZ(objCloud, -0.9, 0.9, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			ObjRender_SetFogEnable(objCloud, true);
+			ObjRender_SetAlpha(objCloud, 225);
+			
+			while(objZ < resetZ)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		task CreateShadow(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_youkaimountain07_01);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 256, 256);
+			ObjSprite3D_SetDestRect(objCloud, -128, -128, 128, 128);
+			ObjRender_SetAngleXYZ(objCloud, 90, 90, 90);
+			ObjRender_SetScaleXYZ(objCloud, -1.05, 1.05, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			//ObjRender_SetZWrite(objCloud, true);
+			//ObjRender_SetZTest(objCloud, true);
+			ObjRender_SetBlendType(objCloud, BLEND_SUBTRACT);
+			ObjRender_SetFogEnable(objCloud, true);
+			ObjRender_SetColor(objCloud, 225,225,225);
+			ObjRender_SetAlpha(objCloud, 225);
+			
+			while(objZ < resetZ)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		CreateShadow(-50, -300, -585 - zOffset, 3, 2, 1);
+		CreateShadow(100, -300, -495 - zOffset, 3, 2, 1);
+		CreateShadow(-40, -300, -415 - zOffset, 3, 2, 1);
+		CreateShadow(-120, -300, -410 - zOffset, 3, 1, 1);
+		CreateShadow(0, -300, -300 - zOffset, 3, 1, 1);
+		CreateShadow(75, -300, -256 - zOffset, 3, 1, 1);
+		
+		CreateCloud(-50, -100, -585 - zOffset, 4, 2, 1);
+		CreateCloud(100, -100, -495 - zOffset, 4, 2, 1);
+		CreateCloud(-40, -100, -415 - zOffset, 4, 2, 1);
+		CreateCloud(-120, -100, -410 - zOffset, 4, 1, 1);
+		CreateCloud(0, -100, -300 - zOffset, 4, 1, 1);
+		CreateCloud(75, -100, -256 - zOffset, 4, 1, 1);
+	}
+	
+	ascent(i in 0..5)
+	{	
+		GroundBack(110, -400, -256*(i*2), 1);
+		Ground(-50, -390, -256*(i*2), 2);
+		//Ground2(150, -300, -256*(i*2), 23, 50);
+		//Ground2(80, -250, -256*(i*2), 24, 130);
+	}
+	CreateClouds(0);
+	CreateClouds(420);
+	CreateClouds(840);
+	offsetZ = -256*10;
+	offsetZ2 = 1260;
+	loop
+	{
+		cameraZ -= modifierZ;
+		checkZ += modifierZ;
+		checkZ2 += modifierZ;
+		
+		if(checkZ >= 1024)
+		{
+			GroundBack(110, -400, offsetZ, 1);
+			Ground(-50, -390, offsetZ, 2);
+			//Ground2(150, -300, offsetZ, 23, 50);
+			//Ground2(80, -250, offsetZ, 24, 130);
+			offsetZ += -1024;
+			checkZ = 0;
+		}
+		
+		if(checkZ2 >= 420)
+		{
+			CreateClouds(offsetZ2);
+			offsetZ2 += 420;
+			checkZ2 = 0;
+		}
+		
+		SetCameraFocusZ(cameraZ);
+		sineVal++;
+		yield;
+	}
+}
+
+task StageBG_YoukaiMountainLake01() //LoLK Stage 2
+{
+	let modifierZ = 1;
+	let sineVal = 0;
+	let offsetZ = 0;
+	let offsetZ2 = 0;
+	let offsetZ3 = 0;
+	let cameraZ = 00;
+	let checkZ = 0;
+	let checkZ2 = 0;
+	let checkZ3 = 0;
+	
+	SetCameraRadius(180);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(0);
+	
+	SetFogEnable(false);
+	SetFogParam(0, 9999, 0, 0, 0);
+	
+	task GroundBack(x, y, z, priority)
+	{
+		//let objZ = z;
+		//let resetZ = GetCameraFocusZ + 1024;
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(obj, img_youkaimountainlake01_00);
+		ObjSprite2D_SetSourceRect(obj, 0, 0, 512, 512);
+		ObjSprite2D_SetDestRect(obj, 0, 0, 512, 512);
+		//ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, -64, 0, -999);
+		Obj_SetRenderPriorityI(obj, priority);
+		//ObjRender_SetZWrite(obj, true);
+		//ObjRender_SetZTest(obj, true);
+		//ObjRender_SetColor(obj, 0, 0, 0);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		loop
+		{
+			//objZ += modifierZ;
+			yield;
+		}
+		//Obj_Delete(obj);
+	}
+	
+	task Fog(zOffset, yOffset, xOffset, priority, type)
+	{
+		//Ground(-50, -390, -256*(i*2), 21);
+		//let objZ = z;
+		//let resetZ = GetCameraFocusZ + 1024;
+		let yPlus = 0;
+		let yPlusVal = 0;
+		let objPrim = ObjPrim_Create(OBJ_PRIMITIVE_3D);
+		ObjPrim_SetPrimitiveType(objPrim, PRIMITIVE_TRIANGLESTRIP);
+		ObjPrim_SetTexture(objPrim, img_youkaimountainlake01_01);
+		ObjPrim_SetVertexCount(objPrim, 4);
+		ObjPrim_SetVertexUVT(objPrim, 0, 0, 0);
+		ObjPrim_SetVertexUVT(objPrim, 1, 512*4, 0);
+		ObjPrim_SetVertexUVT(objPrim, 2, 0, 512);
+		ObjPrim_SetVertexUVT(objPrim, 3, 512*4, 512);
+		
+		ObjPrim_SetVertexPosition(objPrim, 0, -1024 + xOffset,           70 - yOffset, -1060 + zOffset);
+		ObjPrim_SetVertexPosition(objPrim, 1, -1024 + (640*4) + xOffset, 70 - yOffset, -1060 + zOffset);
+		ObjPrim_SetVertexPosition(objPrim, 2, -1024 + xOffset,           -240 - yOffset, -1060 + (640) + zOffset);
+		ObjPrim_SetVertexPosition(objPrim, 3, -1024 + (640*4) + xOffset, -240 - yOffset, -1060 + (640) + zOffset);
+		ObjPrim_SetVertexColor(objPrim, 0, 0, 0, 0);
+		ObjPrim_SetVertexColor(objPrim, 1, 0, 0, 0);
+		//ObjPrim_SetVertexColor(objPrim, 2, 0, 0, 0);
+		//ObjPrim_SetVertexColor(objPrim, 3, 0, 0, 0);
+		//ObjPrim_SetVertexColor(objPrim, 0, 225, 225, 225);
+		//ObjPrim_SetVertexColor(objPrim, 1, 225, 225, 225);
+		ObjPrim_SetVertexColor(objPrim, 2, 245, 245, 245);
+		ObjPrim_SetVertexColor(objPrim, 3, 245, 245, 245);
+		ObjPrim_SetVertexAlpha(objPrim, 0, 0);
+		ObjPrim_SetVertexAlpha(objPrim, 1, 0);
+		Obj_SetRenderPriorityI(objPrim, priority);
+		ObjRender_SetBlendType(objPrim, BLEND_ADD_RGB);
+		/*
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountainlake01_01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*16, -256*4, 256*16, 256*4);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		*/
+		//ObjRender_SetZWrite(objPrim, true);
+		//ObjRender_SetZTest(objPrim, true);
+		
+		if(type == 0)
+		{
+			yPlusVal = 0.5;
+		}
+		else
+		{
+			yPlusVal = 0.25;
+		}
+		loop
+		{
+			ObjPrim_SetVertexPosition(objPrim, 0, -1024 + xOffset,           50 - yOffset, -1060 + zOffset);
+			ObjPrim_SetVertexPosition(objPrim, 1, -1024 + (730*4) + xOffset, 50 - yOffset, -1060 + zOffset);
+			ObjPrim_SetVertexPosition(objPrim, 2, -1024 + xOffset,           -240 - yOffset, -1060 + (730) + zOffset);
+			ObjPrim_SetVertexPosition(objPrim, 3, -1024 + (730*4) + xOffset, -240 - yOffset, -1060 + (730) + zOffset);
+		
+			ObjPrim_SetVertexUVT(objPrim, 0, 0, 0 + yPlus);
+			ObjPrim_SetVertexUVT(objPrim, 1, 512*4, 0 + yPlus);
+			ObjPrim_SetVertexUVT(objPrim, 2, 0, 512*2 + yPlus);
+			ObjPrim_SetVertexUVT(objPrim, 3, 512*4, 512*2 + yPlus);
+			//xOffset++;
+			yPlus -= yPlusVal;
+			yield;
+		}
+		//Obj_Delete(obj);
+	}
+	
+	task EnergyEffect()
+	{
+		let vertexcount = 256;
+		let uvtOffset = 4;
+		let radius = 320;
+		let divideby = radius;
+		let indexVert = 0;
+		let angle = 0;
+		let effAngle = 0;
+		
+		let obj = ObjPrim_Create(OBJ_PRIMITIVE_2D);
+		ObjPrim_SetPrimitiveType(obj,PRIMITIVE_TRIANGLESTRIP);
+		ObjPrim_SetVertexCount(obj,vertexcount + 2);
+		ObjPrim_SetTexture(obj, img_youkaimountainlake01_02);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		ObjRender_SetAngleZ(obj, 270);
+		ObjRender_SetPosition(obj, 221, 25, 0);
+		Obj_SetRenderPriorityI(obj, 4);
+		
+		loop((vertexcount / 2) + 2)
+		{
+			let vx1 = radius * cos(angle);
+			let vy1 = radius * sin(angle);
+			ObjPrim_SetVertexPosition(obj, indexVert, vx1, vy1, 0);
+			ObjPrim_SetVertexAlpha(obj, indexVert, 0);
+			ObjPrim_SetVertexColor(obj, indexVert, 0, 0, 0);
+			
+			let vx2 = 0 * cos(angle);
+			let vy2 = 0 * sin(angle);
+			ObjPrim_SetVertexPosition(obj, indexVert + 1, vx2, vy2, 0);
+			ObjPrim_SetVertexAlpha(obj, indexVert + 1, 150);
+			ObjPrim_SetVertexColor(obj, indexVert + 1, 150, 150, 150);
+			
+			angle += (360/(vertexcount/2));
+			indexVert += 2;
+		}
+
+		let mx = 0;
+		while(true)
+		{
+			mx += 1;
+			ascent(i in 0..vertexcount)
+			{
+				let indexvert = i*2;
+				ObjPrim_SetVertexUVT(obj, indexvert, 0 + uvtOffset*i, 0 + mx);
+				ObjPrim_SetVertexUVT(obj, indexvert + 1, uvtOffset + uvtOffset*i, 512 + mx);
+
+			}
+			ObjRender_SetAngleZ(obj, effAngle);
+			effAngle -= 0.6;
+			yield;
+		}
+		Obj_Delete(obj);
+		//ObjRender_SetZWrite(obj,true);  You don't need these because it is in 2D space
+		//ObjRender_SetZTest(obj,true);   You don't need these because it is in 2D space
+
+	}
+	
+	task Ground2(x, y, z, priority, alpha)
+	{
+		let objZ = z;
+		let resetZ = GetCameraFocusZ + 350;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_youkaimountain00_01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 512*8, 512*2);
+		ObjSprite3D_SetDestRect(obj, -256*8, -256*2, 256*8, 256*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 0.5, 0.5, 0.5);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, priority);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		ObjRender_SetAlpha(obj, alpha);
+		ObjRender_SetColor(obj, alpha, alpha, alpha);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		while(objZ < resetZ)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task CreateClouds(zOffset)
+	{
+		task CreateCloud(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_youkaimountain07_01);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 256, 256);
+			ObjSprite3D_SetDestRect(objCloud, -128, -128, 128, 128);
+			ObjRender_SetAngleXYZ(objCloud, 140, 0, 0);
+			ObjRender_SetScaleXYZ(objCloud, -0.9, 0.9, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			ObjRender_SetAlpha(objCloud, 200);
+			
+			while(objZ < resetZ)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		task CreateShadow(x, y, z, priority, type, scale)
+		{
+			let objZ = z;
+			let resetZ = GetCameraFocusZ + 300;
+			let objCloud = ObjPrim_Create(OBJ_SPRITE_3D);
+			ObjPrim_SetTexture(objCloud, img_youkaimountain07_01);
+			ObjSprite3D_SetSourceRect(objCloud, 0, 0, 256, 256);
+			ObjSprite3D_SetDestRect(objCloud, -128, -128, 128, 128);
+			ObjRender_SetAngleXYZ(objCloud, 90, 90, 90);
+			ObjRender_SetScaleXYZ(objCloud, -1.05, 1.05, 1);
+			ObjRender_SetPosition(objCloud, x, y, z);
+			Obj_SetRenderPriorityI(objCloud, priority);
+			//ObjRender_SetZWrite(objCloud, true);
+			//ObjRender_SetZTest(objCloud, true);
+			ObjRender_SetBlendType(objCloud, BLEND_SUBTRACT);
+			ObjRender_SetColor(objCloud, 225,225,225);
+			ObjRender_SetAlpha(objCloud, 225);
+			
+			while(objZ < resetZ)
+			{
+				objZ += modifierZ;
+				ObjRender_SetX(objCloud, x + (sin(sineVal/4.5) * 23));
+				yield;
+			}
+			Obj_Delete(objCloud);
+		}
+		
+		CreateShadow(-50, -300, -585 - zOffset, 22, 2, 1);
+		CreateShadow(100, -300, -495 - zOffset, 22, 2, 1);
+		CreateShadow(-40, -300, -415 - zOffset, 22, 2, 1);
+		CreateShadow(-120, -300, -410 - zOffset, 22, 1, 1);
+		CreateShadow(0, -300, -300 - zOffset, 22, 1, 1);
+		CreateShadow(75, -300, -256 - zOffset, 22, 1, 1);
+		
+		CreateCloud(-50, -100, -585 - zOffset, 25, 2, 1);
+		CreateCloud(100, -100, -495 - zOffset, 25, 2, 1);
+		CreateCloud(-40, -100, -415 - zOffset, 25, 2, 1);
+		CreateCloud(-120, -100, -410 - zOffset, 25, 1, 1);
+		CreateCloud(0, -100, -300 - zOffset, 25, 1, 1);
+		CreateCloud(75, -100, -256 - zOffset, 25, 1, 1);
+	}
+	
+	offsetZ = -256*10;
+	offsetZ2 = 1260;
+	
+	Fog(0, 50, 90, 3, 0);
+	Fog(70, 120, 24, 4, 1);
+	EnergyEffect();
+	GroundBack(0, 0, 0, 2);
+	loop
+	{
+		if(checkZ >= 1024)
+		{
+			offsetZ += -1024;
+			checkZ = 0;
+		}
+		
+		if(checkZ2 >= 420)
+		{
+			offsetZ2 += 420;
+			checkZ2 = 0;
+		}
+		
+		SetCameraFocusZ(cameraZ);
+		sineVal++;
+		yield;
+	}
+}
+
+task StageBG_Mansion00() //StB Scarlet Devil Mansion
+{
+	let modifierZ = 0.5;
+	let offsetZ = 0;
+	let offsetZ2 = 0;
+	let offsetZ3 = 0;
+	let cameraZ = 0;
+	let checkZ = 0;
+	let checkZ2 = 0;
+	let checkZ3 = 0;
+	
+	SetCameraRadius(180);
+	SetCameraFocusX(0);
+	SetCameraFocusY(-10);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(-10);
+	SetCameraRoll(5);
+	SetCameraAzimuthAngle(90);
+	SetCameraElevationAngle(30);
+	
+	SetFogEnable(true);
+	SetFogParam(400, 880, 16, 0, 0);
+	
+	task Ground(x, y, z)
+	{
+		let objZ = 0;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_stgTest_bg01);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 256*8, 256*2);
+		ObjSprite3D_SetDestRect(obj, -128*8, -128*2, 128*8, 128*2);
+		ObjRender_SetAngleXYZ(obj, 90, 90, 90);
+		ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 2);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ > z - 256*4)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task DecorA(x, y, z)
+	{
+		let objZ = z;
+		let originalZ = z;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_stgTest_bg00);
+		ObjSprite3D_SetSourceRect(obj, 128, 0, 256, 128);
+		ObjSprite3D_SetDestRect(obj, -64, -64, 64, 64);
+		ObjRender_SetAngleXYZ(obj, 90, 0, 90);
+		ObjRender_SetScaleXYZ(obj, 0.9, 0.9, 0.9);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 3);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ > z - 96*4)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task DecorB(x, y, z)
+	{
+		let objZ = z;
+		let originalZ = z;
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj, img_stgTest_bg00);
+		ObjSprite3D_SetSourceRect(obj, 0, 0, 128, 128);
+		ObjSprite3D_SetDestRect(obj, -64, -64, 64, 64);
+		ObjRender_SetAngleXYZ(obj, 90, -90, 90);
+		ObjRender_SetScaleXYZ(obj, 1.2, 1.2, 1.2);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 3);
+		ObjRender_SetAlpha(obj, 100);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(objZ > z - 128*4)
+		{
+			objZ += modifierZ;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	ascent(i in 0..5)
+	{
+		Ground(110, -150, -256*(i*2));
+	}
+	offsetZ = -256*10;
+	
+	ascent(i in 0..10)
+	{
+		DecorA(190, -149, -96*i);
+	}
+	
+	ascent(j in 0..10)
+	{
+		DecorB(-50, -149, -128*j);
+	}
+	
+	loop
+	{
+		cameraZ -= modifierZ;
+		checkZ += modifierZ;
+		checkZ2 += modifierZ;
+		checkZ3 += modifierZ;
+		
+		if(checkZ >= 256)
+		{
+			Ground(110, -150, offsetZ);
+			offsetZ += -256*2;
+			checkZ = 0;
+		}
+		if(checkZ2 >= 96)
+		{
+			DecorA(190, -149, offsetZ2 + -96*10);
+			offsetZ2 += -96;
+			checkZ2 = 0;
+		}
+		if(checkZ3 >= 128)
+		{
+			DecorB(-50, -149, offsetZ3 + -128*10);
+			offsetZ3 += -128;
+			checkZ3 = 0;
+		}
+		
+		SetCameraFocusZ(cameraZ);
+		yield;
+	}
+}
+
+task StageBG_NightSky00() //UFO Extra, old (possibly bad) code
+{
+	task ParticleCreate
+	{
+		loop
+		{
+			CreateEffectParticle(rand(-50, 640), rand(-200, 480), 30, 30, 30, rand(0.3,1.3), rand(8.5,9.5), 110, rand(10, 600));
+			CreateEffectParticle(rand(-50, 640), rand(-200, 480), 30, 30, 30, rand(0.3,1.3), rand(8.5,9.5), 110, rand(10, 600));
+			loop(round(rand(1, 2))){yield;}
+		}
+	}
+	
+	task CreateEffectParticle(deX, deY, colorR, colorG, colorB, deScale, randspeed, randangle, randtime)
+	{
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		let angX = rand(-360, 360);
+		let angY = rand(-360, 360);
+		let angZ = rand(-360, 360);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		Obj_SetRenderPriority(obj, 0.21);
+		ObjPrim_SetTexture(obj, GetMainStgScriptDirectory ~ "img/effect/effect.png");
+		ObjSprite2D_SetSourceRect(obj, 0, 228, 33, 251);
+		ObjSprite2D_SetDestRect(obj, -16, -12, 16, 12);
+		ObjRender_SetAngleXYZ(obj, angX, angY, angZ);
+		ObjRender_SetPosition(obj, deX, deY, 0);
+		ObjRender_SetColor(obj, 0, 0, 0);
+		
+		let alpha = 100;
+		let scale = deScale;
+		let slow = 0;
+		let randX = rand(-200, 200);
+		let randY = rand(-200, 200);
+		let RandZ = rand(-170,170);
+		let colorRZ = 0;
+		let colorGZ = 0;
+		let colorBZ = 0;
+		let x_vel;
+		let y_vel;
+		let count = 0;
+		while(Obj_IsDeleted(obj)==false)
+		{
+			
+			x_vel = cos(randangle)*randspeed; 
+			y_vel = sin(randangle)*randspeed;
+			if(count >= randtime)
+			{
+				alpha += -0.01;
+				colorRZ += -1;
+				colorGZ += -1;
+				colorBZ += -1;
+			}
+			else
+			{
+				if(colorRZ < colorR)
+				{
+					colorRZ++;
+				}
+				if(colorGZ < colorG)
+				{
+					colorGZ++;
+				}
+				if(colorBZ < colorB)
+				{
+					colorBZ++;
+				}
+			}
+			deX += x_vel;
+			deY += y_vel;
+			angX += randX/85;
+			angY += randY/85;
+			angZ += randX/135+randY/135;
+			
+			ObjRender_SetPosition(obj, deX, deY, 0);
+			ObjRender_SetAngleXYZ(obj, angX, angY, angZ);
+			ObjRender_SetAlpha(obj, alpha);
+			ObjRender_SetScaleXYZ(obj, scale, scale, scale);
+			ObjRender_SetColor(obj, colorRZ, colorGZ, colorBZ);
+			
+			if(ObjRender_GetX(obj) <= -40)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			if(ObjRender_GetY(obj) >= GetStgFrameHeight + 40)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			
+			if(colorRZ < 0.01)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			count++;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	let move = 0;
+	let frame = 0;
+	let frame2 = 0;
+	let camx = -170;
+	let camz = 0;
+	let eleangle = -91;
+	let aziangle = 0;
+	let modazi = 0;
+	
+	SetCameraFocusX(-550);
+	SetCameraFocusY(-250);
+	SetCameraFocusZ(-20);
+	
+	SetCameraAzimuthAngle(0);
+	SetCameraElevationAngle(-91);
+	SetCameraRadius(300);
+	SetFogEnable(true);
+	SetFogParam(300, 1000, 12, 12, 12);
+	let groundimg = GetMainStgScriptDirectory ~ "/img/background/stage02a.png";
+	let cloudimg = GetMainStgScriptDirectory ~ "/img/background/stage02b.png";
+	let cloudimgb = GetMainStgScriptDirectory ~ "/img/background/stage02c.png";
+	
+	let ground = ObjPrim_Create(OBJ_SPRITE_3D);
+	Obj_SetRenderPriorityI(ground, 20);
+	ObjPrim_SetTexture(ground, img_nightsky00_00);
+	ObjSprite3D_SetSourceRect(ground, 0, 0, 512*3, 128*10);
+	ObjSprite3D_SetDestRect(ground, 0, 0, 128*10, 512*3);
+	ObjRender_SetPosition(ground, 0,-500,-768);
+	ObjRender_SetAngleXYZ(ground,-45,90,90);
+	ObjRender_SetZWrite(ground, true);
+	ObjRender_SetZTest(ground, true);
+	
+	let cloudb = ObjPrim_Create(OBJ_SPRITE_3D);
+	Obj_SetRenderPriorityI(cloudb, 21);
+	ObjPrim_SetTexture(cloudb, img_nightsky00_01);
+	ObjRender_SetBlendType(cloudb, BLEND_ALPHA);
+	ObjSprite3D_SetSourceRect(cloudb, 0, 0, 512*3, 256*10);
+	ObjSprite3D_SetDestRect(cloudb, 0, 0, (256*10)*2, (512*3)*2);
+	ObjRender_SetPosition(cloudb, -250,-658,-768);
+	ObjRender_SetAngleXYZ(cloudb,-45,90,90);
+	ObjRender_SetZWrite(cloudb, true);
+	ObjRender_SetZTest(cloudb, true);
+	ObjRender_SetScaleXYZ(cloudb,1.5,1.5,1.5);
+	
+	let clouda = ObjPrim_Create(OBJ_SPRITE_3D);
+	Obj_SetRenderPriorityI(clouda, 22);
+	ObjPrim_SetTexture(clouda, img_nightsky00_01);
+	ObjRender_SetBlendType(clouda, BLEND_ALPHA);
+	ObjSprite3D_SetSourceRect(clouda, 0, 0, 512*3, 256*10);
+	ObjSprite3D_SetDestRect(clouda, 0, 0, 256*10, 512*3);
+	ObjRender_SetPosition(clouda, -460,-655,-768);
+	ObjRender_SetAngleXYZ(clouda,-45,90,90);
+	ObjRender_SetZWrite(clouda, true);
+	ObjRender_SetZTest(clouda, true);
+	ObjRender_SetScaleXYZ(clouda,2,2,2);
+	
+	
+	//ObjRender_SetAlpha(cloudb, 0);
+	
+	ParticleCreate;
+	loop
+	{
+		ObjSprite3D_SetSourceRect(ground, 0 + move, 0, 128*10 + move, 512*3);
+		
+		ObjSprite3D_SetSourceRect(clouda, 0 + move/2, 0, 256*10 + move/2, 512*3);
+		
+		ObjSprite3D_SetSourceRect(cloudb, 0 + move, 0 - move/2, 256*10 + move, 512*3 - move/2);
+		move += 3;
+		if(camx > -490)
+		{
+			SetCameraFocusX(camx);
+			SetCameraFocusY(camx);
+			camx -= 0.4;
+		}
+		if(eleangle > -120)
+		{
+			eleangle -= 0.05;
+			SetCameraElevationAngle(eleangle);
+		}
+		if(modazi < 10)
+		{
+			modazi += 0.02;
+		}
+		aziangle = modazi + cos(frame/2)*-12;
+		camz = 0 - cos(frame/5)*40;
+		
+		SetCameraAzimuthAngle(aziangle);
+		//SetCameraFocusZ(camz);
+		
+		frame--;
+		yield;
+	}
+}
+
+task StageBG_Netherworld02() //TD Stage 1, old (possibly bad) code
+{
+	let fog = 0;
+	let focusz = 180;
+	let fogstart = 200;
+	let fogend = 600;
+	SetCameraFocusX(150);
+	SetCameraFocusY(240);
+	SetCameraFocusZ(70);
+	
+	SetCameraAzimuthAngle(17);
+	SetCameraElevationAngle(0);
+	SetFogEnable(true);
+	SetFogParam(500, 1250, 16, 0, 16);
+	SetCameraRadius(500);
+	let globalangle = 0;
+	let azi = 0;
+	
+	
+	let nullpath = "bleh.png";
+	let objn = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(objn, nullpath);
+	ObjSprite3D_SetSourceDestRect(objn, 0, 0, 512, 512);
+	ObjRender_SetAngleXYZ(objn, 0, 270 - 16, 0);
+	ObjRender_SetScaleXYZ(objn, 20, 2, 1);
+	ObjRender_SetPosition(objn, -950, 500, -900);
+	Obj_SetRenderPriorityI(objn, 20);
+	ObjRender_SetZWrite(objn, true);
+	ObjRender_SetZTest(objn, true);
+	
+	task ParticleCreate
+	{
+		loop
+		{
+			CreateEffectParticle(rand(-50, 640), rand(-50, 480), 30, 30, 30, rand(0.3,1), rand(0.5,1.5), rand(50, 70), rand(10, 600));
+			CreateEffectParticle(rand(-50, 640), rand(-50, 480), 30, 30, 30, rand(0.3,1), rand(0.5,1.5), rand(50, 70), rand(10, 600));
+			loop(rand(5, 10)){yield;}
+		}
+	}
+	
+	task CreateEffectParticle(deX, deY, colorR, colorG, colorB, deScale, randspeed, randangle, randtime)
+	{
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		let angX = rand(-360, 360);
+		let angY = rand(-360, 360);
+		let angZ = rand(-360, 360);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		Obj_SetRenderPriority(obj, 0.21);
+		ObjPrim_SetTexture(obj, img_effect_base);
+		ObjSprite2D_SetSourceRect(obj, 0, 228, 33, 251);
+		ObjSprite2D_SetDestRect(obj, -16, -12, 16, 12);
+		ObjRender_SetAngleXYZ(obj, angX, angY, angZ);
+		ObjRender_SetPosition(obj, deX, deY, 0);
+		ObjRender_SetColor(obj, 0, 0, 0);
+		
+		let alpha = 100;
+		let scale = deScale;
+		let slow = 0;
+		let randX = rand(-200, 200);
+		let randY = rand(-200, 200);
+		let RandZ = rand(-170,170);
+		let colorRZ = 0;
+		let colorGZ = 0;
+		let colorBZ = 0;
+		let x_vel;
+		let y_vel;
+		let count = 0;
+		while(Obj_IsDeleted(obj)==false)
+		{
+			
+			x_vel = cos(randangle)*randspeed; 
+			y_vel = sin(randangle)*randspeed;
+			if(count >= randtime)
+			{
+				alpha += -0.01;
+				colorRZ += -1;
+				colorGZ += -1;
+				colorBZ += -1;
+			}
+			else
+			{
+				if(colorRZ < colorR)
+				{
+					colorRZ++;
+				}
+				if(colorGZ < colorG)
+				{
+					colorGZ++;
+				}
+				if(colorBZ < colorB)
+				{
+					colorBZ++;
+				}
+			}
+			deX += x_vel;
+			deY += y_vel;
+			angX += randX/85;
+			angY += randY/85;
+			angZ += randX/135+randY/135;
+			
+			ObjRender_SetPosition(obj, deX, deY, 0);
+			ObjRender_SetAngleXYZ(obj, angX, angY, angZ);
+			ObjRender_SetAlpha(obj, alpha);
+			ObjRender_SetScaleXYZ(obj, scale, scale, scale);
+			ObjRender_SetColor(obj, colorRZ, colorGZ, colorBZ);
+			
+			if(colorRZ < 0.01)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			count++;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task CherryBlossom(x,y,z,color,delay)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		let frame = 0;
+		let frame2 = 0;
+		let scalex = 1.1;
+		let scaley = 1.1;
+		let scalez = 1.1;
+		scalex = 1.1 + cos(frame2)/25;
+		ObjPrim_SetTexture(obj2, img_hakugyokurou02_02);
+		ObjSprite3D_SetSourceRect(obj2, 0, 0, 256, 256);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 256, 256);
+		ObjSprite3D_SetBillboard(obj2,1);
+		ObjRender_SetScaleXYZ(obj2, scalex, 1.1, 1.1);
+		ObjRender_SetBlendType(obj2, BLEND_ADD_RGB);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 21);
+		ObjRender_SetAlpha(obj2,50);
+		ObjRender_SetColor(obj2,color,color,color);
+		while(!Obj_IsDeleted(obj2))
+		{
+			move = ObjRender_GetX(obj2);
+			if(move >= 540)
+			{
+				x -= 2040;
+				y += 1360;
+			}
+			if(frame >= delay)
+			{
+				scalex = 1.1 + cos(frame2)/25; //This creates the waving effect
+				frame2++;
+				ObjRender_SetScaleXYZ(obj2, scalex, 1.1, 1.1);
+			}
+			x += 0.75;
+			y -= 0.5;
+			frame++;
+			ObjRender_SetPosition(obj2, x, y, z);
+			yield;
+		}
+	}
+	
+	task Ground(x,y,z,anglex,angley,anglez,sx)
+	{
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		ObjPrim_SetTexture(obj, img_hakugyokurou02_01);
+		ObjSprite3D_SetSourceDestRect(obj, 0, 0, 512, 512);
+		ObjRender_SetAngleXYZ(obj, 56.3, 270, 270);
+		ObjRender_SetScaleXYZ(obj, 2.3, 2.3, 2.3);
+		ObjRender_SetPosition(obj, 0, 270, 0);
+		Obj_SetRenderPriorityI(obj, 20);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		while(!Obj_IsDeleted(obj))
+		{
+			if(move >= 600)
+			{
+				x -= 768;
+				y += 512;
+			}
+			move = ObjRender_GetX(obj);
+			x += 0.75;
+			y -= 0.5;
+			ObjRender_SetPosition(obj, x, y, z);
+			yield;
+		}
+	}
+	
+	task Side(x,y,z,anglex,angley,anglez,sx)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		ObjPrim_SetTexture(obj2, img_hakugyokurou02_00);
+		ObjSprite3D_SetSourceRect(obj2, 0, sx, 256, 24 + sx);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 256, 24);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 20);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		while(!Obj_IsDeleted(obj2))
+		{
+			move = ObjRender_GetX(obj2);
+			if(move >= 310)
+			{
+				x -= 675*2;
+				y += 450*2;
+			}
+			x += 0.75;
+			y -= 0.5;
+			ObjRender_SetPosition(obj2, x, y, z);
+			yield;
+		}
+	}
+	
+	task Side2(x,y,z,anglex,angley,anglez,sx,color)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		ObjPrim_SetTexture(obj2, img_hakugyokurou02_00);
+		ObjSprite3D_SetSourceRect(obj2, 0, sx, 256, 36 + sx);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 256, 36);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 20);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		ObjRender_SetColor(obj2,color,color,color);
+		while(!Obj_IsDeleted(obj2))
+		{
+			move = ObjRender_GetX(obj2);
+			if(move >= 310)
+			{
+				x -= 675*2;
+				y += 450*2;
+			}
+			x += 0.75;
+			y -= 0.5;
+			ObjRender_SetPosition(obj2, x, y, z);
+			yield;
+		}
+	}
+	
+	task Step(x,y,z,anglex,angley,anglez,arg,color)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = ObjRender_GetX(obj2);
+		ObjPrim_SetTexture(obj2, img_hakugyokurou02_00);
+		ObjSprite3D_SetSourceRect(obj2, 0+(arg*24), 0, 24+(arg*24), 256);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 24, 256);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 20);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		ObjRender_SetColor(obj2,color,color,color);
+		while(!Obj_IsDeleted(obj2))
+		{
+			if(color == 60)
+			{
+				if(move >= 310)
+				{
+					x -= 888.75;
+					y += 592.5;
+				}
+			}
+			if(color == 255)
+			{
+				if(move >= 310)
+				{
+					x -= 888.75;
+					y += 592.5;
+				}
+			}
+			move = ObjRender_GetX(obj2);
+			x += 0.75;
+			y -= 0.5;
+			ObjRender_SetPosition(obj2, x, y, z);
+			yield;
+		}
+	}
+	
+	task Step2(x,y,z,anglex,angley,anglez,arg,color)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = ObjRender_GetX(obj2);
+		ObjPrim_SetTexture(obj2, img_hakugyokurou02_00);
+		ObjSprite3D_SetSourceRect(obj2, 0+(arg*36), 0, 36+(arg*36), 256);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 36, 256);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 20);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		ObjRender_SetColor(obj2,color,color,color);
+		while(!Obj_IsDeleted(obj2))
+		{
+			if(color == 60)
+			{
+				if(move >= 310)
+				{
+					x -= 888.75;
+					y += 592.5;
+				}
+			}
+			if(color == 255)
+			{
+				if(move >= 310)
+				{
+					x -= 888.75;
+					y += 592.5;
+				}
+			}
+			move = ObjRender_GetX(obj2);
+			x += 0.75;
+			y -= 0.5;
+			ObjRender_SetPosition(obj2, x, y, z);
+			yield;
+		}
+	}
+	let angle = 0;
+	
+	ParticleCreate;
+	
+	ascent(i in 0..50)
+	{
+		Step(250-(i*35.55),10+(i*23.7),-9,0,90,90,i,60);
+		Step2(286-(i*35.55),-14+(i*23.7),-9,90,90,90,i,255);
+	}
+	ascent(i in 0..10)
+	{
+		CherryBlossom(250-(i*204),190+(i*136),-180,85,0+i*20);
+		CherryBlossom(318-(i*204),210+(i*136),-150,85,15+i*20);
+		CherryBlossom(386-(i*204),210+(i*136),-230,85,30+i*20);
+		
+		Ground(260-(i*768)*1.1,-180+(i*512)*1.1,-32.5,45,270,270,0);
+		
+		Side2(150-(i*270)/1.5,63+(i*180)/1.5,-9,0,0,-33.3,0,60);
+		Side(150-(i*270)/1.5,106+(i*180)/1.5,-32.5,56.3,270,270,0);
+		Side2(150-(i*270)/1.5,63+(i*180)/1.5,246,0,0,-33.3,220,0);
+		Side(150-(i*270)/1.5,106+(i*180)/1.5,245.5,56.3,270,270,224);
+	}
+	loop
+	{
+		if(stageBGPart == 0)
+		{
+			SetCameraFocusX(150);
+			SetCameraFocusY(240);
+			SetCameraFocusZ(focusz);
+			SetCameraAzimuthAngle(azi);
+			SetCameraRadius(500);
+			
+			SetFogEnable(true);
+			SetFogParam(fogstart, fogend, fog, 0, fog);
+			if(focusz > 70)
+			{
+				focusz -= 0.132;
+				azi += 0.018;
+			}
+			else
+			{
+				stageBGPart = 1;
+			}
+		}
+		if(stageBGPart == 1)
+		{
+			SetCameraFocusX(150);
+			SetCameraFocusY(240);
+			SetCameraFocusZ(70);
+			
+			SetCameraAzimuthAngle(azi);
+			SetCameraElevationAngle(0);
+			SetFogEnable(true);
+			if(fog < 16)
+			{
+				fog += 0.2;
+			}
+			if(fogstart < 500)
+			{
+				fogstart += 5;
+			}
+			if(fogend < 1250)
+			{
+				fogend += 5;
+			}
+			
+			if(azi < 17)
+			{
+				azi += 0.018;
+			}
+			else
+			{
+				azi = 17;
+			}
+			SetFogParam(fogstart, fogend, fog, 0, fog);
+			SetCameraRadius(500);
+		}
+		if(stageBGPart == 2)
+		{
+			SetFogParam(500, 1250, fog, 0, fog);
+			if(fog < 80)
+			{
+				fog++;
+			}
+		}
+		yield;
+	}
+}
+
+task StageBG_TempleCave00() //TD Stage 4, old bad code
+{
+	let fog = 0;
+	let focusz = 180;
+	let fogstart = 200;
+	let fogend = 800;
+	let wr = 0; 
+	let wg = 0; 
+	let wb = 0;
+	SetCameraFocusX(250);
+	SetCameraFocusY(50);
+	SetCameraFocusZ(0);
+	
+	SetCameraAzimuthAngle(0);
+	SetCameraElevationAngle(-60);
+	SetFogEnable(true);
+	SetFogParam(fogstart, fogend, 0, 0, 0);
+	SetCameraRadius(1);
+	let frame = 0;
+	let azi = 0;
+	let stairs = GetCurrentScriptDirectory() ~ "stg1bg.png";
+	let cherry = GetCurrentScriptDirectory() ~ "stg1bg3.png";
+	let gateframe = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_04.png";
+	let gateframe2 = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_05.png";
+	let ground = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_00.png";
+	let ground2 = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_01.png";
+	let groundeff = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_02.png";
+	let groundeff2 = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_03.png";
+	let efftrail = GetModuleDirectory ~ "script/ZUN Engine/img/background/stg_TempleCave00/img_templecave00_effect.png";
+	
+	task ParticleCreate
+	{
+		loop
+		{
+			if(stageBGPart == 0 || stageBGPart == 2)
+			{
+				CreateEffectParticle(rand(190, -120), 150, rand(-150, 150), rand(0,255), rand(0,255), rand(0,255), rand(1,2), rand(5,8), rand(-2,2), rand(30, 900));
+				loop(rand(6, 11)){yield;}
+			}
+			yield;
+		}
+	}
+	
+	task CreateEffectParticle(deX, deY, deZ, colorR, colorG, colorB, deScale, randspeed, randangle, randtime)
+	{
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		let angX = rand(-360, 360);
+		let angY = rand(-360, 360);
+		let angZ = rand(-360, 360);
+		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		Obj_SetRenderPriority(obj, 0.21);
+		ObjPrim_SetTexture(obj, efftrail);
+		ObjSprite3D_SetSourceDestRect(obj, 0, 0, 10, 600);
+		ObjRender_SetAngleXYZ(obj, angX + randangle, angY, angZ);
+		ObjRender_SetPosition(obj, 200, 200, 0);
+		ObjRender_SetColor(obj, 255, 0, 0);
+		
+		let alpha = 100;
+		let scale = deScale;
+		let slow = 0;
+		let randX = rand(-200, 200);
+		let randY = rand(-200, 200);
+		let RandZ = rand(-170,170);
+		let colorRZ = 0;
+		let colorGZ = 0;
+		let colorBZ = 0;
+		let x_vel;
+		let y_vel;
+		let count = 0;
+		while(Obj_IsDeleted(obj)==false)
+		{
+			x_vel = cos(randangle + 90)*randspeed; 
+			y_vel = sin(randangle + 90)*randspeed;
+			if(count >= randtime)
+			{
+				alpha += -0.01;
+				colorRZ += -1;
+				colorGZ += -1;
+				colorBZ += -1;
+			}
+			else
+			{
+				if(colorRZ < colorR)
+				{
+					colorRZ++;
+				}
+				if(colorGZ < colorG)
+				{
+					colorGZ++;
+				}
+				if(colorBZ < colorB)
+				{
+					colorBZ++;
+				}
+			}
+			deZ += x_vel;
+			deY += y_vel;
+			angX += randX/85;
+			angY += randY/85;
+			angZ += randX/135+randY/135;
+			
+			ObjRender_SetPosition(obj, deX, deY, deZ);
+			ObjRender_SetAngleXYZ(obj, 0, 90, -randangle);
+			ObjRender_SetAlpha(obj, alpha);
+			ObjRender_SetScaleXYZ(obj, 0.4, scale, 1);
+			ObjRender_SetColor(obj, colorRZ, colorGZ, colorBZ);
+			
+			if(colorRZ < 0.01)
+			{
+				Obj_Delete(obj);
+				break;
+			}
+			count++;
+			yield;
+		}
+		Obj_Delete(obj);
+	}
+	
+	task Wall(x,y,z,anglex,angley,anglez,sx)
+	{
+		let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		ObjPrim_SetTexture(obj, gateframe);
+		ObjSprite3D_SetSourceDestRect(obj, 0, 0, 512, 512);
+		ObjRender_SetAngleXYZ(obj, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj, -0.7, 0.8, 0.7);
+		ObjRender_SetPosition(obj, x, y, z);
+		Obj_SetRenderPriorityI(obj, 20);
+		ObjRender_SetZWrite(obj, true);
+		ObjRender_SetZTest(obj, true);
+		
+		let obj3 = ObjPrim_Create(OBJ_SPRITE_3D);
+		ObjPrim_SetTexture(obj3, gateframe2);
+		ObjSprite3D_SetSourceDestRect(obj3, 0, 0, 512, 512);
+		ObjRender_SetAngleXYZ(obj3, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj3, -0.7, 0.8, 0.7);
+		ObjRender_SetPosition(obj3, x, y + 50, z);
+		Obj_SetRenderPriorityI(obj3, 20);
+		ObjRender_SetZWrite(obj3, true);
+		ObjRender_SetZTest(obj3, true);
+	}
+	
+	task Part(x,y,z,anglex,angley,anglez,arg,color)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		let moveplus = -1;
+		if(leftright == 0)
+		{
+			ObjPrim_SetTexture(obj2, ground);
+		}
+		if(leftright == 1)
+		{
+			ObjPrim_SetTexture(obj2, ground2);
+		}
+		ObjSprite3D_SetSourceRect(obj2, 0, 0 + (arg*32), 256 * 3, 32 + (arg*32));
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 256*3, 32);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 20);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		while(!Obj_IsDeleted(obj2))
+		{
+			if(stageBGPart == 0)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32), 256*3 + move, 32+(arg*32));
+				move += 5.5;
+			}
+			if(stageBGPart == 1)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32), 256*3 + move, 32+(arg*32));
+				move += moveplus;
+				moveplus += 0.25;
+			}
+			if(stageBGPart == 2)
+			{
+				ObjRender_SetPosition(obj2, x, y - 320, z);
+				ObjSprite3D_SetSourceRect(obj2, 0, 0+(arg*32), 256*3, 32+(arg*32));
+			}
+			yield;
+		}
+	}
+	task Part1(x,y,z,anglex,angley,anglez,arg,color)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		let moveplus = -1;
+		let val_hsv = 180;
+		ObjPrim_SetTexture(obj2, groundeff);
+		ObjRender_SetBlendType(obj2, BLEND_SUBTRACT);
+		ObjSprite3D_SetSourceRect(obj2, 0+(arg*32), 0, 32+(arg*32), 256*3);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 256*3, 32);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 21);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		ObjRender_SetColorHSV(obj2, 255,255,255);
+		while(!Obj_IsDeleted(obj2))
+		{
+			if(stageBGPart == 0)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32) + (move/3), 256*3 + move, 32+(arg*32) + (move/3));
+				move -= 2 - 5.5;
+			}
+			if(stageBGPart == 1)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32) + (move/3), 256*3 + move, 32+(arg*32) + (move/3));
+				move -= 2 - moveplus;
+				moveplus += 0.25;
+			}
+			if(stageBGPart == 2)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32) + (move/3), 256*3 + move, 32+(arg*32) + (move/3));
+				move -= 2;
+			}
+			ObjRender_SetColorHSV(obj2, val_hsv, 255, 180);
+			val_hsv += 0.25;
+			yield;
+		}
+	}
+	task Part2(x,y,z,anglex,angley,anglez,arg,color)
+	{
+		let obj2 = ObjPrim_Create(OBJ_SPRITE_3D);
+		let move = 0;
+		let moveplus = -1;
+		let val_hsv = 0;
+		ObjPrim_SetTexture(obj2, groundeff);
+		ObjRender_SetBlendType(obj2, BLEND_SUBTRACT);
+		ObjSprite3D_SetSourceRect(obj2, 0+(arg*32), 0, 32+(arg*32), 256*3);
+		ObjSprite3D_SetDestRect(obj2, 0, 0, 256*3, 32);
+		ObjRender_SetAngleXYZ(obj2, anglex, angley, anglez);
+		ObjRender_SetScaleXYZ(obj2, 1, 1, 1);
+		ObjRender_SetPosition(obj2, x, y, z);
+		Obj_SetRenderPriorityI(obj2, 21);
+		ObjRender_SetZWrite(obj2, true);
+		ObjRender_SetZTest(obj2, true);
+		ObjRender_SetColorHSV(obj2, 50,255,255);
+		while(!Obj_IsDeleted(obj2))
+		{
+			if(stageBGPart == 0)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32) - (move/3), 256*3 + move, 32+(arg*32) - (move/3));
+				move -= 2 - 5.5;
+			}
+			if(stageBGPart == 1)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32) - (move/3), 256*3 + move, 32+(arg*32) - (move/3));
+				move -= 2 - moveplus;
+				moveplus += 0.25;
+			}
+			if(stageBGPart == 2)
+			{
+				ObjSprite3D_SetSourceRect(obj2, 0 + move, 0+(arg*32) - (move/3), 256*3 + move, 32+(arg*32) - (move/3));
+				move -= 2;
+			}
+			ObjRender_SetColorHSV(obj2, val_hsv, 255, 180);
+			val_hsv += 0.25;
+			yield;
+		}
+	}
+
+	let angle = 0;
+	
+	ParticleCreate;
+	ColorSwitcher;
+	
+	let x1 = 0;
+	let y1 = 0;
+	let x2 = 0;
+	let y2 = 0;
+	let xfinal = -40;
+	let yfinal = -217;
+	let pAngle = 0;
+	let leftright = 0;
+	let j = 0;
+	x1 = 50;
+	y1 = 50;
+	ascent(i in 0..16)
+	{
+		if(i == 8)
+		{
+			leftright = 1;
+			j = 0;
+		}
+		pAngle = 37.2 + (i*7);
+		Part(-xfinal,200,yfinal,0,pAngle,90,j,leftright);
+		Part1(-xfinal + 0.01,200,yfinal,0,pAngle,90,j,leftright);
+		Part2(-xfinal + 0.02,200,yfinal,0,pAngle,90,j,leftright);
+		x1 = xfinal;
+		y1 = yfinal;
+		x2 = (32 * cos(pAngle)) + x1;
+		y2 = (32 * sin(pAngle)) + y1;
+		xfinal = x2;
+		yfinal = y2;
+		j++;
+	}
+	
+	loop
+	{
+		SetCameraAzimuthAngle(cos(azi*1)*5);
+		azi += 0.5;
+		if(stageBGPart == 1)
+		{
+			SetFogParam(fogstart, fogend, 0, 0, 0);
+			
+			if(frame < 300)
+			{
+				if(frame < 250)
+				{
+					fogstart -= 2;
+					fogend -= 2;
+				}
+				frame++;
+			}
+			else if(frame == 300)
+			{
+				Wall(50,665,0,90,0,0,0);
+				stageBGPart = 2;
+			}
+		}
+		if(stageBGPart == 2)
+		{
+			if(fogstart < 470)
+			{
+				fogstart += 1.5;
+			}
+			if(fogend < 750)
+			{
+				fogend += 1.5;
+			}
+			SetCameraElevationAngle(-65 + cos(azi*0.75)*1.5);
+			SetFogParam(fogstart, fogend, 0, 0, 0);
+		}
+		yield;
+	}
+	
+	task ColorSwitcher //bad
+	{
+		wr = 0;
+		wg = 250;
+		loop
+		{
+			loop(240)
+			{
+				wr+=(250/240);
+				wg-=(250/240);
+				yield;
+			}
+			loop(240)
+			{
+				wr-=(250/240);
+				wg+=(250/240);
+				yield;
+			}
+		}
+	}
+}
+
+task StageBG_Test()
+{
+	let origin3D_x = 0;
+	let origin3D_y = 0;
+	let origin3D_z = 0;
+	
+	let cameraZ = 0;
+	
+	SetCameraRadius(120);
+	SetCameraFocusX(0);
+	SetCameraFocusY(430);
+	SetCameraFocusZ(0);
+	SetCameraPitch(0);
+	SetCameraYaw(0);
+	SetCameraRoll(0);
+	SetCameraAzimuthAngle(270);
+	SetCameraElevationAngle(50);
+	
+	SetFogEnable(true);
+	SetFogParam(460, 880, 20, 29, 53);
+	
+	ascent(i in 0..8)
+	{
+		let bgGround = BG3D_CreateCurveA(img_bgdebug, 0, 0, 256, 256, 8, 90, false, false);
+		BG3D_SetPosition(bgGround, 256, 0, 255.9999*i);
+		BG3D_Loop(bgGround, 512, 256*8);
+		
+		bgGround = BG3D_CreateCurveA(img_bgdebug, 0, 0, 256, 256, 8, 90, true, false);
+		BG3D_SetPosition(bgGround, -256, 0, 255.9999*i);
+		BG3D_Loop(bgGround, 512, 256*8);
+	}
+	ascent(i in 0..8)
+	{
+		let bgGround = BG3D_CreatePlane(img_bgdebug, 0, 0, 256, 256, 1, 1, true, false);
+		BG3D_SetPosition(bgGround, 128, 0, -128 + 255.9999*i);
+		BG3D_Loop(bgGround, 512, 256*8);
+		
+		bgGround = BG3D_CreatePlane(img_bgdebug, 0, 0, 256, 256, 1, 1, false, false);
+		BG3D_SetPosition(bgGround, -128, 0, -128 + 255.9999*i);
+		BG3D_Loop(bgGround, 512, 256*8);
+	}
+	ascent(i in 0..8)
+	{
+		//Chains
+		let bgObj = BG3D_CreatePlane(img_bgdebugC, 116, 0, 128, 128, 1, 2, false, false);
+		Obj_SetRenderPriorityI(bgObj, 4);
+		//ObjSprite3D_SetBillboard(bgObj, true);
+		ObjRender_SetScaleXYZ(bgObj, -0.75, -0.75, 1);
+		ObjRender_SetAngleXYZ(bgObj, 0, 0, 0);
+		BG3D_SetPosition(bgObj, -176, 240, -128 + 9 + 255.9999*i);
+		BG3D_Loop(bgObj, 512, 256*8);
+		
+		bgObj = BG3D_CreatePlane(img_bgdebugC, 116, 0, 128, 128, 1, 2, false, false);
+		Obj_SetRenderPriorityI(bgObj, 4);
+		//ObjSprite3D_SetBillboard(bgObj, true);
+		ObjRender_SetScaleXYZ(bgObj, -0.75, -0.75, 1);
+		ObjRender_SetAngleXYZ(bgObj, 0, 0, 0);
+		BG3D_SetPosition(bgObj, 173, 240, -128 + 9 + 255.9999*i);
+		BG3D_Loop(bgObj, 512, 256*8);
+		
+		//Lanterns
+		bgObj = BG3D_CreateObject(img_bgdebugC, 0, 0, 44, 64);
+		Obj_SetRenderPriorityI(bgObj, 4);
+		//ObjSprite3D_SetBillboard(bgObj, true);
+		ObjRender_SetScaleXYZ(bgObj, -1, -1, 1);
+		ObjRender_SetAngleXYZ(bgObj, 0, -25, 3);
+		BG3D_SetPosition(bgObj, -174, 135, -128 + 255.9999*i);
+		BG3D_Loop(bgObj, 512, 256*8);
+		
+		bgObj = BG3D_CreateObject(img_bgdebugC, 0, 0, 44, 64);
+		Obj_SetRenderPriorityI(bgObj, 4);
+		//ObjSprite3D_SetBillboard(bgObj, true);
+		ObjRender_SetScaleXYZ(bgObj, 1, -1, 1);
+		ObjRender_SetAngleXYZ(bgObj, 0, 25, 0);
+		BG3D_SetPosition(bgObj, 172, 135, -128 + 255.9999*i);
+		BG3D_Loop(bgObj, 512, 256*8);
+	}
+	ascent(i in 0..8)
+	{
+		let bgGroundA = BG3D_CreatePlane(img_bgdebugA, 0, 0, 256, 256, 1, 1, false, false);
+		Obj_SetRenderPriorityI(bgGroundA, 6);
+		BG3D_SetPosition(bgGroundA, 0, 1, -128 + 255.9999*i);
+		BG3D_Loop(bgGroundA, 512, 256*8);
+		
+		let bgEff = BG3D_CreateObject(img_bgdebugB, 0, 0, 64, 64);
+		//ObjSprite3D_SetBillboard(bgEff, true);
+		Obj_SetRenderPriorityI(bgEff, 5);
+		ObjRender_SetBlendType(bgEff, BLEND_ADD_ARGB);
+		ObjRender_SetAngleXYZ(bgEff, 50, -25, 0);
+		ObjRender_SetColor(bgEff, 80, 150, 180);
+		ObjRender_SetZWrite(bgEff, false);
+		ObjRender_SetZTest(bgEff, false);
+		EffFlicker(bgEff);
+		BG3D_SetPosition(bgEff, -172, 130, -128 + 255.9999*i);
+		BG3D_Loop(bgEff, 512, 256*8);
+		
+		bgEff = BG3D_CreateObject(img_bgdebugB, 0, 0, 64, 64);
+		//ObjSprite3D_SetBillboard(bgEff, true);
+		Obj_SetRenderPriorityI(bgEff, 5);
+		ObjRender_SetBlendType(bgEff, BLEND_ADD_ARGB);
+		ObjRender_SetAngleXYZ(bgEff, 50, 25, 0);
+		ObjRender_SetColor(bgEff, 80, 150, 180);
+		ObjRender_SetZWrite(bgEff, false);
+		ObjRender_SetZTest(bgEff, false);
+		EffFlicker(bgEff);
+		BG3D_SetPosition(bgEff, 172, 130, -128 + 255.9999*i);
+		BG3D_Loop(bgEff, 512, 256*8);
+	}
+	
+	let frame = 0;
+	while(!unloadStage)
+	{
+		if(CheckModulo(frame, rand2(5, 9)))
+		{
+			EffParticle();
+		}
+		SetCameraFocusZ(cameraZ);
+		cameraZ += 0.6;
+		frame++;
+		yield;
+	}
+	
+	task EffParticle()
+	{
+		let timer = 0;
+		let maxTimer = rand2(180, 300);
+		
+		let loc_x = rand(-345, 345);
+		let loc_y = -16;
+		let loc_z = GetCameraFocusZ + rand(50, 700);
+		let loc_scale = 0.25;
+		let loc_alpha = 255;
+		
+		let rColor = rand2(0, 80);
+		
+		let stX = loc_x;
+		let stY = loc_y;
+		let stZ = loc_z;
+		let loc_destX = loc_x + rand(-20, 20);
+		let loc_destY = rand(32, 64);
+		let loc_destZ = loc_z + rand(-10, 10);
+		
+		let eff = BG3D_CreateObject(img_bgdebugB, 0, 0, 64, 64);
+		ObjRender_SetScaleXYZ(eff, loc_scale, loc_scale, 1);
+		ObjRender_SetBlendType(eff, BLEND_ADD_ARGB);
+		//ObjSprite3D_SetBillboard(eff, true);
+		ObjRender_SetAngleXYZ(eff, 50, 0, 0);
+		ObjRender_SetColor(eff, 80, 150 + rColor, 180 - rColor);
+		ObjRender_SetPosition(eff, loc_x, loc_y, loc_z);
+		ObjRender_SetZWrite(eff, true);
+		ObjRender_SetZTest(eff, true);
+		Obj_SetRenderPriorityI(eff, 10);
+		
+		task Move()
+		{
+			while(timer < maxTimer)
+			{
+				loc_x = InterpolateValue(stX, loc_destX, timer, IP_DECELERATE, maxTimer);
+				loc_y = InterpolateValue(-16, loc_destY, timer, IP_DECELERATE, maxTimer);
+				loc_z = InterpolateValue(stZ, loc_destZ, timer, IP_DECELERATE, maxTimer);
+				ObjRender_SetPosition(eff, loc_x, loc_y, loc_z);
+				timer++;
+				yield;
+			}
+		}
+		
+		function Alpha()
+		{
+			while(timer < 30)
+			{
+				loc_scale = InterpolateValue(0.25, 0.1, timer, IP_ACCELERATE, maxTimer);
+				loc_alpha = InterpolateValue(0, 255, timer, IP_LINEAR, 30);
+				
+				ObjRender_SetScaleXYZ(eff, loc_scale, loc_scale, 1);
+				ObjRender_SetAlpha(eff, loc_alpha);
+				yield;
+			}
+			while(timer < maxTimer)
+			{
+				loc_scale = InterpolateValue(0.25, 0.1, timer, IP_ACCELERATE, maxTimer);
+				loc_alpha = InterpolateValue(255, 0, timer, IP_LINEAR, maxTimer);
+				
+				ObjRender_SetScaleXYZ(eff, loc_scale, loc_scale, 1);
+				ObjRender_SetAlpha(eff, loc_alpha);
+				yield;
+			}
+		}
+		
+		Move();
+		Alpha();
+		Obj_Delete(eff);
+	}
+	
+	task EffFlicker(obj)
+	{
+		let scaleMod = 0;
+		while(!Obj_IsDeleted(obj))
+		{
+			scaleMod = rand(-0.02, 0.02);
+			ObjRender_SetScaleXYZ(obj, 1 + scaleMod, 1 + scaleMod, 1);
+			yield;
+		}
+	}
+}
+
+task CameraDebug()
+{
+	cameraDebug = true;
+
+	let loc_focX = GetCameraFocusX;
+	let loc_focY = GetCameraFocusY;
+	let loc_azi = GetCameraAzimuthAngle;
+	let loc_ele = GetCameraElevationAngle;
+	
+	loop
+	{
+		if(GetKeyState(KEY_W) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraFocusZ(GetCameraFocusZ + 5);
+			}
+			else
+			{
+				SetCameraFocusZ(GetCameraFocusZ + 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_A) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraFocusX(GetCameraFocusX - 5);
+			}
+			else
+			{
+				SetCameraFocusX(GetCameraFocusX - 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_D) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraFocusX(GetCameraFocusX + 5);
+			}
+			else
+			{
+				SetCameraFocusX(GetCameraFocusX + 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_Q) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraAzimuthAngle(GetCameraAzimuthAngle + 5);
+			}
+			else
+			{
+				SetCameraAzimuthAngle(GetCameraAzimuthAngle + 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_E) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraAzimuthAngle(GetCameraAzimuthAngle - 5);
+			}
+			else
+			{
+				SetCameraAzimuthAngle(GetCameraAzimuthAngle - 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_R) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraElevationAngle(GetCameraElevationAngle - 5);
+			}
+			else
+			{
+				SetCameraElevationAngle(GetCameraElevationAngle - 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_F) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraElevationAngle(GetCameraElevationAngle + 5);
+			}
+			else
+			{
+				SetCameraElevationAngle(GetCameraElevationAngle + 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_O) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraFocusY(GetCameraFocusY + 5);
+			}
+			else
+			{
+				SetCameraFocusY(GetCameraFocusY + 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_L) == KEY_HOLD)
+		{
+			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			{
+				SetCameraFocusY(GetCameraFocusY - 5);
+			}
+			else
+			{
+				SetCameraFocusY(GetCameraFocusY - 1);
+			}
+		}
+		
+		if(GetKeyState(KEY_SPACE) == KEY_PUSH)
+		{
+			SetCameraFocusX(loc_focX);
+			SetCameraFocusY(loc_focY);
+			SetCameraAzimuthAngle(loc_azi);
+			SetCameraElevationAngle(loc_ele);
+		}
+		yield;
+	}
+}
+
+// --- Creates a flat surface ---
+
+function BG3D_CreatePlane(texture, x1, y1, x2, y2, scaleX, scaleY, mirrorX, mirrorY)
+{
+	let texW = (x2 * scaleX) - x1;
+	let texH = (y2 * scaleY) - y1;
+	
+	let texWH = texW/2;
+	let texHH = texH/2;
+	
+	let rScaleX = 1;
+	let rScaleY = -1;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjSprite3D_SetSourceRect(obj, x1 + 0.5, y1, (x2 * scaleX) - 0.5, y2 * scaleY);
+	ObjSprite3D_SetDestRect(obj, -texWH, -texHH, texWH, texHH);
+	ObjRender_SetAngleXYZ(obj, 90, 0, 0);
+	if(mirrorX){rScaleX = -1;}
+	if(mirrorY){rScaleY = 1;}
+	ObjRender_SetScaleXYZ(obj, rScaleX, rScaleY, 1);
+	ObjRender_SetPosition(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 2);
+	ObjRender_SetZWrite(obj, false);
+	ObjRender_SetZTest(obj, true);
+	ObjRender_SetColor(obj, 255, 255, 255);
+	
+	__obj3D_DeleteAtStageEnd(obj);
+	return obj;
+}
+
+function BG3D_SetPosition(objA, x, y, z)
+{
+	ObjRender_SetPosition(objA, x, y, z);
+}
+
+task BG3D_Loop(obj, offset, leap)
+{
+	while(!unloadStage)
+	{
+		if(ObjRender_GetZ(obj) + offset < GetCameraFocusZ)
+		{
+			ObjRender_SetZ(obj, ObjRender_GetZ(obj) + leap);
+		}
+		yield;
+	}
+}
+
+// --- Creates a curved surface (SA stage 1/2, TD stage 4, LoLK stage 4 (roofs)) ---
+
+function BG3D_CreateCurveA(texture, x1, y1, x2, y2, sectionCount, angleTotal, mirrorX, mirrorY)
+{
+	let texW = (x2 * 1) - x1;
+	let texH = (y2 * 1) - y1;
+	
+	let texWH = texW/2;
+	let texHH = texH/2;
+	
+	let obj = ObjPrim_Create(OBJ_PRIMITIVE_3D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjPrim_SetVertexCount(obj, (sectionCount*2) + 2);
+	ObjPrim_SetPrimitiveType(obj, PRIMITIVE_TRIANGLESTRIP);
+	//ObjSprite3D_SetSourceRect(obj, x1, y1, x2 * scaleX, y2 * scaleY);
+	//ObjSprite3D_SetDestRect(obj, -texWH, -texHH, texWH, texHH);
+	ObjRender_SetAngleXYZ(obj, 0, 0, 0);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	ObjRender_SetPosition(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 2);
+	ObjRender_SetZWrite(obj, true);
+	ObjRender_SetZTest(obj, true);
+	ObjRender_SetColor(obj, 255, 255, 255);
+	
+	let texOffset = 255.5/sectionCount;
+	let indexVert = 0;
+	ascent(i in 0..sectionCount + 2)
+	{
+		ObjPrim_SetVertexUVT(obj, indexVert,     0.5 + i*texOffset, 0);
+		ObjPrim_SetVertexUVT(obj, indexVert + 1, 0.5 + i*texOffset, 256);
+		indexVert += 2;
+	}
+	indexVert = 0;
+	let angleIncrement = angleTotal/sectionCount;
+	let testAng = -angleIncrement/2;
+	let cx = 0;
+	let cy = 0;
+
+	ascent(i in 0..sectionCount + 2)
+	{
+		if(i > 0)
+		{
+			if(!mirrorX){cx = cx + texOffset*cos(testAng);}
+			else        {cx = cx - texOffset*cos(testAng);}
+			if(!mirrorY){cy = cy + texOffset*sin(testAng);}
+			else        {cy = cy - texOffset*sin(testAng);}
+		}
+		ObjPrim_SetVertexPosition(obj, indexVert,     cx, cy, 0);
+		ObjPrim_SetVertexPosition(obj, indexVert + 1, cx, cy, -256);
+		indexVert += 2;
+		testAng += angleIncrement;
+	}
+	__obj3D_DeleteAtStageEnd(obj);
+	return obj;
+}
+
+function BG3D_CreateCurveB(texture, x1, y1, x2, y2, sectionCount, angleTotal, mirrorX, mirrorY)
+{
+	let texW = (x2 * 1) - x1;
+	let texH = (y2 * 1) - y1;
+	
+	let texWH = texW/2;
+	let texHH = texH/2;
+	
+	let obj = ObjPrim_Create(OBJ_PRIMITIVE_3D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjPrim_SetVertexCount(obj, (sectionCount*2) + 2);
+	ObjPrim_SetPrimitiveType(obj, PRIMITIVE_TRIANGLESTRIP);
+	//ObjSprite3D_SetSourceRect(obj, x1, y1, x2 * scaleX, y2 * scaleY);
+	//ObjSprite3D_SetDestRect(obj, -texWH, -texHH, texWH, texHH);
+	ObjRender_SetAngleXYZ(obj, 0, 0, 0);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	ObjRender_SetPosition(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 2);
+	ObjRender_SetZWrite(obj, true);
+	ObjRender_SetZTest(obj, true);
+	ObjRender_SetColor(obj, 255, 255, 255);
+	
+	let texOffset = 255.5/sectionCount;
+	let indexVert = 0;
+	ascent(i in 0..sectionCount + 2)
+	{
+		ObjPrim_SetVertexUVT(obj, indexVert,     255.5 - i*texOffset, 0);
+		ObjPrim_SetVertexUVT(obj, indexVert + 1, 255.5 - i*texOffset, 256);
+		indexVert += 2;
+	}
+	indexVert = 0;
+	let angleIncrement = angleTotal/sectionCount;
+	let testAng = -angleIncrement/2;
+	let cx = 0;
+	let cy = 0;
+
+	ascent(i in 0..sectionCount + 2)
+	{
+		if(i > 0)
+		{
+			if(!mirrorX){cx = cx + texOffset*cos(testAng);}
+			else        {cx = cx - texOffset*cos(testAng);}
+			if(!mirrorY){cy = cy + texOffset*sin(testAng);}
+			else        {cy = cy - texOffset*sin(testAng);}
+		}
+		ObjPrim_SetVertexPosition(obj, indexVert,     cx, cy, 0);
+		ObjPrim_SetVertexPosition(obj, indexVert + 1, cx, cy, -256);
+		indexVert += 2;
+		testAng += angleIncrement;
+	}
+	__obj3D_DeleteAtStageEnd(obj);
+	return obj;
+}
+
+function BG3D_CreatePlaneS(texture, x1, y1, x2, y2, scaleX, scaleY, rateX, rateY)
+{
+	let texW = (x2 * scaleX) - x1;
+	let texH = (y2 * scaleY) - y1;
+	
+	let texWH = texW/2;
+	let texHH = texH/2;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjSprite3D_SetSourceRect(obj, x1 + 0.5, y1, (x2 * scaleX) - 0.5, y2 * scaleY);
+	ObjSprite3D_SetDestRect(obj, -texWH, -texHH, texWH, texHH);
+	ObjRender_SetAngleXYZ(obj, 90, 0, 0);
+	ObjRender_SetScaleXYZ(obj, 1, -1, 1);
+	ObjRender_SetPosition(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 2);
+	ObjRender_SetZWrite(obj, true);
+	ObjRender_SetZTest(obj, true);
+	ObjRender_SetColor(obj, 255, 255, 255);
+	
+	ScrollTexture;
+	__obj3D_DeleteAtStageEnd(obj);
+	return obj;
+	
+	task ScrollTexture
+	{
+		let loc_oX = 0;
+		let loc_oY = 0;
+		while(!Obj_IsDeleted(obj))
+		{
+			ObjSprite3D_SetSourceRect(obj, (x1 + 0.5) + loc_oX, y1 + loc_oY, ((x2 * scaleX) - 0.5) + loc_oX, (y2 * scaleY) + loc_oY);
+			loc_oX += rateX;
+			loc_oY += rateY;
+			yield;
+		}
+	}
+}
+
+function BG3D_CreateCurveAS(texture, x1, y1, x2, y2, sectionCount, angleTotal, mirrorX, mirrorY, rateX, rateY)
+{
+	
+	let texW = (x2 * 1) - x1;
+	let texH = (y2 * 1) - y1;
+	
+	let texWH = texW/2;
+	let texHH = texH/2;
+	
+	let obj = ObjPrim_Create(OBJ_PRIMITIVE_3D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjPrim_SetVertexCount(obj, (sectionCount*2) + 2);
+	ObjPrim_SetPrimitiveType(obj, PRIMITIVE_TRIANGLESTRIP);
+	//ObjSprite3D_SetSourceRect(obj, x1, y1, x2 * scaleX, y2 * scaleY);
+	//ObjSprite3D_SetDestRect(obj, -texWH, -texHH, texWH, texHH);
+	ObjRender_SetAngleXYZ(obj, 0, 0, 0);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	ObjRender_SetPosition(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 2);
+	ObjRender_SetZWrite(obj, true);
+	ObjRender_SetZTest(obj, true);
+	ObjRender_SetColor(obj, 255, 255, 255);
+	
+	let texOffset = 255.5/sectionCount;
+	let indexVert = 0;
+	ascent(i in 0..sectionCount + 2)
+	{
+		ObjPrim_SetVertexUVT(obj, indexVert,     0.5 + i*texOffset, 0);
+		ObjPrim_SetVertexUVT(obj, indexVert + 1, 0.5 + i*texOffset, 256);
+		indexVert += 2;
+	}
+	indexVert = 0;
+	let angleIncrement = angleTotal/sectionCount;
+	let testAng = -angleIncrement/2;
+	let cx = 0;
+	let cy = 0;
+
+	ascent(i in 0..sectionCount + 2)
+	{
+		if(i > 0)
+		{
+			if(!mirrorX){cx = cx + texOffset*cos(testAng);}
+			else        {cx = cx - texOffset*cos(testAng);}
+			if(!mirrorY){cy = cy + texOffset*sin(testAng);}
+			else        {cy = cy - texOffset*sin(testAng);}
+		}
+		ObjPrim_SetVertexPosition(obj, indexVert,     cx, cy, 0);
+		ObjPrim_SetVertexPosition(obj, indexVert + 1, cx, cy, -256);
+		indexVert += 2;
+		testAng += angleIncrement;
+	}
+	ScrollTexture;
+	__obj3D_DeleteAtStageEnd(obj);
+	return obj;
+	
+	task ScrollTexture
+	{
+		let loc_oX = 0;
+		let loc_oY = 0;
+		while(!Obj_IsDeleted(obj))
+		{
+			indexVert = 0;
+			ascent(i in 0..sectionCount + 2)
+			{
+				ObjPrim_SetVertexUVT(obj, indexVert,     (0.5 + i*texOffset) + loc_oX, 0 + loc_oY);
+				ObjPrim_SetVertexUVT(obj, indexVert + 1, (0.5 + i*texOffset) + loc_oX, 256 + loc_oY);
+				indexVert += 2;
+			}
+			loc_oX += rateX;
+			loc_oY += rateY;
+			yield;
+		}	
+	}
+}
+
+function BG3D_CreateObject(texture, x1, y1, x2, y2)
+{
+	let texW = x2 - x1;
+	let texH = y2 - y1;
+	
+	let texWH = texW/2;
+	let texHH = texH/2;
+	
+	let obj = ObjPrim_Create(OBJ_SPRITE_3D);
+	ObjPrim_SetTexture(obj, texture);
+	ObjSprite3D_SetSourceRect(obj, x1, y1, x2, y2);
+	ObjSprite3D_SetDestRect(obj, -texWH, -texHH, texWH, texHH);
+	ObjRender_SetAngleXYZ(obj, 0, 0, 0);
+	ObjRender_SetScaleXYZ(obj, 1, 1, 1);
+	ObjRender_SetPosition(obj, 0, 0, 0);
+	Obj_SetRenderPriorityI(obj, 3);
+	ObjRender_SetZWrite(obj, true);
+	ObjRender_SetZTest(obj, true);
+	//ObjRender_SetColor(obj, 0, 150, 200);
+	
+	__obj3D_DeleteAtStageEnd(obj);
+	return obj;
+}
+
+task __obj3D_DeleteAtStageEnd(obj)
+{
+	while(!unloadStage){yield;}
+	Obj_Delete(obj);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

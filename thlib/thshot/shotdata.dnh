@@ -1,0 +1,721 @@
+shot_image = "./img_etama00.png"
+delay_rect = (0, 0, 0, 0)
+delay_color = (255, 255, 255)
+
+//Straight Laser
+ShotData{ id = 1  rect = (288, 17, 305, 34) render = ADD_ARGB } //Gray
+ShotData{ id = 2  rect = (306, 17, 323, 34) render = ADD_ARGB } //Dark Red
+ShotData{ id = 3  rect = (324, 17, 341, 34) render = ADD_ARGB } //Red
+ShotData{ id = 4  rect = (342, 17, 359, 34) render = ADD_ARGB } //Purple
+ShotData{ id = 5  rect = (360, 17, 377, 34) render = ADD_ARGB } //Pink
+ShotData{ id = 6  rect = (378, 17, 395, 34) render = ADD_ARGB } //Dark Blue
+ShotData{ id = 7  rect = (396, 17, 413, 34) render = ADD_ARGB } //Blue
+ShotData{ id = 8  rect = (414, 17, 431, 34) render = ADD_ARGB } //Sky
+ShotData{ id = 9  rect = (432, 17, 449, 34) render = ADD_ARGB } //Ice
+ShotData{ id = 10 rect = (450, 17, 467, 34) render = ADD_ARGB } //Dark Green
+ShotData{ id = 11 rect = (468, 17, 485, 34) render = ADD_ARGB } //Green
+ShotData{ id = 12 rect = (486, 17, 503, 34) render = ADD_ARGB } //Lime
+ShotData{ id = 13 rect = (504, 17, 521, 34) render = ADD_ARGB } //Gold
+ShotData{ id = 14 rect = (522, 17, 539, 34) render = ADD_ARGB } //Yellow
+ShotData{ id = 15 rect = (540, 17, 557, 34) render = ADD_ARGB } //Orange
+ShotData{ id = 16 rect = (558, 17, 575, 34) render = ADD_ARGB } //White
+
+//Youmu/Arrowhead/Wake Shot
+ShotData{ id = 17 rect = (288, 35, 305, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 18 rect = (306, 35, 323, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 19 rect = (324, 35, 341, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 20 rect = (342, 35, 359, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 21 rect = (360, 35, 377, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 22 rect = (378, 35, 395, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 23 rect = (396, 35, 413, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 24 rect = (414, 35, 431, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 25 rect = (432, 35, 449, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 26 rect = (450, 35, 467, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 27 rect = (468, 35, 485, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 28 rect = (486, 35, 503, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 29 rect = (504, 35, 521, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 30 rect = (522, 35, 539, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 31 rect = (540, 35, 557, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 32 rect = (558, 35, 575, 51) collision = (3.5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Bordered Round Shot
+ShotData{ id = 33 rect = (288, 53, 305, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 34 rect = (306, 53, 323, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 35 rect = (324, 53, 341, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 36 rect = (342, 53, 359, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 37 rect = (360, 53, 377, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 38 rect = (378, 53, 395, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 39 rect = (396, 53, 413, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 40 rect = (414, 53, 431, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 41 rect = (432, 53, 449, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 42 rect = (450, 53, 467, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 43 rect = (468, 53, 485, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 44 rect = (486, 53, 503, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 45 rect = (504, 53, 521, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 46 rect = (522, 53, 539, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 47 rect = (540, 53, 557, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 48 rect = (558, 53, 575, 70) collision = (4.5, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Round Shot
+ShotData{ id = 49 rect = (288, 71, 305, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 50 rect = (306, 71, 323, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 51 rect = (324, 71, 341, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 52 rect = (342, 71, 359, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 53 rect = (360, 71, 377, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 54 rect = (378, 71, 395, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 55 rect = (396, 71, 413, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 56 rect = (414, 71, 431, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 57 rect = (432, 71, 449, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 58 rect = (450, 71, 467, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 59 rect = (468, 71, 485, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 60 rect = (486, 71, 503, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 61 rect = (504, 71, 521, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 62 rect = (522, 71, 539, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 63 rect = (540, 71, 557, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 64 rect = (558, 71, 575, 88) collision = (5, -0.5, -0.5) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Rice Shot
+ShotData{ id = 65 rect = (288, 89, 305, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 66 rect = (306, 89, 323, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 67 rect = (324, 89, 341, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 68 rect = (342, 89, 359, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 69 rect = (360, 89, 377, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 70 rect = (378, 89, 395, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 71 rect = (396, 89, 413, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 72 rect = (414, 89, 431, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 73 rect = (432, 89, 449, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 74 rect = (450, 89, 467, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 75 rect = (468, 89, 485, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 76 rect = (486, 89, 503, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 77 rect = (504, 89, 521, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 78 rect = (522, 89, 539, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 79 rect = (540, 89, 557, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 80 rect = (558, 89, 575, 106) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Kunai Shot
+ShotData{ id = 81 rect = (288, 107, 305, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 82 rect = (306, 107, 323, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 83 rect = (324, 107, 341, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 84 rect = (342, 107, 359, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 85 rect = (360, 107, 377, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 86 rect = (378, 107, 395, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 87 rect = (396, 107, 413, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 88 rect = (414, 107, 431, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 89 rect = (432, 107, 449, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 90 rect = (450, 107, 467, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 91 rect = (468, 107, 485, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 92 rect = (486, 107, 503, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 93 rect = (504, 107, 521, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 94 rect = (522, 107, 539, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 95 rect = (540, 107, 557, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 96 rect = (558, 107, 575, 124) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Ice Shot
+ShotData{ id = 97 rect =  (288, 125, 305, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 98 rect =  (306, 125, 323, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 99 rect =  (324, 125, 341, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 100 rect = (342, 125, 359, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 101 rect = (360, 125, 377, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 102 rect = (378, 125, 395, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 103 rect = (396, 125, 413, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 104 rect = (414, 125, 431, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 105 rect = (432, 125, 449, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 106 rect = (450, 125, 467, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 107 rect = (468, 125, 485, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 108 rect = (486, 125, 503, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 109 rect = (504, 125, 521, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 110 rect = (522, 125, 539, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 111 rect = (540, 125, 557, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 112 rect = (558, 125, 575, 142) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Amulet Shot
+ShotData{ id = 113 rect = (288, 143, 305, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 114 rect = (306, 143, 323, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 115 rect = (324, 143, 341, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 116 rect = (342, 143, 359, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 117 rect = (360, 143, 377, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 118 rect = (378, 143, 395, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 119 rect = (396, 143, 413, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 120 rect = (414, 143, 431, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 121 rect = (432, 143, 449, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 122 rect = (450, 143, 467, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 123 rect = (468, 143, 485, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 124 rect = (486, 143, 503, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 125 rect = (504, 143, 521, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 126 rect = (522, 143, 539, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 127 rect = (540, 143, 557, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 128 rect = (558, 143, 575, 160) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Reisen Bullet Shot
+ShotData{ id = 129 rect = (288, 161, 305, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 130 rect = (306, 161, 323, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 131 rect = (324, 161, 341, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 132 rect = (342, 161, 359, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 133 rect = (360, 161, 377, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 134 rect = (378, 161, 395, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 135 rect = (396, 161, 413, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 136 rect = (414, 161, 431, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 137 rect = (432, 161, 449, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 138 rect = (450, 161, 467, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 139 rect = (468, 161, 485, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 140 rect = (486, 161, 503, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 141 rect = (504, 161, 521, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 142 rect = (522, 161, 539, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 143 rect = (540, 161, 557, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 144 rect = (558, 161, 575, 178) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Erin/Seija Inverse Shots
+ShotData{ id = 145 rect = (288, 179, 305, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 146 rect = (306, 179, 323, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 147 rect = (324, 179, 341, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 148 rect = (342, 179, 359, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 149 rect = (360, 179, 377, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 150 rect = (378, 179, 395, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 151 rect = (396, 179, 413, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 152 rect = (414, 179, 431, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 153 rect = (432, 179, 449, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 154 rect = (450, 179, 467, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 155 rect = (468, 179, 485, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 156 rect = (486, 179, 503, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 157 rect = (504, 179, 521, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 158 rect = (522, 179, 539, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 159 rect = (540, 179, 557, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 160 rect = (558, 179, 575, 196) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Marisa Small Star Shot
+ShotData{ id = 161 rect = (288, 197, 305, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 162 rect = (306, 197, 323, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 163 rect = (324, 197, 341, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 164 rect = (342, 197, 359, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 165 rect = (360, 197, 377, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 166 rect = (378, 197, 395, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 167 rect = (396, 197, 413, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 168 rect = (414, 197, 431, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 169 rect = (432, 197, 449, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 170 rect = (450, 197, 467, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 171 rect = (468, 197, 485, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 172 rect = (486, 197, 503, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 173 rect = (504, 197, 521, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 174 rect = (522, 197, 539, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 175 rect = (540, 197, 557, 214) collision = (3, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 176 rect = (558, 197, 575, 214) collision = (3, 0, 0) angular_velocity = -4 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Murasa Droplet Shot
+ShotData{ id = 177 rect = (288, 642, 305, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 178 rect = (306, 642, 323, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 179 rect = (324, 642, 341, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 180 rect = (342, 642, 359, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 181 rect = (360, 642, 377, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 182 rect = (378, 642, 395, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 183 rect = (396, 642, 413, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 184 rect = (414, 642, 431, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 185 rect = (432, 642, 449, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 186 rect = (450, 642, 467, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 187 rect = (468, 642, 485, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 188 rect = (486, 642, 503, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 189 rect = (504, 642, 521, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 190 rect = (522, 642, 539, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 191 rect = (540, 642, 557, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 192 rect = (558, 642, 575, 662) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Heart Shot
+ShotData{ id = 193 rect = (288, 525, 321, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 194 rect = (322, 525, 355, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 195 rect = (356, 525, 389, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 196 rect = (390, 525, 423, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 197 rect = (424, 525, 457, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 198 rect = (458, 525, 491, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 199 rect = (492, 525, 515, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 200 rect = (526, 525, 559, 558) collision = (7, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Arrow Shot
+ShotData{ id = 201 rect = (288, 751, 321, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 202 rect = (322, 751, 355, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 203 rect = (356, 751, 389, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 204 rect = (390, 751, 423, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 205 rect = (424, 751, 457, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 206 rect = (458, 751, 491, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 207 rect = (492, 751, 525, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 208 rect = (526, 751, 559, 802) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//DDC Laser Tip
+ShotData{ id = 209 rect = (288, 803, 321, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 210 rect = (322, 803, 355, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 211 rect = (356, 803, 389, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 212 rect = (390, 803, 423, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 213 rect = (424, 803, 457, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 214 rect = (458, 803, 491, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 215 rect = (492, 803, 525, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 216 rect = (526, 803, 559, 836) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//TD Large Light Shot
+ShotData{ id = 217 rect = (576, 17, 641, 82)  collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 218 rect = (642, 17, 707, 82)  collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 219 rect = (708, 17, 773, 82)  collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 220 rect = (774, 17, 839, 82)  collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 221 rect = (576, 83, 641, 148) collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 222 rect = (642, 83, 707, 148) collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 223 rect = (708, 83, 773, 148) collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 224 rect = (774, 83, 839, 148) collision = (11, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Marisa Large Star Shot
+ShotData{ id = 225 rect = (288, 216, 321, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 226 rect = (322, 216, 355, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 227 rect = (356, 216, 389, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 228 rect = (390, 216, 423, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 229 rect = (424, 216, 457, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 230 rect = (458, 216, 491, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 231 rect = (492, 216, 525, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 232 rect = (526, 216, 559, 248) collision = (6, 0, 0) angular_velocity = 4 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Large Round Shot
+ShotData{ id = 233 rect = (288, 249, 321, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (256, 160, 288, 192) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 234 rect = (322, 249, 355, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (288, 160, 320, 192) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 235 rect = (356, 249, 389, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (320, 160, 352, 192) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 236 rect = (390, 249, 423, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (352, 160, 384, 192) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 237 rect = (424, 249, 457, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (384, 160, 416, 192) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 238 rect = (458, 249, 491, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (416, 160, 448, 192) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 239 rect = (492, 249, 525, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (448, 160, 480, 192) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 240 rect = (526, 249, 559, 282) collision = (9, 0, 0) fixed_angle = true filter = NONE delay_rect = (480, 160, 512, 192) delay_color = (240, 255, 255)} //White*
+
+//Butterfly Shot
+ShotData{ id = 241 rect = (288, 283, 321, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 242 rect = (322, 283, 355, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 243 rect = (356, 283, 389, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 244 rect = (390, 283, 423, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 245 rect = (424, 283, 457, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 246 rect = (458, 283, 491, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 247 rect = (492, 283, 525, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 248 rect = (526, 283, 559, 316) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Sakuya Knife
+ShotData{ id = 249 rect = (288, 317, 321, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 250 rect = (322, 317, 355, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 251 rect = (356, 317, 389, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 252 rect = (390, 317, 423, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 253 rect = (424, 317, 457, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 254 rect = (458, 317, 491, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 255 rect = (492, 317, 525, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 256 rect = (526, 317, 559, 350) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Oval Shot
+ShotData{ id = 257 rect = (288, 351, 321, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 258 rect = (322, 351, 355, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 259 rect = (356, 351, 389, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 260 rect = (390, 351, 423, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 261 rect = (424, 351, 457, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 262 rect = (458, 351, 491, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 263 rect = (492, 351, 525, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 264 rect = (526, 351, 559, 384) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Youmu Knife
+ShotData{ id = 265 rect = (0, 557, 33, 590)    collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 266 rect = (34, 557, 67, 590)   collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 267 rect = (68, 557, 101, 590)  collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 268 rect = (102, 557, 135, 590) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 269 rect = (136, 557, 169, 590) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 270 rect = (170, 557, 203, 590) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 271 rect = (204, 557, 237, 590) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 272 rect = (238, 557, 271, 590) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//EoSD Fire
+ShotData
+{ 
+	id = 273 collision = (6, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 0,   277, 33,  316) 
+		animation_data = (5, 34,  277, 67,  316) 	
+		animation_data = (5, 68,  277, 101, 316) 	
+		animation_data = (5, 102, 277, 135, 316) 	
+	}
+}
+
+//Moukou Fire
+ShotData
+{ 
+	id = 274 collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 0,   870, 33,  907) 
+		animation_data = (5, 34,  870, 67,  907) 	
+		animation_data = (5, 68,  870, 101, 907) 	
+		animation_data = (5, 102, 870, 135, 907)	
+	}
+}
+
+//DDC Fire Red
+ShotData
+{ 
+	id = 275 collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (4, 288, 837, 321, 877)
+		animation_data = (4, 322, 837, 355, 877)
+		animation_data = (4, 356, 837, 389, 877)
+		animation_data = (4, 390, 837, 423, 877)
+	}
+}
+
+//DDC Fire Violet
+ShotData
+{ 
+	id = 276 collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (4, 424, 837, 457, 877)
+		animation_data = (4, 458, 837, 491, 877)
+		animation_data = (4, 492, 837, 525, 877)
+		animation_data = (4, 526, 837, 559, 877)
+	}
+}
+
+//DDC Fire Purple
+ShotData
+{ 
+	id = 277 collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (4, 288, 878, 321, 918)
+		animation_data = (4, 322, 878, 355, 918)
+		animation_data = (4, 356, 878, 389, 918)
+		animation_data = (4, 390, 878, 423, 918)
+	}
+}
+
+//DDC Fire Gold
+ShotData
+{ 
+	id = 278 collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (4, 424, 878, 457, 918)
+		animation_data = (4, 458, 878, 491, 918)
+		animation_data = (4, 492, 878, 525, 918)
+		animation_data = (4, 526, 878, 559, 918)
+	}
+}
+
+//Small Fire Red
+ShotData
+{ 
+	id = 279 collision = (6, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 288, 385, 321, 418)
+		animation_data = (5, 322, 385, 355, 418)
+		animation_data = (5, 356, 385, 389, 418)
+		animation_data = (5, 390, 385, 423, 418)
+	}
+}
+
+//Small Fire Blue
+ShotData
+{ 
+	id = 280 collision = (6, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 424, 385, 457, 418) 
+		animation_data = (5, 458, 385, 491, 418) 	
+		animation_data = (5, 492, 385, 525, 418) 	
+		animation_data = (5, 526, 385, 559, 418)	
+	}
+}
+
+//Small Fire Gold
+ShotData
+{ 
+	id = 281 collision = (5, -1, -1) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 0, 0, 0, 0) 
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0)	
+	}
+} 
+
+//Small Fire Violet
+ShotData
+{ 
+	id = 282 collision = (5, -1, -1) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 0, 0, 0, 0) 
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0)	
+	}
+} 
+
+//GFW Small Fire Yellow
+ShotData
+{ 
+	id = 283 collision = (5, -1, -1) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 0, 0, 0, 0) 
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0)	
+	}
+} 
+
+//GFW Small Fire Red
+ShotData
+{ 
+	id = 284 collision = (5, -1, -1) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (5, 0, 0, 0, 0) 
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0) 	
+		animation_data = (5, 0, 0, 0, 0)	
+	}
+} 
+
+//Bubble Shot (Spinning, MoF+)
+ShotData{ id = 285 rect = (288, 419, 353, 484) collision = 12 angular_velocity = -50 render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 286 rect = (354, 419, 419, 484) collision = 12 angular_velocity = -50 render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 287 rect = (420, 419, 485, 484) collision = 12 angular_velocity = -50 render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 288 rect = (486, 419, 551, 484) collision = 12 angular_velocity = -50 render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+
+//Bubble Shot (Fixed, EoSD - PoFV)
+ShotData{ id = 289 rect = (0, 143, 65, 208)    collision = 9 fixed_angle = true filter = NONE render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 290 rect = (66, 143, 131, 208)  collision = 9 fixed_angle = true filter = NONE render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 291 rect = (132, 143, 197, 208) collision = 9 fixed_angle = true filter = NONE render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 292 rect = (198, 143, 263, 208) collision = 9 fixed_angle = true filter = NONE render = ADD_ARGB delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+
+//Pellet Shot
+ShotData{ id = 293 rect = (288, 485, 297, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 294 rect = (298, 485, 307, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 295 rect = (308, 485, 317, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 296 rect = (318, 485, 327, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 297 rect = (328, 485, 337, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 298 rect = (338, 485, 347, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 299 rect = (348, 485, 357, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 300 rect = (358, 485, 367, 494) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 301 rect = (288, 495, 297, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 302 rect = (298, 495, 307, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 303 rect = (308, 495, 317, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 304 rect = (318, 495, 327, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 305 rect = (328, 495, 337, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 306 rect = (338, 495, 347, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 307 rect = (348, 495, 357, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 308 rect = (358, 495, 367, 504) collision = (3, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//MoF Spinning + Pellets
+ShotData{ id = 309 rect = (368, 485, 377, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 310 rect = (378, 485, 387, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 311 rect = (388, 485, 397, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 312 rect = (398, 485, 407, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 313 rect = (408, 485, 417, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 314 rect = (418, 485, 427, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 315 rect = (428, 485, 437, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 316 rect = (438, 485, 447, 494) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 317 rect = (368, 495, 377, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 318 rect = (378, 495, 387, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 319 rect = (388, 495, 397, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 320 rect = (398, 495, 407, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 321 rect = (408, 495, 417, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 322 rect = (418, 495, 427, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 323 rect = (428, 495, 437, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 324 rect = (438, 495, 447, 504) collision = (3, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//th08 Yin-yang
+ShotData{ id = 325 rect = (136, 871, 169, 904) collision = (5, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //Red*
+ShotData{ id = 326 rect = (170, 871, 203, 904) collision = (5, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //Green*
+ShotData{ id = 327 rect = (204, 871, 237, 904) collision = (5, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //Purple*
+ShotData{ id = 328 rect = (238, 871, 271, 904) collision = (5, 0, 0) angular_velocity = -8 delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //Pink*
+
+//DDC 8th Note Red
+ShotData
+{ 
+	id = 329 collision = (4, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (8, 576, 169, 609, 220)
+		animation_data = (8, 610, 169, 643, 220)
+		animation_data = (8, 644, 169, 677, 220)
+		animation_data = (8, 610, 169, 643, 220)
+	}
+}
+
+//DDC 8th Note Blue
+ShotData
+{ 
+	id = 330 collision = (4, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (8, 678, 169, 711, 220)
+		animation_data = (8, 712, 169, 745, 220)
+		animation_data = (8, 746, 169, 779, 220)
+		animation_data = (8, 712, 169, 745, 220)
+	}
+}
+
+//DDC 8th Note Yellow
+ShotData
+{ 
+	id = 331 collision = (4, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (8, 576, 221, 609, 272)
+		animation_data = (8, 610, 221, 643, 272)
+		animation_data = (8, 644, 221, 677, 272)
+		animation_data = (8, 610, 221, 643, 272)
+	}
+}
+
+//DDC 8th Note Purple
+ShotData
+{ 
+	id = 332 collision = (4, 0, 0) fixed_angle = true filter = NONE delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)
+	AnimationData
+	{ 
+		animation_data = (8, 678, 221, 711, 272)
+		animation_data = (8, 712, 221, 745, 272)
+		animation_data = (8, 746, 221, 779, 272)
+		animation_data = (8, 712, 221, 745, 272)
+	}
+}
+
+//DDC Rest
+ShotData{ id = 333 rect = (576, 273, 609, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 334 rect = (610, 273, 643, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 335 rect = (644, 273, 677, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 336 rect = (678, 273, 711, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 337 rect = (712, 273, 745, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 338 rect = (746, 273, 779, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 339 rect = (780, 273, 813, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 340 rect = (814, 273, 847, 306) collision = (5, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+//Coins
+ShotData{ id = 341 rect = (448, 485, 465, 502) collision = (4, 0, 0) angular_velocity = -5 delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 342 rect = (466, 485, 483, 502) collision = (4, 0, 0) angular_velocity = -5 delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 343 rect = (484, 485, 501, 502) collision = (4, 0, 0) angular_velocity = -5 delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+
+//Th09 Coins
+ShotData{ id = 344 rect = (0, 959, 17, 976)  collision = (4, 0, 0) angular_velocity = -5 delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 345 rect = (18, 959, 35, 976) collision = (4, 0, 0) angular_velocity = -5 delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 346 rect = (36, 959, 53, 976) collision = (4, 0, 0) angular_velocity = -5 delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+
+//Loose/Curve Laser
+ShotData{ id = 347 rect = (849,   1, 864, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 348 rect = (865,   1, 880, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 349 rect = (881,   1, 896, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 350 rect = (897,   1, 912, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 351 rect = (913,   1, 928, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 352 rect = (929,   1, 944, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 353 rect = (945,   1, 960, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 354 rect = (961,   1, 976, 256) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 355 rect = (849, 259, 864, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 356 rect = (865, 259, 880, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 357 rect = (881, 259, 896, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 358 rect = (897, 259, 912, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 359 rect = (913, 259, 928, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 360 rect = (929, 259, 944, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 361 rect = (945, 259, 960, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 362 rect = (961, 259, 976, 514) collision = (3, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+
+//Delays
+ShotData{ id = 1000 rect = (576, 911, 609, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 1001 rect = (610, 911, 643, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 1002 rect = (644, 911, 677, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 1003 rect = (678, 911, 711, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 1004 rect = (712, 911, 745, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 1005 rect = (746, 911, 779, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 1006 rect = (780, 911, 813, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 1007 rect = (814, 911, 847, 944) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+
+ShotData{ id = 1008 rect = (0, 0, 0, 0) collision = (0, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 1009 rect = (0, 0, 0, 0) collision = (0, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 1010 rect = (0, 0, 0, 0) collision = (0, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 1011 rect = (0, 0, 0, 0) collision = (0, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 1012 rect = (0, 0, 0, 0) collision = (0, 0, 0) fixed_angle = true delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+
+//MoF-UFO Break Effect
+ShotData{ id = 1013 rect = (288, 919, 305, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id = 1014 rect = (306, 919, 323, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id = 1015 rect = (324, 919, 341, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (253, 255, 255)} //Red*
+ShotData{ id = 1016 rect = (342, 919, 359, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id = 1017 rect = (360, 919, 377, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id = 1018 rect = (378, 919, 395, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id = 1019 rect = (396, 919, 413, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id = 1020 rect = (414, 919, 431, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id = 1021 rect = (432, 919, 449, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id = 1022 rect = (450, 919, 467, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id = 1023 rect = (468, 919, 485, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (245, 255, 255)} //Green*
+ShotData{ id = 1024 rect = (486, 919, 503, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id = 1025 rect = (504, 919, 521, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id = 1026 rect = (522, 919, 539, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id = 1027 rect = (540, 919, 557, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id = 1028 rect = (558, 919, 575, 936) collision = (0, 0, 0) delay_rect = (0, 0, 0, 0) delay_color = (240, 255, 255)} //White*
+
+/*
+//TEMPLATE A
+ShotData{ id =  rect = (0, xxx, 15, yyy) collision = docolol delay_rect = (256, 160, 288, 192) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id =  rect = (16, xxx, 31, yyy) collision = docolol delay_rect = (288, 160, 320, 192) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id =  rect = (32, xxx, 47, yyy) collision = docolol delay_rect = (288, 160, 320, 192) delay_color = (253, 255, 255)} //Red*
+ShotData{ id =  rect = (48, xxx, 63, yyy) collision = docolol delay_rect = (320, 160, 352, 192) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id =  rect = (64, xxx, 79, yyy) collision = docolol delay_rect = (320, 160, 352, 192) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id =  rect = (80, xxx, 95, yyy) collision = docolol delay_rect = (352, 160, 384, 192) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id =  rect = (96, xxx, 111, yyy) collision = docolol delay_rect = (352, 160, 384, 192) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id =  rect = (112, xxx, 127, yyy) collision = docolol delay_rect = (384, 160, 416, 192) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id =  rect = (128, xxx, 143, yyy) collision = docolol delay_rect = (384, 160, 416, 192) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id =  rect = (144, xxx, 159, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id =  rect = (160, xxx, 175, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (245, 255, 255)} //Green*
+ShotData{ id =  rect = (176, xxx, 191, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id =  rect = (192, xxx, 207, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id =  rect = (208, xxx, 223, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id =  rect = (224, xxx, 239, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id =  rect = (240, xxx, 255, yyy) collision = docolol delay_rect = (480, 160, 512, 192) delay_color = (240, 255, 255)} //White*
+
+//TEMPLATE B
+ShotData{ id =  rect = (0, xxx, 16, yyy) collision = docolol delay_rect = (256, 160, 288, 192) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id =  rect = (16, xxx, 32, yyy) collision = docolol delay_rect = (288, 160, 320, 192) delay_color = (254, 255, 255)} //Dark Red*
+ShotData{ id =  rect = (32, xxx, 48, yyy) collision = docolol delay_rect = (288, 160, 320, 192) delay_color = (253, 255, 255)} //Red*
+ShotData{ id =  rect = (48, xxx, 64, yyy) collision = docolol delay_rect = (320, 160, 352, 192) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id =  rect = (64, xxx, 80, yyy) collision = docolol delay_rect = (320, 160, 352, 192) delay_color = (251, 255, 255)} //Pink*
+ShotData{ id =  rect = (80, xxx, 96, yyy) collision = docolol delay_rect = (352, 160, 384, 192) delay_color = (250, 255, 255)} //Dark Blue*
+ShotData{ id =  rect = (96, xxx, 112, yyy) collision = docolol delay_rect = (352, 160, 384, 192) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id =  rect = (112, xxx, 128, yyy) collision = docolol delay_rect = (384, 160, 416, 192) delay_color = (248, 255, 255)} //Sky*
+ShotData{ id =  rect = (128, xxx, 144, yyy) collision = docolol delay_rect = (384, 160, 416, 192) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id =  rect = (144, xxx, 160, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (246, 255, 255)} //Dark Green*
+ShotData{ id =  rect = (160, xxx, 176, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (245, 255, 255)} //Green*
+ShotData{ id =  rect = (176, xxx, 192, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (244, 255, 255)} //Lime*
+ShotData{ id =  rect = (192, xxx, 208, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (243, 255, 255)} //Gold*
+ShotData{ id =  rect = (208, xxx, 224, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id =  rect = (224, xxx, 240, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (241, 255, 255)} //Orange*
+ShotData{ id =  rect = (240, xxx, 256, yyy) collision = docolol delay_rect = (480, 160, 512, 192) delay_color = (240, 255, 255)} //White*
+
+//Template C
+ShotData{ id =  rect = (0, xxx, 32, yyy) collision = docolol delay_rect = (256, 160, 288, 192) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id =  rect = (32, xxx, 64, yyy) collision = docolol delay_rect = (288, 160, 320, 192) delay_color = (253, 255, 255)} //Red*
+ShotData{ id =  rect = (64, xxx, 96, yyy) collision = docolol delay_rect = (320, 160, 352, 192) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id =  rect = (96, xxx, 128, yyy) collision = docolol delay_rect = (352, 160, 384, 192) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id =  rect = (128, xxx, 160, yyy) collision = docolol delay_rect = (384, 160, 416, 192) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id =  rect = (160, xxx, 192, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (245, 255, 255)} //Green*
+ShotData{ id =  rect = (192, xxx, 224, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id =  rect = (224, xxx, 256, yyy) collision = docolol delay_rect = (480, 160, 512, 192) delay_color = (240, 255, 255)} //White*
+
+//Template D
+ShotData{ id =  rect = (256, xxx, 288, yyy) collision = docolol delay_rect = (256, 160, 288, 192) delay_color = (255, 255, 255)} //Grey*
+ShotData{ id =  rect = (288, xxx, 320, yyy) collision = docolol delay_rect = (288, 160, 320, 192) delay_color = (253, 255, 255)} //Red*
+ShotData{ id =  rect = (320, xxx, 352, yyy) collision = docolol delay_rect = (320, 160, 352, 192) delay_color = (252, 255, 255)} //Purple*
+ShotData{ id =  rect = (352, xxx, 384, yyy) collision = docolol delay_rect = (352, 160, 384, 192) delay_color = (249, 255, 255)} //Blue*
+ShotData{ id =  rect = (384, xxx, 416, yyy) collision = docolol delay_rect = (384, 160, 416, 192) delay_color = (247, 255, 255)} //Ice*
+ShotData{ id =  rect = (416, xxx, 448, yyy) collision = docolol delay_rect = (416, 160, 448, 192) delay_color = (245, 255, 255)} //Green*
+ShotData{ id =  rect = (448, xxx, 480, yyy) collision = docolol delay_rect = (448, 160, 480, 192) delay_color = (242, 255, 255)} //Yellow*
+ShotData{ id =  rect = (480, xxx, 512, yyy) collision = docolol delay_rect = (480, 160, 512, 192) delay_color = (240, 255, 255)} //White*
+
+
+*/
+
+
+
+
+
+

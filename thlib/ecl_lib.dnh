@@ -1,0 +1,4138 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib ECL Library (ecl_lib.dnh)
+	
+	Author: Frenticpony
+	Version 1.0
+	
+	to do: lasers of all types
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+//---------- ECL Constants ----------
+
+let FALSE   = 0;
+let TRUE    = 1;
+
+let ET0 = 0;
+let ET1 = 1;
+let ET2 = 2;
+let ET3 = 3;
+let ET4 = 4;
+let ET5 = 5;
+let ET6 = 6;
+let ET7 = 7;
+let ET8 = 8;
+let ET9 = 9;
+
+let EX0 = 0;
+let EX1 = 1;
+let EX2 = 2;
+let EX3 = 3;
+let EX4 = 4;
+let EX5 = 5;
+let EX6 = 6;
+let EX7 = 7;
+let EX8 = 8;
+let EX9 = 9;
+
+let EX_NOWAIT = -1;
+let EX_WAIT   = -2;
+
+let ECL_NULL = -999999;
+
+let ETAMA_SHOT           = 0;
+let ETAMA_LASER_LOOSE    = 1;
+let ETAMA_LASER_CURVE    = 2;
+let ETAMA_LASER_STRAIGHT = 3;
+
+let STYLE_CIRCLE = 0;
+let STYLE_FAN = 1;
+let STYLE_WAVE = 2;
+let STYLE_RING = 3;
+let STYLE_PYRAMID = 4;
+let STYLE_SPREAD = 5;
+let STYLE_RANDOM = 6;
+let STYLE_STAR = 7;
+let STYLE_PEANUT = 8;
+
+let TYPE_FIXED = 0;
+let TYPE_RELATIVE = 1;
+let TYPE_AIMED = 2;
+let TYPE_ABSOLUTE = 3;
+
+let ETON_FAN = 0;
+let ETON_CIR = 1;
+let ETON_RING = 2;
+let ETON_RANDOM = 3;
+
+let EFFON_SMALL = 0;
+let EFFON_DEF = 1;
+let EFFON_MEDIUM = 2;
+let EFFON_LARGE = 3;
+let EFFON_SAME = 4;
+
+let EFFON_8 = 8;
+let EFFON_15 = 15;
+let EFFON_25 = 25;
+
+let OFFSET_HALF      = -999990;
+
+let ANGLE_RANDOM      = -999990;
+let ANGLE_RANDOM_ALL  = -999991;
+let ANGLE_AIMED       = -999992;
+let ANGLE_AIMED_GAP   = -999993;
+let ANGLE_AIMED_AWAY  = -999994;
+
+// --------------- ECL Initalization ---------------
+
+function eclID(id)
+{
+	let str = itoa(id);
+	return str;
+}	
+
+function ecl_objID(objID)
+{
+	let val = Obj_GetValue(objID, "ID");
+	return val;
+}
+
+function ecl_init(objID)
+{
+	let objEcl = ObjMesh_Create();
+	Obj_SetValue(objEcl, "ID", objID);
+	return objEcl;
+}
+
+function thEcl_Init(objID)
+{
+	let objEcl = ObjMesh_Create();
+	Obj_SetValue(objEcl, "ID", objID);
+	return objEcl;
+}
+
+task thEcl_Finish(n_obj)
+{
+	wait(600);
+	Obj_Delete(n_obj);
+}
+
+// --------------- ECL Instructions ---------------
+
+function et_set(obj, id, pattern, speed, angle, graphic, count, layer)
+{
+	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType, filterType]];
+	let l_scale = 1;
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  -1, -1, l_scale, ETAMA_SHOT, FILTER_LINEAR]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_set_ll(obj, id, pattern, speed, angle, graphic, count, layer, lLength, lWidth)
+{
+	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType]];
+	let l_scale = 1;
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale, ETAMA_LASER_LOOSE]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_set_lc(obj, id, pattern, speed, angle, graphic, count, layer, lLength, lWidth)
+{
+	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType]];
+	let l_scale = 1;
+	//if(graphic >= 1013 && graphic <= 1028){l_scale = 0.47;}
+	//if(graphic >= 286 && graphic <= 289){l_scale = 0.67;}
+	//if(graphic >= 162 && graphic <= 177){l_scale = 0.64;}
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  -1,  50,  lLength, lWidth, l_scale, ETAMA_LASER_CURVE]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_set_ls(obj, id, pattern, delay, angle, graphic, count, layer, lLength, lWidth)
+{
+	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType]];
+	let l_scale = 1;
+	//if(graphic >= 1013 && graphic <= 1028){l_scale = 0.47;}
+	//if(graphic >= 286 && graphic <= 289){l_scale = 0.67;}
+	//if(graphic >= 162 && graphic <= 177){l_scale = 0.64;}
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  delay, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale, ETAMA_LASER_STRAIGHT]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+
+function et_copy(obj, idA, idB)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	Obj_SetValue(obj, itoa(idB), ar);
+}
+
+function et_style(obj, id, style)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[0] = style;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_gr(obj, id, graphic)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[1] = graphic;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_count(obj, id, count)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[2] = count;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_layer(obj, id, layer)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[3] = layer;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_ang(obj, id, angle)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[4] = angle;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_ang2(obj, id, lyAngMod)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[5] = lyAngMod;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_ang3(obj, id, angle, lyAngMod)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[4] = angle;
+	ar2[5] = lyAngMod;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_sp(obj, id, speed)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[6] = speed;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_sp2(obj, id, lySpeed)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[7] = lySpeed;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_sp3(obj, id, speed, lySpeed)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[6] = speed;
+	ar2[7] = lySpeed;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_fan_angle(obj, id, angRange)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[8] = angRange;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_ofs(obj, id, x, y)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[9] = x;
+	ar2[10] = y;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_ofs2(obj, id, angle, radius)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[9] = radius * cos(angle);
+	ar2[10] = radius * sin(angle);
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_rad(obj, id, radius)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[11] = radius;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_se(obj, id, se)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[12] = se;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_se2(obj, id, se, se2)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[12] = se;
+	ar2[13] = se2;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_blend(obj, id, blend)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[14] = blend;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_sub(obj, id, subA, subB, subC, subD)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[15] = subA;
+	ar2[16] = subB;
+	ar2[17] = subC;
+	ar2[18] = subD;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_pr(obj, id, pr)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[20] = pr;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+// --------------- Laser Instructions ---------------
+
+function et_lsr_set(obj, id, pattern, speed, angle, graphic, count, layer, lLength, lWidth)
+{
+	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale]];
+	let l_scale = 1;
+	if(graphic >= 1013 && graphic <= 1028){l_scale = 0.47;}
+	if(graphic >= 286 && graphic <= 289){l_scale = 0.67;}
+	if(graphic >= 162 && graphic <= 177){l_scale = 0.64;}
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_lsr_l(obj, id, llength)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[21] = llength;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_lsr_w(obj, id, width)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[22] = width;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function et_lsr_lw(obj, id, llength, width)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[21] = llength;
+	ar2[22] = width;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+// --------------- EXM/EXI/EX Instructions ---------------
+
+function exm_modify(obj, idA, idB, index, value)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	let ar2 = ar[idB];
+	ar2[index] = value;
+	ar[idB] = ar2;
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+function exm_replace(obj, idA, idB, array)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	let ar2 = ar[0];
+	ar2[idB] = [array];
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+function exm_inject(obj, idA, idB, array)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	let ar2 = ar[0];
+	
+	let arA = ar2[0..idB];
+	let arB = ar2[idB..length(ar2)];
+	ar2 = arA ~ array ~ arB;
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+function exm_remove(obj, idA, idB)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	let ar2 = ar[0];
+	ar2 = erase(ar2, idB);
+	ar[0] = ar2;
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+
+function exi_effon(obj, id, graphic, type, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[19] = time;
+	ar[0] = ar2;
+	ar = ar ~ [[_EXI_EFFON, graphic, type, time]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function exi_effon1(obj, id, graphic, type, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar2[19] = time;
+	ar[0] = ar2;
+	ar = ar ~ [[_EXI_EFFON, graphic, type, time]];
+	ar = ar ~ [[_EXI_SPDOWN]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function exi_spdown(obj, id)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EXI_SPDOWN]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+
+function ex_effon(obj, id, graphic, type, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	ar = ar ~ [[_EXI_EFFON, graphic, type, time]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_gr2(obj, id, graphicA, graphicB, type, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	let ar2 = ar[0];
+	ar[0] = ar2;
+	ar = ar ~ [[_EX_GR2, graphicA, graphicB, type, time]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_grav(obj, id, time, gravAng, gravStr, gravStrMax)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_GRAV, time, gravAng, gravStr, gravStrMax]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_spup(obj, id, time, accel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPUP, time, accel]];
+	Obj_SetValue(obj, itoa(id), ar);
+}	
+
+function ex_spup2(obj, id, time, accel, rAccelRange)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPUP2, time, accel, rAccelRange]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_spup3(obj, id, time, rAccelA, rAccelB)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPUP3, time, rAccelA, rAccelB]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_spav(obj, id, time, accel, angVel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPAV, time, accel, angVel]];
+	Obj_SetValue(obj, itoa(id), ar);
+}	
+
+function ex_spav2(obj, id, time, accel, rAccelRange, angVel, rAngveVRange)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPAV2, time, accel, rAccelRange, angVel, rAngveVRange]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_spav3(obj, id, time, rAccelA, rAccelB, rAngVelA, rAngVelB)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPAV3, time, rAccelA, rAccelB, rAngVelA, rAngVelB]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angvel(obj, id, time, angvel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVEL, time, angvel]];
+	Obj_SetValue(obj, itoa(id), ar);
+}	
+
+function ex_angvel2(obj, id, time, angVel, rAngVelRange)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVEL2, time, angVel, rAngVelRange]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angvel3(obj, id, time, rAngVelA, rAngVelB)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVEL3, time, rAngVelA, rAngVelB]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angvelB(obj, id, time, angleTotal)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVELB, time, angleTotal]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angvelB2(obj, id, time, angleTotal, angleTotalRange)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVELB2, time, angleTotal, angleTotalRange]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angvelB3(obj, id, time, rAngleTotalA, rAngleTotalB)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVELB3, time, rAngleTotalA, rAngleTotalB]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angmod(obj, id, type, frame, repeat, angle, speed)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGMOD, type, frame, repeat, angle, speed]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angmod2(obj, id, type, frame, repeat, angle, rangleRange, speed, rspeedRange)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGMOD2, type, frame, repeat, angle, rangleRange, speed, rspeedRange]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angmod3(obj, id, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGMOD3, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_bounce(obj, id, repeat, speed, sides)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_BOUNCE, repeat, speed, sides[0], sides[1], sides[2], sides[3]]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_armor(obj, id, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ARMOR, time]];
+	Obj_SetValue(obj, itoa(id), ar);
+}	
+
+function ex_oob(obj, id, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_OOB, time]];
+	Obj_SetValue(obj, itoa(id), ar);
+}	
+
+function ex_gr(obj, id, graphic)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_GR, graphic]];
+	Obj_SetValue(obj, itoa(id), ar);
+}	
+
+function ex_wait(obj, id, time)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_WAIT, time]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_del(obj, id)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_DEL]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_se(obj, id, se)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SE, se]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_blend(obj, id, blend)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_BLEND, blend]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_eton_fr(obj, idA, idB, type, angle, delay, frame, repeat, del)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	
+	ar = ar ~ [[_EX_ETON_FR, idB, type, angle, delay, frame, repeat, del]];
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+function ex_eton_br(obj, idA, idB, type, sides, del)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	
+	ar = ar ~ [[_EX_ETON_BR, idB, type, sides[0], sides[1], sides[2], sides[3], del]];
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+function ex_eton_br2(obj, idA, idB, type, sides, angles, del)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	
+	ar = ar ~ [[_EX_ETON_BR2, idB, type, sides[0], sides[1], sides[2], sides[3], angles[0], angles[1], angles[2], angles[3], del]];
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
+function ex_spup_osc(obj, id, delay, time, repeat, accel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPUP_OSC, delay, time, repeat, accel]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angvel_osc(obj, id, delay, time, repeat, angvel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGVEL_OSC, delay, time, repeat, angvel]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_spav_osc(obj, id, delay, time, repeat, accel, angvel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_SPAV_OSC, delay, time, repeat, accel, angvel]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+// --------------- et_on Functions ---------------
+
+function et_on(obj, id)
+{
+	if(!Obj_IsDeleted(ecl_objID(obj)))
+	{
+		let patternCount = 1;
+		let ecl_initShots = [];
+		let ar = Obj_GetValue(obj, eclID(id));
+		
+		let x = ObjMove_GetX(ecl_objID(obj)) + ar[0][9];
+		let y = ObjMove_GetY(ecl_objID(obj)) + ar[0][10];
+		let rmod = 0;
+			
+		if(ar[0][24] == ETAMA_SHOT)
+		{	
+			if(length(ar) > 1)
+			{
+				if(ar[1][0] == _EXI_EFFON)
+				{
+					rmod = ar[0][6] * 3.5;
+				}
+			}
+
+			if(ar[0][0] == STYLE_CIRCLE)
+			{
+				ecl_initShots = _et_on_circle(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_FAN)
+			{
+				ecl_initShots = _et_on_fan(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_WAVE)
+			{
+				ecl_initShots = _et_on_wave(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_RING)
+			{
+				ecl_initShots = _et_on_ring(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_PYRAMID)
+			{
+				ecl_initShots = _et_on_pyramid(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_SPREAD)
+			{
+				ecl_initShots = _et_on_spread(x, y, -999, ar[0]);
+			}
+			else
+			{
+				RaiseError("Unknown ecl style type (Shot)");
+			}
+			
+			if(DEBUG_MODE)
+			{
+				ascent(i in 0..length(ecl_initShots))
+				{
+					//__ecl_DebugHitbox(ecl_initShots[i]);
+				}
+			}
+			
+			loop(length(ar) - 1)
+			{
+				_ex(obj, id, ecl_initShots, patternCount);
+				patternCount++;
+			}
+			
+			return ecl_initShots;
+		}
+		else if(ar[0][24] == ETAMA_LASER_LOOSE)
+		{
+			if(length(ar) > 1)
+			{
+				if(ar[1][0] == _EXI_EFFON)
+				{
+					rmod = ar[0][6] * 3.5;
+				}
+			}
+
+			if(ar[0][0] == STYLE_CIRCLE)
+			{
+				ecl_initShots = _et_on_circle_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_FAN)
+			{
+				//ecl_initShots = _et_on_fan_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_WAVE)
+			{
+				//ecl_initShots = _et_on_wave_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_RING)
+			{
+				//ecl_initShots = _et_on_ring_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_PYRAMID)
+			{
+				//ecl_initShots = _et_on_pyramid_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_SPREAD)
+			{
+				//ecl_initShots = _et_on_spread_ll(x, y, -999, ar[0]);
+			}
+			else
+			{
+				RaiseError("Unknown ecl style type (Shot)");
+			}
+			
+			if(DEBUG_MODE)
+			{
+				ascent(i in 0..length(ecl_initShots))
+				{
+					//__ecl_DebugHitbox(ecl_initShots[i]);
+				}
+			}
+			
+			loop(length(ar) - 1)
+			{
+				_ex(obj, id, ecl_initShots, patternCount);
+				patternCount++;
+			}
+			
+			return ecl_initShots;
+		}
+		else if(ar[0][24] == ETAMA_LASER_CURVE)
+		{
+			if(length(ar) > 1)
+			{
+				if(ar[1][0] == _EXI_EFFON)
+				{
+					rmod = ar[0][6] * 3.5;
+				}
+			}
+
+			if(ar[0][0] == STYLE_CIRCLE)
+			{
+				ecl_initShots = _et_on_circle_lc(x, y, -999, ar[0], obj, id);
+			}
+			else if(ar[0][0] == STYLE_FAN)
+			{
+				//ecl_initShots = _et_on_fan_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_WAVE)
+			{
+				//ecl_initShots = _et_on_wave_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_RING)
+			{
+				//ecl_initShots = _et_on_ring_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_PYRAMID)
+			{
+				//ecl_initShots = _et_on_pyramid_ll(x, y, -999, ar[0]);
+			}
+			else if(ar[0][0] == STYLE_SPREAD)
+			{
+				//ecl_initShots = _et_on_spread_ll(x, y, -999, ar[0]);
+			}
+			else
+			{
+				RaiseError("Unknown ecl style type (Shot)");
+			}
+			
+			if(DEBUG_MODE)
+			{
+				ascent(i in 0..length(ecl_initShots))
+				{
+					//__ecl_DebugHitbox(ecl_initShots[i]);
+				}
+			}
+			
+			loop(length(ar) - 1)
+			{
+				_ex(obj, id, ecl_initShots, patternCount);
+				patternCount++;
+			}
+			
+			return ecl_initShots;
+		}
+	}
+}
+
+// -x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-
+
+//                 ECL Internal Functions
+
+// -x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-
+
+let _frameHelper = 0;
+
+let _EXI_EFFON   = 0;
+let _EXI_SPDOWN  = 1;
+let _EX_GRAV     = 2;
+let _EX_SPAV     = 3;
+let _EX_SPAV2    = 4;
+let _EX_SPAV3    = 5;
+let _EX_SPUP     = 6;
+let _EX_SPUP2    = 7;
+let _EX_SPUP3    = 8;
+let _EX_ANGVEL   = 9;
+let _EX_ANGVEL2  = 10;
+let _EX_ANGVEL3  = 11;
+let _EX_ANGVELB  = 12;
+let _EX_ANGVELB2 = 13;
+let _EX_ANGVELB3 = 14;
+let _EX_ANGMOD   = 15;
+let _EX_ANGMOD2  = 16;
+let _EX_ANGMOD3  = 17;
+let _EX_BOUNCE   = 18;
+let _EX_ARMOR    = 19;
+let _EX_OOB      = 20;
+let _EX_GR       = 21;
+let _EX_WAIT     = 22;
+let _EX_DEL      = 23;
+let _EX_SE       = 24;
+let _EX_BLEND    = 25;
+let _EX_GR2      = 26;
+let _EX_EFFON    = 27;
+let _EX_EFFON2   = 28;
+
+let _EX_ETON_FR  = 29;
+let _EX_ETON_BR  = 30;
+let _EX_ETON_PR  = 31;
+
+let _EX_ETON_FR2  = 32; //Frame
+let _EX_ETON_BR2  = 33; //Border
+let _EX_ETON_PR2  = 34; //Proximity
+
+let _EX_SPUP_OSC   = 35;
+let _EX_ANGVEL_OSC = 36;
+let _EX_SPAV_OSC   = 37;
+
+let _delayScale = [[2, 0.65], [3, 0.65], [4, 1], [5, 1], [2.5, 1]];
+
+function _ex(obj, id, array, patternCount)
+{
+	let flag = false;
+	let ar = Obj_GetValue(obj, eclID(id));
+	if(ar[patternCount][0] == _EXI_EFFON)
+	{
+		if(ar[0][21] == -1)
+		{
+			_exi_effon(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][23], ar[0][20]);
+		}
+	}
+	else if(ar[patternCount][0] == _EXI_SPDOWN)
+	{
+		if(ar[1][0] == _EXI_EFFON)
+		{
+			flag = true;
+		}
+		_exi_spdown(array, flag);
+	}
+	if(ar[patternCount][0] == _EX_EFFON)
+	{
+		if(ar[0][21] == -1)
+		{
+			_ex_effon(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][23], ar[0][20]);
+		}
+	}
+	else if(ar[patternCount][0] == _EX_GRAV)
+	{
+		_ex_grav(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
+	}
+	else if(ar[patternCount][0] == _EX_SPUP)
+	{
+		_ex_spup(array, ar[patternCount][1], ar[patternCount][2], ar[0][7]);
+	}
+	else if(ar[patternCount][0] == _EX_SPUP2)
+	{
+		_ex_spup2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7]);
+	}
+	else if(ar[patternCount][0] == _EX_SPUP3)
+	{
+		_ex_spup3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7]);
+	}
+	else if(ar[patternCount][0] == _EX_SPAV)
+	{
+		_ex_spav(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7]);
+	}
+	else if(ar[patternCount][0] == _EX_SPAV2)
+	{
+		_ex_spav2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[0][7]);
+	}
+	else if(ar[patternCount][0] == _EX_SPAV3)
+	{
+		_ex_spav3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[0][7]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVEL)
+	{
+		_ex_angvel(array, ar[patternCount][1], ar[patternCount][2]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVEL2)
+	{
+		_ex_angvel2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVEL3)
+	{
+		_ex_angvel3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVELB)
+	{
+		_ex_angvelB(array, ar[patternCount][1], ar[patternCount][2]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVELB2)
+	{
+		_ex_angvelB2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVELB3)
+	{
+		_ex_angvelB3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGMOD)
+	{
+		_ex_angmod(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGMOD2)
+	{
+		_ex_angmod2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGMOD3)
+	{
+		_ex_angmod3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+	}
+	else if(ar[patternCount][0] == _EX_BOUNCE)
+	{
+		_ex_bounce(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6]);
+	}
+	else if(ar[patternCount][0] == _EX_GR)
+	{
+		//_ex_gr(array, ar[patternCount][1]);
+	}
+	else if(ar[patternCount][0] == _EX_GR2)
+	{
+		_ex_gr2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[0][23], ar[0][20]);
+	}
+	else if(ar[patternCount][0] == _EX_WAIT)
+	{
+		_ex_wait(array, ar[patternCount][1]);
+	}
+	else if(ar[patternCount][0] == _EX_DEL)
+	{
+		_ex_del(array);
+	}
+	else if(ar[patternCount][0] == _EX_SE)
+	{
+		//_ex_se(array, ar[patternCount][1]);
+	}
+	else if(ar[patternCount][0] == _EX_BLEND)
+	{
+		//_ex_blend(array, ar[patternCount][1]);
+	}
+	else if(ar[patternCount][0] == _EX_ETON_FR)
+	{
+		_ex_eton_fr(array, obj, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+	}
+	else if(ar[patternCount][0] == _EX_ETON_BR)
+	{
+		_ex_eton_br(array, obj, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+	}
+	else if(ar[patternCount][0] == _EX_ETON_BR2)
+	{
+		_ex_eton_br2(array, obj, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7], ar[patternCount][8], ar[patternCount][9], ar[patternCount][10], ar[patternCount][11]);
+	}
+	else if(ar[patternCount][0] == _EX_SPUP_OSC)
+	{
+		_ex_spup_osc(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGVEL_OSC)
+	{
+		_ex_angvel_osc(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
+	}
+	else if(ar[patternCount][0] == _EX_SPAV_OSC)
+	{
+		_ex_spav_osc(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5]);
+	}
+}
+
+/*
+	[
+		lShotStyle,    // 0 
+		lGraphic,      // 1 
+		lCount,        // 2 
+		lLayer,        // 3 
+		lAngle,        // 4 
+		lAngleOffset,  // 5 
+		lSpeedMax,     // 6 
+		lSpeedMin,     // 7 
+		fanAngleSpread,// 8 
+		lXOffset,      // 9 
+		lYOffset,      //10
+		lRadius,       //11
+		lSE,           //12
+		lSE2,          //13
+		lBlend,        //14
+		lSub1,         //15
+		lSub2,         //16
+		lSub3,         //17
+		lSub3,         //18
+		lDelayTime,    //19
+		lPriority,     //20
+		lLaserLength,  //21
+		lLaserWidth,   //22
+		lScale         //23
+		etamaType      //24
+		filterType     //25
+	]
+*/
+
+function _et_on_r(objA, objB, angle, id)
+{
+	if(!Obj_IsDeleted(ecl_objID(objA)))
+	{
+		let patternCount = 1;
+		let ecl_initShots = [];
+		let ar = Obj_GetValue(objA, eclID(id));
+		
+		let x = ObjMove_GetX(objB) + ar[0][9];
+		let y = ObjMove_GetY(objB) + ar[0][10];
+		let rmod = 0;
+		
+		if(length(ar) > 1)
+		{
+			if(ar[1][0] == _EXI_EFFON)
+			{
+				rmod = ar[0][6] * 3.5;
+			}
+		}
+
+		if(ar[0][0] == STYLE_CIRCLE)
+		{
+			ecl_initShots = _et_on_circle(x, y, angle, ar[0]);
+		}
+		else if(ar[0][0] == STYLE_FAN)
+		{
+			ecl_initShots = _et_on_fan(x, y, angle, ar[0]);
+		}
+		else if(ar[0][0] == STYLE_WAVE)
+		{
+			ecl_initShots = _et_on_wave(x, y, angle, ar[0]);
+		}
+		else if(ar[0][0] == STYLE_RING)
+		{
+			ecl_initShots = _et_on_ring(x, y, angle, ar[0]);
+		}
+		else if(ar[0][0] == STYLE_PYRAMID)
+		{
+			ecl_initShots = _et_on_pyramid(x, y, angle, ar[0]);
+		}
+		else if(ar[0][0] == STYLE_SPREAD)
+		{
+			ecl_initShots = _et_on_spread(x, y, angle, ar[0]);
+		}
+		else
+		{
+			RaiseError("Unknown ecl style type (Shot)");
+		}
+		
+		if(DEBUG_MODE)
+		{
+			ascent(i in 0..length(ecl_initShots))
+			{
+				//__ecl_DebugHitbox(ecl_initShots[i]);
+			}
+		}
+		
+		loop(length(ar) - 1)
+		{
+			_ex(objA, id, ecl_initShots, patternCount);
+			patternCount++;
+		}
+	}
+}
+
+
+// --------------- ETAMA_SHOT et_on ---------------
+
+function _et_on_circle(x, y, angleO, groupArray)
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = groupArray[19];
+	
+	let lPriority = groupArray[20];
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lLayer;
+
+	if(angleO != -999 && lAngle > -999990)
+	{
+		lAngle = angleO;
+	}
+	
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+	
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	if(lDelayTime > 0)
+	{
+		ascent(iCount in 0..lCount)
+		{
+			ascent(iLayer in 0..lLayer)
+			{
+				shot_Angle = (lAngle + iCount*(360/lCount)) + (lAngleOffset * iLayer);
+				if(iLayer != 0)
+				{
+					let curSpeed = lSpeedMax - (layerSpeedVar * iLayer);
+					let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+					let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+					
+					currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle, lGraphic, 0);
+					ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+					
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, curSpeed);
+				}
+				else
+				{
+					let curSpeed = lSpeedMax;
+					let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+					let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+					
+					currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle, lGraphic, 0);
+					ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+					
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, curSpeed);
+				}
+				Obj_SetRenderPriorityI(currentShot, lPriority);
+				//ObjShot_SetIntersectionEnable(currentShot, false);
+				shotArray = shotArray ~ [currentShot];
+			}
+		}
+	}
+	else
+	{
+		ascent(iCount in 0..lCount)
+		{
+			ascent(iLayer in 0..lLayer)
+			{
+				shot_Angle = (lAngle + iCount*(360/lCount));
+				if(iLayer != 0)
+				{
+					currentShot = CreateShotA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar * iLayer), shot_Angle, lGraphic, 0);
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, lSpeedMax - (layerSpeedVar*iLayer));
+					ObjRender_SetScaleZ(currentShot, shot_Angle);
+				}
+				else
+				{
+					currentShot = CreateShotA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax, shot_Angle, lGraphic, 0);
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, lSpeedMax);
+					ObjRender_SetScaleZ(currentShot, shot_Angle);
+				}
+				Obj_SetRenderPriorityI(currentShot, lPriority);
+				////ObjShot_SetIntersectionEnable(currentShot, false);
+				shotArray = shotArray ~ [currentShot];
+			}
+		}
+	}
+	return shotArray;
+}
+
+function _et_on_fan(x, y, angleO, groupArray)
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = groupArray[19];
+	
+	let lPriority = groupArray[20];
+	
+	if(lSub1 == 0 || lSub1 == -99)
+	{
+		lSub1 = 1;
+	}
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lSub1;
+	
+	let layerCount = 0;
+	
+	if(angleO != -999)
+	{
+		lAngle = angleO;
+	}
+
+	if(lAngle == ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	else if(lAngle == ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	else if(lAngle == ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	else if(lAngle == ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	if(lDelayTime > 0)
+	{
+		ascent(iCount in 0..lCount)
+		{
+			shot_Angle = (lAngle + iCount*(360/lCount)) - ((lAngleOffset*(lLayer - 1))/2);
+			ascent(iLayer in 0..lLayer)
+			{
+				ascent(jLayer in 0..lSub1)
+				{	
+					if(iLayer != 0)
+					{
+						let curSpeed = lSpeedMax - (layerSpeedVar*jLayer);
+						let modSpeed = (curSpeed * 3.5) / lDelayTime;
+						let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+						
+						let curAngle = shot_Angle + (lAngleOffset*iLayer);
+					
+						//lSpeedMax - (layerSpeedVar * iLayer)
+						currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(curAngle)), y + ((lRadius - lRadiusMod) * sin(curAngle)), modSpeed, curAngle, lGraphic, 0);
+						ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+						
+						ObjRender_SetBlendType(currentShot, lBlend);
+						ObjRender_SetZ(currentShot, curSpeed);
+					}
+					else
+					{
+						let curSpeed = lSpeedMax - (layerSpeedVar*jLayer);
+						let modSpeed = (curSpeed * 3.5) / lDelayTime;
+						let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+						
+						currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle, lGraphic, 0);
+						ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+						
+						ObjRender_SetBlendType(currentShot, lBlend);
+						ObjRender_SetZ(currentShot, curSpeed);
+					}
+					Obj_SetRenderPriorityI(currentShot, lPriority);
+					////ObjShot_SetIntersectionEnable(currentShot, false);
+					shotArray = shotArray ~ [currentShot];
+				}
+			}
+		}
+	}
+	else
+	{
+		ascent(iCount in 0..lCount)
+		{
+			shot_Angle = (lAngle + iCount*(360/lCount)) - ((lAngleOffset*(lLayer - 1))/2);
+			ascent(iLayer in 0..lLayer)
+			{
+				ascent(jLayer in 0..lSub1)
+				{	
+					if(iLayer != 0)
+					{
+						//lSpeedMax - (layerSpeedVar * iLayer)
+						currentShot = CreateShotA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar*jLayer), shot_Angle + (lAngleOffset*iLayer), lGraphic, 0);
+						ObjRender_SetBlendType(currentShot, lBlend);
+						ObjRender_SetZ(currentShot, lSpeedMax);
+					}
+					else
+					{
+						currentShot = CreateShotA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar*jLayer), shot_Angle, lGraphic, 0);
+						ObjRender_SetBlendType(currentShot, lBlend);
+						ObjRender_SetZ(currentShot, lSpeedMax);
+					}
+					Obj_SetRenderPriorityI(currentShot, lPriority);
+					////ObjShot_SetIntersectionEnable(currentShot, false);
+					shotArray = shotArray ~ [currentShot];
+				}
+			}
+		}
+	}
+	if(lGraphic >= 2500 && lGraphic <= 2650)
+	{
+		AddPattern_SetShotDrawScale(shotArray, 0.191);
+	}
+	return shotArray;
+}
+
+function _et_on_wave(x, y, angleO, groupArray) //todo: no delay
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = groupArray[19];
+	
+	let lPriority = groupArray[20];
+	
+	if(lSub1 == 0 || lSub1 == -99)
+	{
+		lSub1 = 1;
+	}
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lLayer;
+	
+	let layerCount = 0;
+	
+	if(angleO != -999)
+	{
+		lAngle = angleO;
+	}
+
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	ascent(iCount in 0..lCount)
+	{
+		//shot_Angle = (lAngle + iCount*(360/lCount)) - ((lAngleOffset*(lLayer - 1))/2);
+		shot_Angle = (lAngle + iCount*(360/lCount));
+		ascent(iLayer in 0..lLayer)
+		{
+			ascent(jLayer in 0..lSub1)
+			{	
+				if(iLayer != 0)
+				{
+					let curSpeed = lSpeedMax - ((layerSpeedVar*iLayer) + (lSub2*jLayer));
+					let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+					let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+					
+					currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle + (lAngleOffset*iLayer) + (lSub3*jLayer), lGraphic, 0);
+					ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+					
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, curSpeed);
+				}
+				else
+				{
+					let curSpeed = lSpeedMax - ((layerSpeedVar*iLayer) + (lSub2*jLayer));
+					let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+					let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+					
+					currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle + (lSub3*jLayer), lGraphic, 0);
+					ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+					
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, curSpeed);
+				}
+				Obj_SetRenderPriorityI(currentShot, lPriority);
+				//ObjShot_SetIntersectionEnable(currentShot, false);
+				shotArray = shotArray ~ [currentShot];
+			}
+		}
+	}
+	if(lGraphic >= 2500 && lGraphic <= 2650)
+	{
+		AddPattern_SetShotDrawScale(shotArray, 0.191);
+	}
+	return shotArray;
+}
+
+function _et_on_ring(x, y, angleO, groupArray) //todo: no delay
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = groupArray[19];
+	
+	let lPriority = groupArray[20];
+	
+	let shot_Angle = lAngle;
+	
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lLayer;
+
+	if(angleO != -999)
+	{
+		lAngle = angleO;
+	}
+	
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+	
+	let jLayer = 0;
+	
+	let shot_Angle2 = lAngle;
+	
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	ascent(iCount in 0..lCount)
+	{
+		ascent(iLayer in 0..lLayer)
+		{
+			shot_Angle = (lAngle + iCount*(360/lCount));
+			shot_Angle2 = (lAngle + iLayer*(360/lLayer));
+			if(iLayer != 0)
+			{
+				let curSpeed = lSpeedMax - (layerSpeedVar * jLayer);
+				let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+				let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+				
+				currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)) + (lSub1 * cos(shot_Angle2)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)) + (lSub1 * sin(shot_Angle2)), modSpeed, shot_Angle2, lGraphic, 0);
+				ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+				
+				ObjRender_SetBlendType(currentShot, lBlend);
+				ObjRender_SetZ(currentShot, curSpeed);
+			}
+			else
+			{
+				let curSpeed = lSpeedMax;
+				let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+				let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+				
+				currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)) + (lSub1 * cos(shot_Angle2)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)) + (lSub1 * sin(shot_Angle2)), modSpeed, shot_Angle2, lGraphic, 0);
+				ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+				
+				ObjRender_SetBlendType(currentShot, lBlend);
+				ObjRender_SetZ(currentShot, curSpeed);
+			}
+			Obj_SetRenderPriorityI(currentShot, lPriority);
+			//ObjShot_SetIntersectionEnable(currentShot, false);
+			shotArray = shotArray ~ [currentShot];
+		}
+	}
+	if(lGraphic >= 2500 && lGraphic <= 2650)
+	{
+		AddPattern_SetShotDrawScale(shotArray, 0.191);
+	}
+	return shotArray;
+}
+
+function _et_on_pyramid(x, y, angleO, groupArray) //todo: no delay, even number pyramid
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime  = groupArray[19];
+	let lPriority = groupArray[20]; 
+	
+	if(lSub1 == 0)
+	{
+		lSub1 = 1;
+	}
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let halfLayer = ((lLayer - 1) / 2) + 1;
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / (halfLayer-1);
+	
+	let layerCount = 0;
+	
+	if(angleO != -999 && lAngle > -999990)
+	{
+		lAngle = angleO;
+	}
+
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	
+	if(lLayer%2 == 0) //Even
+	{
+	
+	}
+	else //Odd
+	{
+		ascent(iCount in 0..lCount)
+		{
+			shot_Angle = (lAngle + iCount*(360/lCount));
+			
+			let curSpeed = lSpeedMax;
+			let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+			let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+			
+			currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle, lGraphic, 0);
+			ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+			
+			ObjRender_SetBlendType(currentShot, lBlend);
+			ObjRender_SetZ(currentShot, curSpeed);
+			
+			Obj_SetRenderPriorityI(currentShot, lPriority);
+			//ObjShot_SetIntersectionEnable(currentShot, false);
+			shotArray = shotArray ~ [currentShot];
+			
+			ascent(iPart in 0..2)
+			{
+				alternative(iPart)
+				case(0)
+				{
+					ascent(iLayer in 1..halfLayer)
+					{
+						curSpeed = lSpeedMax - (layerSpeedVar*iLayer);
+						modSpeed = (curSpeed * 3.5) / (lDelayTime);
+						lRadiusMod = modSpeed * (lDelayTime + 1.5);
+			
+						currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle + (lAngleOffset*iLayer), lGraphic, 0);
+						ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+						
+						ObjRender_SetBlendType(currentShot, lBlend);
+						ObjRender_SetZ(currentShot, curSpeed);
+
+						Obj_SetRenderPriorityI(currentShot, lPriority);
+						//ObjShot_SetIntersectionEnable(currentShot, false);
+						shotArray = shotArray ~ [currentShot];
+					}
+				}
+				case(1)
+				{
+					ascent(iLayer in 1..halfLayer)
+					{
+						curSpeed = lSpeedMax - (layerSpeedVar*iLayer);
+						modSpeed = (curSpeed * 3.5) / (lDelayTime);
+						lRadiusMod = modSpeed * (lDelayTime + 1.5);
+						
+						currentShot = CreateShotA1(x + ((lRadius - lRadiusMod) * cos(shot_Angle)), y + ((lRadius - lRadiusMod) * sin(shot_Angle)), modSpeed, shot_Angle - (lAngleOffset*iLayer), lGraphic, 0);
+						ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+						
+						ObjRender_SetBlendType(currentShot, lBlend);
+						ObjRender_SetZ(currentShot, curSpeed);
+
+						Obj_SetRenderPriorityI(currentShot, lPriority);
+						//ObjShot_SetIntersectionEnable(currentShot, false);
+						shotArray = shotArray ~ [currentShot];
+					}
+				}
+				
+			}
+		}
+	}
+	
+	if(lGraphic >= 2500 && lGraphic <= 2650)
+	{
+		AddPattern_SetShotDrawScale(shotArray, 0.191);
+	}
+	return shotArray;
+}
+
+function _et_on_spread(x, y, angleO, groupArray) //todo: no delay
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = groupArray[19];
+	let lPriority = groupArray[20];
+	
+	if(lSub1 == 0 || lSub1 == -99)
+	{
+		lSub1 = 1;
+	}
+	
+	let lAngleOffset2 = lAngleOffset/2;
+	lAngleOffset = lAngleOffset/lCount;
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = lSpeedMax - lSpeedMin;
+	
+	let layerCount = 0;
+	
+	let loc_speed = lSpeedMax;
+	
+	if(angleO != -999)
+	{
+		lAngle = angleO;
+	}
+
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	ascent(iCount in 0..lCount)
+	{
+		shot_Angle = (lAngle + iCount*(360/lCount));
+		ascent(iLayer in 0..lLayer)
+		{
+			ascent(jLayer in 0..lSub1)
+			{	
+				if(iLayer != 0)
+				{	
+					let curSpeed = sRand(lSpeedMax, lSpeedMin);
+					let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+					let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+					
+					currentShot = CreateShotA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), modSpeed, shot_Angle + (rand(-lAngleOffset2, lAngleOffset2)), lGraphic, 0);
+					ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+					
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, curSpeed);
+				}
+				else
+				{
+					let curSpeed = sRand(lSpeedMax, lSpeedMin);
+					let modSpeed = (curSpeed * 3.5) / (lDelayTime);
+					let lRadiusMod = modSpeed * (lDelayTime + 1.5);
+					
+					currentShot = CreateShotA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), modSpeed, shot_Angle + (rand(-lAngleOffset2, lAngleOffset2)), lGraphic, 0);
+					ObjMove_AddPatternA2(currentShot, lDelayTime, curSpeed, NO_CHANGE, 0, 0, NO_CHANGE);
+					
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, curSpeed);
+				}
+				//ObjShot_SetIntersectionEnable(currentShot, false);
+				shotArray = shotArray ~ [currentShot];
+			}
+		}
+	}
+	if(lGraphic >= 2500 && lGraphic <= 2650)
+	{
+		AddPattern_SetShotDrawScale(shotArray, 0.191);
+	}
+	return shotArray;
+}
+
+// --------------- ETAMA_LASER_LOOSE et_on ---------------
+
+function _et_on_circle_ll(x, y, angleO, groupArray)
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = 0;
+	
+	let lPriority = groupArray[20];
+	
+	let lLength = groupArray[21];
+	let lWidth = groupArray[22];
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lLayer;
+
+	if(angleO != -999 && lAngle > -999990)
+	{
+		lAngle = angleO;
+	}
+	
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+	
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+
+	ascent(iCount in 0..lCount)
+	{
+		ascent(iLayer in 0..lLayer)
+		{
+			shot_Angle = (lAngle + iCount*(360/lCount));
+			if(iLayer != 0)
+			{
+				currentShot = CreateLooseLaserA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar * iLayer), shot_Angle, lLength, lWidth, lGraphic, 0);
+				ObjRender_SetBlendType(currentShot, lBlend);
+				ObjRender_SetZ(currentShot, lSpeedMax - (layerSpeedVar*iLayer));
+			}
+			else
+			{
+				currentShot = CreateLooseLaserA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax, shot_Angle, lLength, lWidth, lGraphic, 0);
+				ObjRender_SetBlendType(currentShot, lBlend);
+				ObjRender_SetZ(currentShot, lSpeedMax);
+			}
+			Obj_SetRenderPriorityI(currentShot, lPriority);
+			//ObjShot_SetIntersectionEnable(currentShot, false);
+			shotArray = shotArray ~ [currentShot];
+		}
+	}
+	return shotArray;
+}
+
+function _et_on_fan_ll(x, y, angleO, groupArray)
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = groupArray[19];
+	
+	let lPriority = groupArray[20];
+	
+	let lLength = groupArray[21];
+	let lWidth = groupArray[22];
+	
+	if(lSub1 == 0 || lSub1 == -99)
+	{
+		lSub1 = 1;
+	}
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lSub1;
+	
+	let layerCount = 0;
+	
+	if(angleO != -999)
+	{
+		lAngle = angleO;
+	}
+
+	if(lAngle == ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	else if(lAngle == ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	else if(lAngle == ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	else if(lAngle == ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+	
+	ascent(iCount in 0..lCount)
+	{
+		shot_Angle = (lAngle + iCount*(360/lCount)) - ((lAngleOffset*(lLayer - 1))/2);
+		ascent(iLayer in 0..lLayer)
+		{
+			ascent(jLayer in 0..lSub1)
+			{	
+				if(iLayer != 0)
+				{
+					//lSpeedMax - (layerSpeedVar * iLayer)
+					currentShot = CreateLooseLaserA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar*jLayer), shot_Angle + (lAngleOffset*iLayer), lLength, lWidth, lGraphic, 0);
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, lSpeedMax);
+				}
+				else
+				{
+					currentShot = CreateLooseLaserA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar*jLayer), shot_Angle, lLength, lWidth, lGraphic, 0);
+					ObjRender_SetBlendType(currentShot, lBlend);
+					ObjRender_SetZ(currentShot, lSpeedMax);
+				}
+				Obj_SetRenderPriorityI(currentShot, lPriority);
+				//ObjShot_SetIntersectionEnable(currentShot, false);
+				shotArray = shotArray ~ [currentShot];
+			}
+		}
+	}
+	
+	if(lGraphic >= 2500 && lGraphic <= 2650)
+	{
+		AddPattern_SetShotDrawScale(shotArray, 0.191);
+	}
+	return shotArray;
+}
+
+// --------------- ETAMA_LASER_CURVE et_on ---------------
+
+function _et_on_circle_lc(x, y, angleO, groupArray, lobj, lid)
+{
+	let lShotStyle = groupArray[0];
+	let lGraphic = groupArray[1];
+	
+	let lCount = groupArray[2];
+	let lLayer = groupArray[3];
+	
+	let lAngle = groupArray[4];
+	let lAngleOffset = groupArray[5];
+	
+	let lSpeedMax = groupArray[6];
+	let lSpeedMin = groupArray[7];
+	
+	let fanAngleSpread = groupArray[8];
+	
+	let lXOffset = groupArray[9];
+	let lYOffset = groupArray[10];
+	
+	let lRadius = groupArray[11];
+	let lSE = groupArray[12];
+	let lSE2 = groupArray[13];
+	let lBlend = groupArray[14];
+	
+	let lSub1 = groupArray[15];
+	let lSub2 = groupArray[16];
+	let lSub3 = groupArray[17];
+	let lSub4 = groupArray[18];
+	
+	let lDelayTime = 0;
+	
+	let lPriority = groupArray[20];
+	
+	let lLength = groupArray[21];
+	let lWidth = groupArray[22];
+	
+	let shot_Angle = 0;
+	let currentShot = 0;
+	let shotArray = [];
+	let layerSpeedVar = (lSpeedMax - lSpeedMin) / lLayer;
+
+	if(angleO != -999 && lAngle > -999990)
+	{
+		lAngle = angleO;
+	}
+	
+	alternative(lAngle)
+	case(ANGLE_RANDOM)
+	{
+		lAngle = sRand(0, 360);
+	}
+	case(ANGLE_AIMED)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY);
+	}
+	case(ANGLE_AIMED_GAP)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + ((360/lCount)/2);
+	}
+	case(ANGLE_AIMED_AWAY)
+	{
+		lAngle = GetAngleFromTo(x, y, GetPlayerX, GetPlayerY) + 180;
+	}
+	
+	thSE_PlayPan(lSE, x);
+	_frameHelper = 0;
+
+	ascent(iCount in 0..lCount)
+	{
+		ascent(iLayer in 0..lLayer)
+		{
+			shot_Angle = (lAngle + iCount*(360/lCount));
+			if(iLayer != 0)
+			{
+				currentShot = CreateCurveLaserA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar * iLayer), shot_Angle, lLength, lWidth, lGraphic, -1);
+				//_ecl_CreateCurveLaser(lobj, lid, x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar * iLayer), shot_Angle, lLength, lWidth, lGraphic);
+				ObjRender_SetBlendType(currentShot, lBlend);
+				ObjRender_SetZ(currentShot, lSpeedMax - (layerSpeedVar*iLayer));
+				_ecl_LooseLaserBase(currentShot, lLength);
+			}
+			else
+			{
+				currentShot = CreateCurveLaserA1(x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax, shot_Angle, lLength, lWidth, lGraphic, -1);
+				//_ecl_CreateCurveLaser(lobj, lid, x + (lRadius * cos(shot_Angle)), y + (lRadius * sin(shot_Angle)), lSpeedMax - (layerSpeedVar * iLayer), shot_Angle, lLength, lWidth, lGraphic);
+				ObjRender_SetBlendType(currentShot, lBlend);
+				ObjRender_SetZ(currentShot, lSpeedMax);
+				_ecl_LooseLaserBase(currentShot, lLength);
+			}
+			Obj_SetRenderPriorityI(currentShot, lPriority);
+			shotArray = shotArray ~ [currentShot];
+		}
+	}
+	return shotArray;
+}
+
+// --------------- Pattern Instructions ---------------
+
+function _exi_effon(array, graphic, type, time, scale, pri) 
+{
+	ascent(i in 0..length(array))
+	{
+		_exi_effon_t(array[i], graphic, type, time, scale, pri);
+	}
+	_frameHelper += time;
+}
+
+function _exi_spdown(array, flag)
+{
+	let frames = 16;
+	ascent(i in 0..length(array))
+	{
+		let fp_speed = ObjRender_GetZ(array[i]);
+		let fp_startSpeed =  fp_speed * 2;
+		let fp_speedDifference = fp_startSpeed - fp_speed;
+		let fp_accel = fp_speedDifference / frames;
+		ObjMove_AddPatternA2(array[i], _frameHelper, fp_startSpeed, NO_CHANGE, -fp_accel, 0, fp_speed);
+	}
+	_frameHelper += 16;
+}
+
+function _ex_grav(array, time, gravAng, gravStr, gravStrMax)
+{
+	let xa = gravStr * cos(gravAng);
+	let ya = gravStr * sin(gravAng);
+	
+	let xm = gravStrMax;
+	let ym = gravStrMax;
+	
+	if(xa < 0){xm = -gravStrMax;}
+	if(ya < 0){ym = -gravStrMax;}
+	
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternB2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, xa, ya, xm, ym);
+		ObjMove_AddPatternB2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999, 999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_effon(array, graphic, type, time, scale, pri) 
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_effon_t(array[i], graphic, type, time, scale, pri);
+	}
+	_frameHelper += time;
+}
+
+function _ex_gr2(array, graphicA, graphicB, type, time, scale, pri)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_gr2_t(array[i], graphicA, graphicB, type, time, scale, pri);
+	}
+	//_frameHelper += time;
+}
+
+function _ex_spup(array, time, accel, minSpeed)
+{
+	if(accel >= 0)
+	{
+		ascent(i in 0..length(array))
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+	else
+	{
+		ascent(i in 0..length(array))
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, 0, minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+	_frameHelper += time;
+}
+
+function _ex_spup2(array, time, accel, rAccelRange, minSpeed)
+{
+	let sAccel = 0;
+	
+	ascent(i in 0..length(array))
+	{
+		sAccel = accel + sRand(-rAccelRange, rAccelRange);
+		if(accel > 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, sAccel, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else if(accel < 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -sAccel, 0, minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+}
+
+function _ex_spup3(array, time, rAccelA, rAccelB, minSpeed)
+{
+	let accel = 0;
+	
+	ascent(i in 0..length(array))
+	{
+		accel = sRand(rAccelA, rAccelB);
+		if(accel > 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else if(accel < 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -accel, 0, minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+}
+
+function _ex_spav(array, time, accel, angvel, minSpeed)
+{
+	if(accel >= 0)
+	{
+		ascent(i in 0..length(array))
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, angvel, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0,      999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+	else
+	{
+		ascent(i in 0..length(array))
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -accel, angvel, minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0,      999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+	_frameHelper += time;
+}
+
+function _ex_spav2(array, time, accel, rAccelRange, angVel, rAngVelRange, minSpeed)
+{
+	let sAccel = 0;
+	
+	ascent(i in 0..length(array))
+	{
+		sAccel = accel + sRand(-rAccelRange, rAccelRange);
+		if(sAccel > 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, sAccel, angVel + sRand(-rAngVelRange, rAngVelRange), 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else if(sAccel < 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -sAccel, angVel + sRand(-rAngVelRange, rAngVelRange), minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+}
+
+function _ex_spav3(array, time, rAccelA, rAccelB, rAngVelA, rAngVelB, minSpeed)
+{
+	let sAccel = 0;
+	
+	ascent(i in 0..length(array))
+	{
+		sAccel = sRand(rAccelA, rAccelB);
+		if(sAccel > 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, sAccel, sRand(rAngVelA, rAngVelB), 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else if(sAccel < 0)
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -sAccel, sRand(rAngVelA, rAngVelB), minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+		else
+		{
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+			AddPatternSE(array[i], _frameHelper, se_kira00);
+		}
+	}
+}
+
+function _ex_angvel(array, time, angvel)
+{
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
+		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_angvel2(array, time, angvel, rAngVelRange)
+{
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel + sRand(-rAngVelRange, rAngVelRange), 999);
+		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_angvel3(array, time, rAngVelA, rAngVelB)
+{
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, sRand(rAngVelA, rAngVelB), 999);
+		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_angvelB(array, time, angleTotal)
+{
+	let angvel = angleTotal / time;
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
+		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_angvelB2(array, time, angleTotal, angleTotalRange)
+{
+	let angvel = (angleTotal + sRand(-angleTotalRange, angleTotalRange)) / time;
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
+		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_angvelB3(array, time, rAngleTotalA, rAngleTotalB)
+{
+	let angvel = sRand(rAngleTotalA, rAngleTotalB) / time;
+	ascent(i in 0..length(array))
+	{
+		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
+		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
+		AddPatternSE(array[i], _frameHelper, se_kira00);
+	}
+	_frameHelper += time;
+}
+
+function _ex_angmod(array, type, frame, repeat, angle, speed)
+{
+	let decel = 0;
+	let curAngle = 0;
+
+	if(type == TYPE_FIXED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			decel = speed / frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_FIXED): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			decel = speed / frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, -decel, angle, 0);
+					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0,     0);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_RELATIVE): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_AIMED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			decel = speed / frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_AIMED): 'repeat' argument should not be less than 0")
+		}
+	}
+}
+
+function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspeedRange)
+{
+	let decel = 0;
+	
+	let mspeed = speed;
+	let mangle = angle;
+
+	if(type == TYPE_FIXED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					speed = mspeed + sRand(-rspeedRange, rspeedRange);
+					angle = mangle + sRand(-rangleRange, rangleRange);
+					decel = speed / frame;
+					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod2(TYPE_FIXED): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					speed = mspeed + sRand(-rspeedRange, rspeedRange);
+					angle = mangle + sRand(-rangleRange, rangleRange);
+					decel = speed / frame;
+
+					ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, -decel, angle, 0);
+					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0,     0);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod2(TYPE_RELATIVE): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_AIMED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					speed = mspeed + sRand(-rspeedRange, rspeedRange);
+					angle = mangle + sRand(-rangleRange, rangleRange);
+					decel = speed / frame;
+
+					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+				decel = speed / frame;
+
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				speed = mspeed + sRand(-rspeedRange, rspeedRange);
+				angle = mangle + sRand(-rangleRange, rangleRange);
+
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_AIMED): 'repeat' argument should not be less than 0")
+		}
+	}
+}
+
+function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB)
+{
+	let decel = 0;
+	let speed = 0;
+	let angle = 0;
+
+	if(type == TYPE_FIXED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					speed = sRand(rspeedA, rspeedB);
+					angle = sRand(rangleA, rangleB);
+					decel = speed / frame;
+					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod3(TYPE_FIXED): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					speed = sRand(rspeedA, rspeedB);
+					angle = sRand(rangleA, rangleB);
+					decel = speed / frame;
+
+					ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, -decel, angle, 0);
+					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0, 0);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod3(TYPE_RELATIVE): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_AIMED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					speed = sRand(rspeedA, rspeedB);
+					angle = sRand(rangleA, rangleB);
+					decel = speed / frame;
+
+					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
+					AddPatternSE(array[i], _frameHelper, se_kira00);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+				decel = speed / frame;
+
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				speed = sRand(rspeedA, rspeedB);
+				angle = sRand(rangleA, rangleB);
+
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod3(TYPE_AIMED): 'repeat' argument should not be less than 0")
+		}
+	}
+}
+
+function _ex_bounce(array, repeat, speed, sleft, sright, stop, sbottom)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_bounce_t(array[i], repeat, speed, sleft, sright, stop, sbottom);
+	}
+}
+
+function _ex_wait(array, time)
+{
+	_frameHelper += time;
+}
+
+function _ex_del(array)
+{
+	ascent(i in 0..length(array))
+	{
+		ObjShot_SetDeleteFrame(array[i], _frameHelper);
+	}
+}
+
+function _ex_eton_fr(array, eclObj, id, type, angle, delay, frame, repeat, del)
+{
+	let flag = false;
+	if(delay == EX_WAIT){delay = _frameHelper; flag = true;}
+	ascent(i in 0..length(array))
+	{
+		_ex_eton_fr_t(array[i], eclObj, id, type, angle, delay, frame, repeat, del);
+	}
+	if(flag){_frameHelper += frame * repeat;}
+}
+
+function _ex_eton_br(array, eclObj, id, type, sleft, sright, stop, sbottom, del)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_eton_br_t(array[i], eclObj, id, type, sleft, sright, stop, sbottom, del);
+	}
+}
+
+function _ex_eton_br2(array, eclObj, id, type, sleft, sright, stop, sbottom, aleft, aright, atop, abottom, del)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_eton_br2_t(array[i], eclObj, id, type, sleft, sright, stop, sbottom, aleft, aright, atop, abottom, del);
+	}
+}
+
+function _ex_spup_osc(array, delay, time, repeat, accel)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_spup_osc_t(array[i], delay, time, repeat, accel);
+	}
+	if(delay == EX_WAIT){_frameHelper += time * repeat};
+}
+
+function _ex_angvel_osc(array, delay, time, repeat, angvel)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_angvel_osc_t(array[i], delay, time, repeat, angvel);
+	}
+	if(delay == EX_WAIT){_frameHelper += time * repeat};
+}
+
+function _ex_spav_osc(array, delay, time, repeat, accel, angvel)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_spav_osc_t(array[i], delay, time, repeat, accel, angvel);
+	}
+	if(delay == EX_WAIT){_frameHelper += time * repeat};
+}
+
+
+// --------------- Pattern Tasks ---------------
+
+task _exi_effon_t(shot, graphic, type, time, lscale, pri)
+{
+	let init_blend = ObjRender_GetBlendType(shot);
+	let init_graphic = ObjShot_GetImageID(shot);
+	
+	let sca = [];
+	let timer = 1;
+	let scale = 3;
+	let alpha = 0;
+	//let pri = Obj_GetRenderPriorityI(shot);
+	
+	if(type < 0 || type >= 5) { RaiseError("Invalid EFFON type:" ~ itoa(type)); }
+	sca = _delayScale[type];
+	
+	if(time >= 25)
+	{
+		sca[0] = sca[0] + 1;
+	}
+	
+	if(graphic != NO_CHANGE)
+	{
+		ObjShot_SetGraphic(shot, graphic);
+		ObjRender_SetBlendType(shot, BLEND_ALPHA);
+	}
+
+	Obj_SetRenderPriorityI(shot, 58);
+	while(!Obj_IsDeleted(shot) && timer <= time)
+	{
+		//ObjShot_SetIntersectionEnable(shot, false);
+		scale = InterpolateDecelerate(sca[0], sca[1], timer, time);
+		alpha = InterpolateLinear(0, 256, timer, time);
+		ObjRender_SetScaleX(shot, scale);
+		ObjRender_SetScaleY(shot, scale);
+		ObjRender_SetAlpha(shot, alpha);
+		timer++;
+		yield;
+	}
+	Obj_SetRenderPriorityI(shot, pri);
+	ObjRender_SetAlpha(shot, 256);
+	ObjRender_SetScaleX(shot, lscale);
+	ObjRender_SetScaleY(shot, lscale);
+	ObjShot_SetGraphic(shot, init_graphic);
+	ObjRender_SetBlendType(shot, init_blend);
+}
+
+task _ex_effon_t(shot, graphic, type, time, lscale, pri)
+{
+	let init_blend = ObjRender_GetBlendType(shot);
+	let init_graphic = ObjShot_GetImageID(shot);
+	
+	let sca = [];
+	let timer = 1;
+	let scale = 3;
+	let alpha = 0;
+	//let pri = Obj_GetRenderPriorityI(shot);
+	
+	if(type < 0 || type >= 4) { RaiseError("Invalid EFFON type:" ~ itoa(type)); }
+	sca = _delayScale[type];
+	
+	if(time >= 25)
+	{
+		sca[0] = sca[0] + 1;
+	}
+	
+	if(graphic != NO_CHANGE)
+	{
+		ObjShot_SetGraphic(shot, graphic);
+		ObjRender_SetBlendType(shot, BLEND_ALPHA);
+	}
+
+	Obj_SetRenderPriorityI(shot, 51);
+	while(!Obj_IsDeleted(shot) && timer <= time)
+	{
+		//ObjShot_SetIntersectionEnable(shot, false);
+		scale = InterpolateDecelerate(sca[0], sca[1], timer, time);
+		alpha = InterpolateLinear(0, 256, timer, time);
+		ObjRender_SetScaleX(shot, scale);
+		ObjRender_SetScaleY(shot, scale);
+		ObjRender_SetAlpha(shot, alpha);
+		timer++;
+		yield;
+	}
+	Obj_SetRenderPriorityI(shot, pri);
+	ObjRender_SetAlpha(shot, 256);
+	ObjRender_SetScaleX(shot, lscale);
+	ObjRender_SetScaleY(shot, lscale);
+	ObjShot_SetGraphic(shot, init_graphic);
+	ObjRender_SetBlendType(shot, init_blend);
+}
+
+task _ex_gr2_t(shot, graphicA, graphicB, type, time, lscale, pri)
+{
+	let l_scale = 1;
+	if(graphicA >= 1013 && graphicA <= 1028){l_scale = 0.47;}
+	if(graphicA >= 286 && graphicA <= 289){l_scale = 0.67;}
+	if(graphicA >= 162 && graphicA <= 177){l_scale = 0.64;}
+
+	loop(_frameHelper){yield;}
+	
+	if(!Obj_IsDeleted(shot))
+	{
+		let init_blend = ObjRender_GetBlendType(shot);
+		let init_graphic = graphicA;
+		
+		let sca = [];
+		let timer = 1;
+		let scale = 3;
+		let alpha = 0;
+		//let pri = Obj_GetRenderPriorityI(shot);
+		
+		if(type < 0 || type >= 4) { RaiseError("Invalid EFFON type:" ~ itoa(type)); }
+		sca = _delayScale[type];
+		
+		if(time >= 25)
+		{
+			sca[0] = sca[0] + 1;
+		}
+		
+		if(graphicB != NO_CHANGE)
+		{
+			ObjShot_SetGraphic(shot, graphicB);
+			ObjRender_SetBlendType(shot, BLEND_ALPHA);
+		}
+
+		Obj_SetRenderPriorityI(shot, 51);
+		while(!Obj_IsDeleted(shot) && timer <= time)
+		{
+			//ObjShot_SetIntersectionEnable(shot, false);
+			scale = InterpolateDecelerate(sca[0], sca[1], timer, time);
+			alpha = InterpolateLinear(0, 256, timer, time);
+			ObjRender_SetScaleX(shot, scale);
+			ObjRender_SetScaleY(shot, scale);
+			ObjRender_SetAlpha(shot, alpha);
+			timer++;
+			yield;
+		}
+		Obj_SetRenderPriorityI(shot, pri);
+		ObjRender_SetAlpha(shot, 256);
+		ObjRender_SetScaleX(shot, l_scale);
+		ObjRender_SetScaleY(shot, l_scale);
+		ObjShot_SetGraphic(shot, init_graphic);
+		ObjRender_SetBlendType(shot, init_blend);
+	}
+}
+
+task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom)
+{
+	let cBounces = 1;
+	let lFlag = false;
+	let rFlag = false;
+	let tFlag = false;
+	let bFlag = false;
+	
+	while(!Obj_IsDeleted(shot) && cBounces <= repeat)
+	{
+		if(sleft && ObjMove_GetX(shot) < 0 && !lFlag)
+		{
+			lFlag = true;
+			ObjMove_SetAngle(shot, 180 - ObjMove_GetAngle(shot));
+			
+			if(speed != NO_CHANGE)
+			{
+				ObjMove_SetMaxSpeed(shot, 999);
+				ObjMove_SetAcceleration(shot, 0);
+				ObjMove_SetSpeed(shot, speed);
+			}
+			
+			cBounces++;
+		}
+		else
+		{
+			lFlag = false;
+		}
+		
+		if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
+		{
+			rFlag = true;
+			ObjMove_SetAngle(shot, 180 - ObjMove_GetAngle(shot));
+			
+			if(speed != NO_CHANGE)
+			{
+				ObjMove_SetMaxSpeed(shot, 999);
+				ObjMove_SetAcceleration(shot, 0);
+				ObjMove_SetSpeed(shot, speed);
+			}
+			
+			cBounces++;
+		}
+		else
+		{
+			rFlag = false;
+		}
+		
+		if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
+		{
+			tFlag = true;
+			ObjMove_SetAngle(shot, -1 * ObjMove_GetAngle(shot));
+			
+			if(speed != NO_CHANGE)
+			{
+				ObjMove_SetMaxSpeed(shot, 999);
+				ObjMove_SetAcceleration(shot, 0);
+				ObjMove_SetSpeed(shot, speed);
+			}
+			
+			cBounces++;
+		}
+		else
+		{
+			tFlag = false;
+		}
+		
+		if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
+		{
+			bFlag = true;
+			ObjMove_SetAngle(shot, -1 * ObjMove_GetAngle(shot));
+			
+			if(speed != NO_CHANGE)
+			{
+				ObjMove_SetMaxSpeed(shot, 999);
+				ObjMove_SetAcceleration(shot, 0);
+				ObjMove_SetSpeed(shot, speed);
+			}
+			
+			cBounces++;
+		}
+		else
+		{
+			bFlag = false;
+		}
+		yield;
+	}
+}
+
+task _ex_eton_fr_t(shot, eclObj, id, type, angle, delay, frame, repeat, del)
+{
+	let loc_frame = frame;
+	let loc_repeat = 0;
+	
+	if(delay > -1)
+	{
+		loop(delay){yield;}
+	}
+	
+	if(type == TYPE_FIXED)
+	{
+		while(!Obj_IsDeleted(shot) && loc_repeat < repeat)
+		{
+			if(loc_frame == frame)
+			{
+				_et_on_r(eclObj, shot, angle, id);
+				
+				loc_frame = 1;
+				loc_repeat++;
+				
+				if(loc_repeat == repeat && del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+			}
+			else
+			{
+				loc_frame++;
+			}
+			yield;
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		while(!Obj_IsDeleted(shot) && loc_repeat < repeat)
+		{
+			if(loc_frame == frame)
+			{
+				_et_on_r(eclObj, shot, ObjMove_GetAngle(shot) + angle, id);
+				
+				loc_frame = 1;
+				loc_repeat++;
+				
+				if(loc_repeat == repeat && del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+			}
+			else
+			{
+				loc_frame++;
+			}
+			yield;
+		}
+	}
+}
+
+task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
+{
+	let cBounces = 0;
+	let lFlag = false;
+	let rFlag = false;
+	let tFlag = false;
+	let bFlag = false;
+	
+	if(type == TYPE_FIXED)
+	{
+		while(!Obj_IsDeleted(shot) && cBounces == 0)
+		{
+			if(sleft && ObjMove_GetX(shot) < 0 && !lFlag)
+			{
+				lFlag = true;
+				
+				_et_on_r(eclObj, shot, 0, id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				cBounces++;
+			}
+			else
+			{
+				lFlag = false;
+			}
+			
+			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
+			{
+				rFlag = true;
+				_et_on_r(eclObj, shot, 180, id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				rFlag = false;
+			}
+			
+			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
+			{
+				tFlag = true;
+				_et_on_r(eclObj, shot, 90, id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				tFlag = false;
+			}
+			
+			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
+			{
+				bFlag = true;
+				_et_on_r(eclObj, shot, 270, id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				bFlag = false;
+			}
+			yield;
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		while(!Obj_IsDeleted(shot) && cBounces == 0)
+		{
+			if(sleft && ObjMove_GetX(shot) < 0 && !lFlag)
+			{
+				lFlag = true;
+				
+				_et_on_r(eclObj, shot, 180 - ObjMove_GetAngle(shot), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				cBounces++;
+			}
+			else
+			{
+				lFlag = false;
+			}
+			
+			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
+			{
+				rFlag = true;
+				_et_on_r(eclObj, shot, 180 - ObjMove_GetAngle(shot), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				rFlag = false;
+			}
+			
+			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
+			{
+				tFlag = true;
+				_et_on_r(eclObj, shot, -1 * ObjMove_GetAngle(shot), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				tFlag = false;
+			}
+			
+			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
+			{
+				bFlag = true;
+				_et_on_r(eclObj, shot, -1 * ObjMove_GetAngle(shot), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				bFlag = false;
+			}
+			yield;
+		}
+	}
+}
+
+task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft, aright, atop, abottom, del)
+{
+	let cBounces = 0;
+	let lFlag = false;
+	let rFlag = false;
+	let tFlag = false;
+	let bFlag = false;
+	
+	if(type == TYPE_FIXED)
+	{
+		while(!Obj_IsDeleted(shot) && cBounces == 0)
+		{
+			if(sleft && ObjMove_GetX(shot) < 0 && !lFlag)
+			{
+				lFlag = true;
+				
+				_et_on_r(eclObj, shot, 0 + sRand(-aleft, aleft), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				cBounces++;
+			}
+			else
+			{
+				lFlag = false;
+			}
+			
+			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
+			{
+				rFlag = true;
+				_et_on_r(eclObj, shot, 180 + sRand(-aright, aright), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				rFlag = false;
+			}
+			
+			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
+			{
+				tFlag = true;
+				_et_on_r(eclObj, shot, 90 + sRand(-atop, atop), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				tFlag = false;
+			}
+			
+			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
+			{
+				bFlag = true;
+				_et_on_r(eclObj, shot, 270 + sRand(-abottom, abottom), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				bFlag = false;
+			}
+			yield;
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		while(!Obj_IsDeleted(shot) && cBounces == 0)
+		{
+			if(sleft && ObjMove_GetX(shot) < 0 && !lFlag)
+			{
+				lFlag = true;
+				
+				_et_on_r(eclObj, shot, (180 - ObjMove_GetAngle(shot)) + sRand(-aleft, aleft), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				cBounces++;
+			}
+			else
+			{
+				lFlag = false;
+			}
+			
+			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
+			{
+				rFlag = true;
+				_et_on_r(eclObj, shot, (180 - ObjMove_GetAngle(shot)) + sRand(-aright, aright), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				rFlag = false;
+			}
+			
+			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
+			{
+				tFlag = true;
+				_et_on_r(eclObj, shot, (-1 * ObjMove_GetAngle(shot)) + sRand(-atop, atop), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				tFlag = false;
+			}
+			
+			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
+			{
+				bFlag = true;
+				_et_on_r(eclObj, shot, (-1 * ObjMove_GetAngle(shot)) + sRand(-abottom, abottom), id);
+				
+				if(del == 1)
+				{
+					ObjShot_SetDeleteFrame(shot, 0);
+				}
+				
+				cBounces++;
+			}
+			else
+			{
+				bFlag = false;
+			}
+			yield;
+		}
+	}
+}
+
+task _ex_spup_osc_t(shot, delay, time, repeat, accel)
+{
+	loop(_frameHelper){yield;}
+	
+	let loc_frame = 0;
+	let loc_repeats = 0;
+	
+	if(accel > 0)
+	{
+		ObjMove_SetAcceleration(shot, accel);
+		ObjMove_SetMaxSpeed(shot, 999);
+	}
+	else
+	{
+		ObjMove_SetAcceleration(shot, accel);
+		ObjMove_SetMaxSpeed(shot, 0);
+	}
+	
+	while(loc_repeats <= repeat)
+	{
+		if(loc_frame == time)
+		{
+			accel = -accel;
+			if(accel > 0)
+			{
+				ObjMove_SetAcceleration(shot, accel);
+				ObjMove_SetMaxSpeed(shot, 999);
+			}
+			else
+			{
+				ObjMove_SetAcceleration(shot, accel);
+				ObjMove_SetMaxSpeed(shot, 0);
+			}
+			loc_repeats++;
+			loc_frame = -1;
+		}
+		loc_frame++;
+		yield;
+	}
+	ObjMove_SetAcceleration(shot, 0);
+	ObjMove_SetMaxSpeed(shot, 999);
+}
+
+task _ex_angvel_osc_t(shot, delay, time, repeat, angvel)
+{
+	loop(_frameHelper + 1){yield;}
+	
+	let loc_frame = 0;
+	let loc_repeats = 0;
+
+	ObjMove_SetAngularVelocity(shot, angvel);
+
+	while(loc_repeats <= repeat)
+	{
+		if(loc_frame == time)
+		{
+			angvel = -angvel;
+			ObjMove_SetAngularVelocity(shot, angvel);
+			loc_repeats++;
+			loc_frame = 1;
+		}
+		else
+		{
+			loc_frame++;
+		}
+		yield;
+	}
+	ObjMove_SetAngularVelocity(shot, 0);
+}
+
+task _ex_spav_osc_t(shot, delay, time, repeat, accel, angvel)
+{
+	loop(_frameHelper){yield;}
+	
+	let loc_frame = 0;
+	let loc_repeats = 0;
+	
+	if(accel > 0)
+	{
+		ObjMove_SetAcceleration(shot, accel);
+		ObjMove_SetMaxSpeed(shot, 999);
+	}
+	else
+	{
+		ObjMove_SetAcceleration(shot, accel);
+		ObjMove_SetMaxSpeed(shot, 0);
+	}
+	ObjMove_SetAngularVelocity(shot, angvel);
+	
+	while(loc_repeats <= repeat)
+	{
+		if(loc_frame == time)
+		{
+			accel = -accel;
+			angvel = -angvel;
+			if(accel > 0)
+			{
+				ObjMove_SetAcceleration(shot, accel);
+				ObjMove_SetMaxSpeed(shot, 999);
+			}
+			else
+			{
+				ObjMove_SetAcceleration(shot, accel);
+				ObjMove_SetMaxSpeed(shot, 0);
+			}
+			ObjMove_SetAngularVelocity(shot, angvel);
+			loc_repeats++;
+			loc_frame = -1;
+		}
+		loc_frame++;
+		yield;
+	}
+	ObjMove_SetAcceleration(shot, 0);
+	ObjMove_SetMaxSpeed(shot, 999);
+	ObjMove_SetAngularVelocity(shot, 0);
+}
+
+// --------------- Other ---------------
+
+task _ecl_CreateCurveLaser(obj, id, x, y, speed, angle, lLength, lWidth, graphic)
+{
+	let loc_patternCount = 1;
+	
+	let crLaser_segmentCount = 0;
+	let crLaser_segmentTotal = lLength / 3;
+	let crLaser_shotIDArray = [];
+	
+	//LaserControl;
+	
+	//task LaserControl
+	//{
+		loop
+		{
+			if(crLaser_segmentCount < crLaser_segmentTotal)
+			{
+				let currentShot = CreateShotA1(x, y, speed, angle, SHOT_YOUMU_RED, 0);
+				//ObjRender_SetBlendType(currentShot, fullArray[0][14]);
+				ObjRender_SetZ(currentShot, speed);
+
+				loc_patternCount = 1;
+				_frameHelper = 0;
+				loop(length(Obj_GetValue(obj, eclID(id))) - 1)
+				{
+					_ex(obj, id, [currentShot], loc_patternCount);
+					loc_patternCount++;
+				}
+				
+				crLaser_shotIDArray = crLaser_shotIDArray ~ [currentShot];
+				crLaser_segmentCount++;
+			}
+			yield;
+			yield;
+			yield;
+		}
+	//}
+}
+
+task _ecl_LooseLaserBase(shot, time)
+{
+	let counter = 0;
+	let lScale = 1.4;
+	let lScaleFlip = 0.2;
+	let lAngle = rand(0, 360);
+
+	let shotID = 0;
+	let rectArray = 
+	[
+		[576, 911, 609, 944],
+		[610, 911, 643, 944],
+		[644, 911, 677, 944],
+		[678, 911, 711, 944],
+		[712, 911, 745, 944],
+		[746, 911, 779, 944],
+		[780, 911, 813, 944],
+		[814, 911, 847, 944]
+	];
+	let rectID = 0;
+	
+	alternative(ObjShot_GetImageID(shot))
+	case(347)
+	{
+		rectID = 0;
+	}
+	case(348, 349)
+	{
+		rectID = 1;
+	}
+	case(350, 351)
+	{
+		rectID = 2;
+	}
+	case(352, 353)
+	{
+		rectID = 3;
+	}
+	case(354, 355)
+	{
+		rectID = 4;
+	}
+	case(356, 357, 358)
+	{
+		rectID = 5;
+	}
+	case(359, 360, 361)
+	{
+		rectID = 6;
+	}
+	case(362)
+	{
+		rectID = 7;
+	}
+	
+	let laserBase = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(laserBase, img_etama00);
+	ObjSprite2D_SetSourceRect(laserBase, rectArray[rectID][0], rectArray[rectID][1], rectArray[rectID][2], rectArray[rectID][3]);
+	ObjSprite2D_SetDestCenter(laserBase);
+	ObjRender_SetPosition(laserBase, ObjMove_GetX(shot), ObjMove_GetY(shot), 0);
+	ObjRender_SetBlendType(laserBase, BLEND_ADD_ARGB);
+	
+	while(counter < time && !Obj_IsDeleted(shot))
+	{
+		lScaleFlip = -lScaleFlip;
+		lScale = 1.4 + lScaleFlip;
+		lAngle += 34;
+		ObjRender_SetScaleXYZ(laserBase, lScale, lScale, 1);
+		ObjRender_SetAngleZ(laserBase, lAngle);
+		counter++;
+		yield;
+	}
+	Obj_Delete(laserBase);
+}
+
+function AddPattern_SetShotDrawScale(array, scale)
+{
+	ascent(i in 0..length(array))
+	{
+		ObjRender_SetScaleX(array[i], scale);
+		ObjRender_SetScaleY(array[i], scale);
+	}
+}
+
+task AddPatternSE(id, endFrame, soundEffect)
+{
+	let loc_framec = 0;
+	while(loc_framec < endFrame)
+	{
+		loc_framec++;
+		yield;
+	}
+	if(!Obj_IsDeleted(id))
+	{
+		thSE_Play(soundEffect);
+	}
+}
+
+task __ecl_DebugHitbox(eclShot)
+{
+	let colTest = ObjPrim_CreateEffectCircle(16, BLEND_ALPHA);
+	//ObjPrim_SetTexture(colTest, img_eff);
+	Obj_SetRenderPriorityI(colTest, 51);
+	
+	ObjEffCircle_SetColorC(colTest, [0, 0, 255], [0, 0, 255]);
+	ObjRender_SetAlpha(colTest, 200);
+
+	while(!Obj_IsDeleted(eclShot))
+	{
+		let ofs = GetShotDataInfoA1(ObjShot_GetImageID(eclShot), TARGET_ENEMY, INFO_COLLISION_LIST);
+		ObjEffCircle_SetRadiusA(colTest, ofs[0][0]*2);
+		
+		let x_vel = ObjMove_GetSpeed(eclShot) * cos(ObjMove_GetAngle(eclShot));
+		let y_vel = ObjMove_GetSpeed(eclShot) * sin(ObjMove_GetAngle(eclShot));
+		
+		ObjRender_SetPosition(colTest, (ObjMove_GetX(eclShot) - ofs[0][1]) + x_vel, (ObjMove_GetY(eclShot) - ofs[0][2]) + y_vel, 0);
+		if(ecl_debug){Obj_SetVisible(colTest, true);}
+		if(!ecl_debug){Obj_SetVisible(colTest, false);}
+		yield;
+	}
+	Obj_Delete(colTest);
+}

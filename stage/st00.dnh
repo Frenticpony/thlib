@@ -1,0 +1,275 @@
+let Stage00BG = BG_TH10_05;
+let Stage00Boss = 0;
+
+function Stage00_Load()
+{
+	
+}
+
+function Stage00_Remove()
+{
+	
+}
+
+function Stage00_MidBossStart()
+{
+	boss_debug_bh();
+}
+
+function Stage00_BossStart()
+{
+	boss_debug_bh();
+}
+
+function Stage00_End()
+{
+	thStage_TransitionToStage(0);
+}
+
+function Stage00_Handler()
+{	
+	let ene_CreateX = 0;
+	let ene_CreateY = 0;
+
+	ene_CreateX = 0;
+	ene_CreateY = 0;
+
+	unloadStage = false;
+	bossEnd = false;
+	stageEnd = false;
+	stageFrame = 0;
+	replayFrame = 0;
+	
+	//StartStageBG(Stage00BG);
+	StageBG_Test();
+	//CameraDebug();
+
+	let valB = -144;
+	
+	task Girl99(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 16);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl99_Main();
+		thEcl_Finish(ecl);
+		
+		function Girl99_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, 5, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_DECELERATE, 0, 60);
+				}
+				case(60)
+				{
+					Girl99_at();
+					thEnemy_SetSpeedAtAngle(objEnemy, 0, 157.5);
+					thEnemy_TransitionSpeedF(objEnemy, 180, 0.005);
+					//SetAccelerationAtAngle(objMonster, 0, 0.005, 157.5);
+				}
+				case(240)
+				{
+					stopAtkTask = true;
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl99_at()
+		{
+			let atFrame = 0;
+			
+			et_set(ecl, 0, STYLE_FAN, 4, ANGLE_AIMED, SHOT_BROUND_RED, 5, 4);
+			et_ang2(ecl, 0, 5);
+			
+			exi_effon(ecl, 0, DELAY_RED, EFFON_DEF, 12);
+			exi_spdown(ecl, 0);
+			
+			while(thEnemy_GetLife(objEnemy) > 0 && !stopAtkTask)
+			{
+				if(atFrame == 10)
+				{
+					et_on(ecl, 0);
+					atFrame = -1;
+				}
+				
+				atFrame++;
+				yield;
+			}
+		}
+	}
+	
+	task EGirl(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		thEnemy_SetHitbox(objEnemy, 24, 16);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl02_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl02_Main()
+		{
+			let mainFrame = 0;
+			
+			Girl02_at();
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetEllipseMovementA(objEnemy, x, 3,  64, 0,  1, 90);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl02_at()
+		{
+			
+		}
+	}
+	
+	let radiation = 100; //0-100
+	let geiger = 0;
+	let clickTimer = 0;
+	let click = false;
+	let flag = false;
+
+	while(!stageEnd)
+	{
+		geiger++;
+		if(geiger >= clickTimer)
+		{
+			click = true;
+		}
+		if(click)
+		{
+			//thSE_Play(floor(rand(78, 84)));
+			click = false;
+			geiger = -1;
+		}
+
+		if(geiger == -1 && radiation > 0)
+		{
+			clickTimer = rand(-1, InterpolateValue(1, 100, radiation, IP_ACCELERATE, 100));
+		}
+		
+		radiation = InterpolateValue(0, 100, GetPlayerY, IP_LINEAR, GetStgFrameHeight);
+		
+		if(!flag) //Start/end dps test boss
+		{
+			flag = true;
+			if(!isBossActive && canSpawnBoss)
+			{
+				isBossActive = true;
+				canSpawnBoss = false;
+				Stage00_BossStart();
+			}
+			else
+			{
+				bossAttackState = -1;
+				ObjEnemy_SetLife(bossID, 0);
+			}
+		}
+		if(GetKeyState(KEY_NUMPAD1) == KEY_PUSH) //Boss: Previous attack
+		{
+			bossAttackState -= 2;
+			ObjEnemy_SetLife(bossID, 0);
+		}
+		if(GetKeyState(KEY_NUMPAD2) == KEY_PUSH)
+		{
+			_et_on_fan(
+			200, 100, -999, 
+			[0, SHOT_ROUND_SKY,  //pattern, graphic
+			5, 13,               //count, layer
+			ANGLE_AIMED, 5,      //angle, angleOffset
+			2.4, 0.4,            //maxSpeed, minSpeed
+			-0,                  //fanAngleSpread
+			0, 0,                //xOffset, yOffset
+			0,                   //radius
+			se_tan00, se_tan00,  //se, se2
+			BLEND_ALPHA,         //blend
+			0, 0, 0, 0,          //sub 1, 2, 3, 4
+			0,                   //delayTime     
+			48,                  //render priority I
+			0,                   //laser length
+			0,                   //laser width
+			1]);                 //draw scale
+		}
+		if(GetKeyState(KEY_NUMPAD3) == KEY_PUSH) //Boss: Next Attack
+		{
+			//bossAttackState += 1;
+			ObjEnemy_SetLife(bossID, 0);
+		}
+		if(GetKeyState(KEY_NUMPAD4) == KEY_PUSH)
+		{
+			EGirl(0, -16, ENE_FAIRY00_RED, 32, 1000, true);
+		}
+		if(GetKeyState(KEY_NUMPAD5) == KEY_PUSH)
+		{
+
+		}
+		if(GetKeyState(KEY_NUMPAD6) == KEY_PUSH)
+		{
+			
+		}
+		if(GetKeyState(KEY_NUMPAD7) == KEY_PUSH) //Spawn some bullets
+		{
+			ascent(i in 0..20)
+			{
+				ascent(j in 0..5)
+				{
+					CreateShotA1(CenX + rand(-200, 200), rand(20, 180), 1.5 + j*0.1, 0 + i*(360/20), 41, 0);
+				}
+			}
+		}
+		if(GetKeyState(KEY_NUMPAD8) == KEY_PUSH) //
+		{
+			
+		}
+		if(GetKeyState(KEY_NUMPAD9) == KEY_PUSH) //Transition stage back to start
+		{
+			stageEnd = true;
+		}
+		yield;
+	}
+	Stage00_End();
+}
+
+task CreateParticle(x, y, speed, angle, sides, radius)
+{
+	let randAng = rand(-4, 4);
+	let testObj = ObjPrim_CreateEffectCircle(sides * 2, BLEND_ALPHA);
+	ObjEffCircle_SetRadiusC(testObj, radius, radius - 1.2);
+	//ObjEffCircle_SetAlphaC(testObj, 200, 80);
+	
+	while(y < 600)
+	{
+		ObjRender_SetPosition(testObj, x, y, 0);
+		ObjRender_SetAngleZ(testObj, angle);
+		angle += randAng;
+		y += 0.3;
+		yield;
+	}
+	Obj_Delete(testObj);
+}

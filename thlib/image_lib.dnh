@@ -1,0 +1,865 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	thlib Image Library (image_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+	to do: clean up **everything**, rename/replace all images to zun's source file names, texture load and removal functions
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+//GetMainPackageScriptPath
+
+let path_img = GetCurrentScriptDirectory ~ "../img";
+
+let img_ename_current = "";
+let img_ct_current = "";
+
+//Declare MoF Textures
+let img_front_front00_th10 = GetCurrentScriptDirectory ~ "../img/th10/front/front00.png";
+
+//Declate SA Textures
+let img_ascii_ascii_th11 = GetCurrentScriptDirectory ~ "../img/th11/ascii/ascii.png";
+let img_front_front00_th11 = GetCurrentScriptDirectory ~ "../img/th11/front/front00.png";
+
+//Declare Main textures
+let img_null = GetCurrentScriptDirectory ~ "../img/null.png";
+
+let img_eff = GetCurrentScriptDirectory ~ "../img/effect/eff.png";
+
+let img_etama00    = GetCurrentScriptDirectory ~ "../thlib/shot/thshot/img_etama00.png";
+let img_etama_all    = GetCurrentScriptDirectory ~ "../thlib/shot/img_etama_all.png";
+let img_shot_bullet1 = GetCurrentScriptDirectory ~ "../thlib/shot/img_etama_all.png";
+let img_shot_bullet2 = GetCurrentScriptDirectory ~ "../thlib/shot/img_etama_all.png";
+let img_shot_bullet3 = GetCurrentScriptDirectory ~ "../thlib/shot/img_etama_all.png";
+
+let img_ascii_ascii = GetCurrentScriptDirectory ~ "../img/ascii/ascii.png";
+let img_ascii_pause = GetCurrentScriptDirectory ~ "../img/ascii/pause.png";
+let img_ascii_loading = GetCurrentScriptDirectory ~ "../img/ascii/loading.png";
+let img_ascii_numbers = GetCurrentScriptDirectory ~ "../img/ascii/numbers.png";
+
+let img_cutin_eff00 = GetCurrentScriptDirectory ~ "../img/effect/cutin_eff00.png";
+let img_cutin_eff01 = GetCurrentScriptDirectory ~ "../img/effect/cutin_eff01.png";
+let img_cutin_eff02 = GetCurrentScriptDirectory ~ "../img/effect/cutin_eff02.png";
+
+let img_eff_01 = GetCurrentScriptDirectory ~ "../img/effect/Effect01.png";
+let img_eff_02 = GetCurrentScriptDirectory ~ "../img/effect/Effect02.png";
+let img_eff_03 = GetCurrentScriptDirectory ~ "../img/effect/Effect03.png";
+let img_eff_04 = GetCurrentScriptDirectory ~ "../img/effect/Effect04.png";
+let img_eff_05 = GetCurrentScriptDirectory ~ "../img/effect/Effect05.png";
+
+let img_effect_base = GetCurrentScriptDirectory ~ "../img/effect/eff_base.png";
+let img_effect_deadcircle = GetCurrentScriptDirectory ~ "../img/effect/eff_deadcircle.png";
+let img_effect_etbreak = GetCurrentScriptDirectory ~ "../img/effect/etbreak.png";
+let img_effect_etbreak_th10 = GetCurrentScriptDirectory ~ "../img/effect/etbreak_th10.png";
+let img_effect_etbreak_add = GetCurrentScriptDirectory ~ "../img/effect/etbreak_add.png";
+let img_effect_lifebar = GetCurrentScriptDirectory ~ "../img/effect/lifebar.png";
+let img_effect_aura00 = GetCurrentScriptDirectory ~ "../img/effect/eff_aura00.png";
+let img_effect_magicsquare00 = GetCurrentScriptDirectory ~ "../img/effect/eff_magicsquare00.png";
+let img_effect_magicsquare01 = GetCurrentScriptDirectory ~ "../img/effect/eff_magicsquare01.png";
+let img_effect_magiccircle00 = GetCurrentScriptDirectory ~ "../img/effect/eff_magiccircle00.png";
+let img_effect_magiccircle01 = GetCurrentScriptDirectory ~ "../img/effect/eff_magiccircle01.png";
+let img_effect_maple_th14 = GetCurrentScriptDirectory ~ "../img/effect/eff_maple_th14.png";
+let img_effect_maple = GetCurrentScriptDirectory ~ "../img/effect/eff_maple_th14.png";
+
+let img_enemy_enemy00 = GetCurrentScriptDirectory ~ "../img/enemy/enemy00.png";
+let img_enemy_enemy01 = GetCurrentScriptDirectory ~ "../img/enemy/enemy01.png";
+let img_enemy_enemyspark = GetCurrentScriptDirectory ~ "../img/enemy/enemySpark.png";
+
+let img_loading_blackback = GetModuleDirectory ~ "/script/FP_Script/img/loading/blackback.png";
+let img_loading_sig00 = GetCurrentScriptDirectory ~ "../img/loading/sig00.png";
+let img_loading_sig01 = GetCurrentScriptDirectory ~ "../img/loading/sig01.png";
+
+let img_face_textballoon = GetCurrentScriptDirectory ~ "../img/face/text_balloon.png";
+let img_face_textbox = GetCurrentScriptDirectory ~ "../img/face/text_box.png";
+
+let img_front_front00 = GetCurrentScriptDirectory ~ "../img/front/front00.png";
+let img_front_front01 = GetCurrentScriptDirectory ~ "../img/front/front01.png";
+let img_front_front_num = GetCurrentScriptDirectory ~ "../img/front/front_num.png";
+let img_front_rank00 = GetCurrentScriptDirectory ~ "../img/front/rank00.png";
+let img_front_ename = GetCurrentScriptDirectory ~ "../img/front/ename.png";
+
+let img_st01logo_th10 = GetCurrentScriptDirectory ~ "../img/front/logo/st01logo_th10.png";
+
+let img_title_back00 = GetCurrentScriptDirectory ~ "../img/title/title00a.png";
+let img_title_back01 = GetCurrentScriptDirectory ~ "../img/title/title00b.png";
+let img_title_select00 = GetCurrentScriptDirectory ~ "../img/title/select00a.png";
+let img_title_select01 = GetCurrentScriptDirectory ~ "../img/title/select00b.png";
+let img_title_title_item00 = GetCurrentScriptDirectory ~ "../img/title/title_item00.png";
+let img_title_rank00 = GetCurrentScriptDirectory ~ "../img/title/rank00.png";
+
+//Declare Boss Images
+// *----------* Complete *----------*
+// ------------ Almost done ------------
+// X----------X Incomplete X----------X
+
+
+/* --------------------------------
+----                           ----
+----     Touhou 10 Images      ----
+----                           ----
+-------------------------------- */
+
+// X----------X Aki X----------X
+let img_enm_aki        = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_enm_aki.png";
+let img_ename_shizuha  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_ename_shizuha.png";
+let img_ename_minoriko = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_ename_minoriko.png";
+let img_ct_shizuha     = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_ct_shizuha.png";
+let img_ct_minoriko    = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_ct_minoriko.png";
+let img_cdbg_aki00     = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_cdbg_aki00.png";
+let img_cdbg_aki01     = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAki/img_cdbg_aki01.png";
+
+// X----------X Hina X----------X
+let img_enm_hina    = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmHina/img_enm_hina.png";
+let img_ename_hina  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmHina/img_ename_hina.png";
+let img_ct_hina     = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmHina/img_ct_hina.png";
+let img_cdbg_hina00 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmHina/img_cdbg_hina00.png";
+let img_cdbg_hina01 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmHina/img_cdbg_hina01.png";
+
+// X----------X Nitori X----------X
+let img_enm_nitori00   = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmNitori/img_enm_nitori00.png";
+let img_enm_nitori01   = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmNitori/img_enm_nitori01.png";
+let img_ename_nitori   = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmNitori/img_ename_nitori.png";
+let img_ct_nitori      = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmNitori/img_ct_nitori.png";
+let img_cdbg_nitori00  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmNitori/img_cdbg_nitori00.png";
+let img_cdbg_nitori01  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmNitori/img_cdbg_nitori01.png";
+
+// ------------ Aya ------------
+let img_enm_aya    = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAya/img_enm_aya.png";
+let img_ename_aya  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAya/img_ename_aya.png";
+let img_ct_aya00   = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAya/img_ct_aya00.png";
+let img_cdbg_aya00 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAya/img_cdbg_aya00.png";
+let img_cdbg_aya01 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmAya/img_cdbg_aya01.png";
+
+// *----------* Sanae *----------*
+let img_enm_sanae    = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSanae/img_enm_sanae.png";
+let img_ename_sanae  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSanae/img_ename_sanae.png";
+let img_ct_sanae00   = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSanae/img_ct_sanae00.png";
+let img_cdbg_sanae00 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSanae/img_cdbg_sanae00.png";
+let img_cdbg_sanae01 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSanae/img_cdbg_sanae01.png";
+
+// X----------X Kanako X----------X
+let img_enm_kanako00  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmKanako/img_enm_kanako00.png";
+let img_enm_kanako01  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmKanako/img_enm_kanako01.png";
+let img_ename_kanako  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmKanako/img_ename_kanako.png";
+let img_ct_kanako     = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmKanako/img_ct_kanako.png";
+let img_cdbg_kanako00 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmKanako/img_cdbg_kanako00.png";
+let img_cdbg_kanako01 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmKanako/img_cdbg_kanako01.png";
+
+// X----------X Suwako X----------X
+let img_enm_suwako00  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwako/img_enm_suwako00.png";
+let img_enm_suwako01  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwako/img_enm_suwako01.png";
+let img_ename_suwako  = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwako/img_ename_suwako.png";
+let img_ct_suwako     = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwako/img_ct_suwako.png";
+let img_cdbg_suwako00 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwako/img_cdbg_suwako00.png";
+let img_cdbg_suwako01 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwako/img_cdbg_suwako01.png";
+
+/* --------------------------------
+----                           ----
+----     Touhou 11 Images      ----
+----                           ----
+-------------------------------- */
+
+// *----------* Kisume/Yamame *----------*
+let img_enm_kisumeyamame    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_enm_kisumeyamame.png";
+let img_ename_kisume        = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ename_kisume.png";
+let img_ename_yamame        = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ename_yamame.png";
+let img_ct_kisume           = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ct_kisume.png";
+let img_ct_yamame           = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ct_yamame.png";
+let img_cdbg_kisumeyamame00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_cdbg_kisumeyamame00.png";
+let img_cdbg_kisumeyamame01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_cdbg_kisumeyamame01.png";
+
+// *----------* Parsee *----------*
+let img_enm_parsee    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_enm_parsee.png";
+let img_ename_parsee  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_ename_parsee.png";
+let img_ct_parsee     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_ct_parsee.png";
+let img_cdbg_parsee00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_cdbg_parsee00.png";
+let img_cdbg_parsee01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_cdbg_parsee01.png";
+
+// X----------X Yuugi X----------X
+let img_enm_yuugi    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_enm_yuugi.png";
+let img_ename_yuugi  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_ename_yuugi.png";
+let img_ct_yuugi     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_ct_yuugi.png";
+let img_cdbg_yuugi00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_cdbg_yuugi00.png";
+let img_cdbg_yuugi01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_cdbg_yuugi01.png";
+
+// X----------X Satori X----------X
+let img_enm_satori    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmSatori/img_enm_satori.png";
+let img_ename_satori  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmSatori/img_ename_satori.png";
+let img_ct_satori     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmSatori/img_ct_satori.png";
+let img_cdbg_satori00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmSatori/img_cdbg_satori00.png";
+let img_cdbg_satori01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmSatori/img_cdbg_satori01.png";
+
+// X----------X Orin X----------X
+let img_enm_cat       = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmOrin/img_enm_cat.png";
+let img_enm_orin      = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmOrin/img_enm_orin.png";
+let img_ename_orin    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmOrin/img_ename_orin.png";
+let img_ct_orin       = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmOrin/img_ct_orin.png";
+let img_cdbg_orin00   = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmOrin/img_cdbg_orin00.png";
+let img_cdbg_orin01   = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmOrin/img_cdbg_orin01.png";
+
+// X----------X Utsuho X----------X
+let img_enm_utsuho    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmUtsuho/img_enm_utsuho.png";
+let img_ename_utsuho  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmUtsuho/img_ename_utsuho.png";
+let img_ct_utsuho     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmUtsuho/img_ct_utsuho.png";
+let img_ct_caution    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmUtsuho/img_ct_caution.png";
+let img_cdbg_utsuho00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmUtsuho/img_cdbg_utsuho00.png";
+let img_cdbg_utsuho01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmUtsuho/img_cdbg_utsuho01.png";
+
+// X----------X Koishi X----------X
+let img_enm_koishi    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKoishi/img_enm_koishi.png";
+let img_ename_koishi  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKoishi/img_ename_koishi.png";
+let img_ct_koishi     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKoishi/img_ct_koishi.png";
+let img_cdbg_koishi00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKoishi/img_cdbg_koishi00.png";
+let img_cdbg_koishi01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKoishi/img_cdbg_koishi01.png";
+
+/* --------------------------------
+----                           ----
+----     Touhou 12 Images      ----
+----                           ----
+-------------------------------- */
+
+// X----------X Nazrin X----------X
+let img_enm_nazrin00  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_enm_nazrin00.png";
+let img_enm_nazrin01  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_enm_nazrin01.png";
+let img_ename_nazrin  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_ename_nazrin.png";
+let img_ct_nazrin00   = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_ct_nazrin00.png";
+let img_ct_nazrin01   = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_ct_nazrin01.png";
+let img_cdbg_nazrin00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_cdbg_nazrin00.png";
+let img_cdbg_nazrin01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNazrin/img_cdbg_nazrin01.png";
+
+// X----------X Kogasa X----------X
+let img_enm_kogasa00  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmKogasa/img_enm_kogasa00.png";
+let img_enm_kogasa01  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmKogasa/img_enm_kogasa01.png";
+let img_ename_kogasa  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmKogasa/img_ename_kogasa.png";
+let img_ct_kogasa00   = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmKogasa/img_ct_kogasa00.png";
+let img_cdbg_kogasa00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmKogasa/img_cdbg_kogasa00.png";
+let img_cdbg_kogasa01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmKogasa/img_cdbg_kogasa01.png";
+
+// X----------X Ichirin X----------X
+let img_enm_ichirin00  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmIchirin/img_enm_ichirin00.png";
+let img_enm_ichirin01  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmIchirin/img_enm_ichirin01.png";
+let img_ename_ichirin  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmIchirin/img_ename_ichirin.png";
+let img_ct_ichirin00   = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmIchirin/img_ct_ichirin00.png";
+let img_cdbg_ichirin00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmIchirin/img_cdbg_ichirin00.png";
+let img_cdbg_ichirin01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmIchirin/img_cdbg_ichirin01.png";
+
+// X----------X Murasa X----------X
+let img_enm_murasa00  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmMurasa/img_enm_murasa00.png";
+let img_enm_murasa01  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmMurasa/img_enm_murasa01.png";
+let img_ename_murasa  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmMurasa/img_ename_murasa.png";
+let img_ct_murasa     = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmMurasa/img_ct_murasa.png";
+let img_cdbg_murasa00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmMurasa/img_cdbg_murasa00.png";
+let img_cdbg_murasa01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmMurasa/img_cdbg_murasa01.png";
+
+// X----------X Shou X----------X
+let img_enm_shou00  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmShou/img_enm_shou00.png";
+let img_enm_shou01  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmShou/img_enm_shou01.png";
+let img_ename_shou  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmShou/img_ename_shou.png";
+let img_ct_shou     = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmShou/img_ct_shou.png";
+let img_cdbg_shou00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmShou/img_cdbg_shou00.png";
+let img_cdbg_shou01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmShou/img_cdbg_shou01.png";
+
+// X----------X Byakuren X----------X
+let img_enm_byakuren00  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_enm_byakuren00.png";
+let img_enm_byakuren01  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_enm_byakuren01.png";
+let img_enm_byakuren02  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_enm_byakuren02.png";
+let img_ename_byakuren  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_ename_byakuren.png";
+let img_ct_byakuren     = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_ct_byakuren.png";
+let img_cdbg_byakuren00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_cdbg_byakuren00.png";
+let img_cdbg_byakuren01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmByakuren/img_cdbg_byakuren01.png";
+
+// X----------X Nue X----------X
+let img_enm_nue00    = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNue/img_enm_nue00.png";
+let img_ename_nue  = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNue/img_ename_nue.png";
+let img_ct_nue00   = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNue/img_ct_nue00.png";
+let img_cdbg_nue00 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNue/img_cdbg_nue00.png";
+let img_cdbg_nue01 = GetCurrentScriptDirectory ~ "../img/stgenm/th12/enmNue/img_cdbg_nue01.png";
+
+/* --------------------------------
+----                           ----
+----     Touhou 13 Images      ----
+----                           ----
+-------------------------------- */
+
+// ------------ Yuyuko ------------
+let img_enm_yuyuko    = GetCurrentScriptDirectory ~ "../img/stgenm/enmYuyuko/img_enm_yuyuko.png";
+let img_cdbg_yuyuko00 = GetCurrentScriptDirectory ~ "../img/stgenm/enmYuyuko/img_cdbg_yuyuko00.png";
+let img_cdbg_yuyuko01 = GetCurrentScriptDirectory ~ "../img/stgenm/enmYuyuko/img_cdbg_yuyuko01.png";
+
+// X----------X Kyouko X----------X
+
+// X----------X Yoshika X----------X
+
+// ------------ Seiga ------------
+let img_enm_seiga    = GetCurrentScriptDirectory ~ "../img/stgenm/enmSeiga/img_enm_seiga.png";
+let img_cdbg_seiga00 = GetCurrentScriptDirectory ~ "../img/stgenm/enmSeiga/img_cdbg_seiga00.png";
+let img_cdbg_seiga01 = GetCurrentScriptDirectory ~ "../img/stgenm/enmSeiga/img_cdbg_seiga01.png";
+
+// X----------X Soga X----------X
+
+// X----------X Mononobe X----------X
+
+// X----------X Toyosatomimi X----------X
+
+// ------------ Mamizou ------------
+let img_enm_mamizou    = GetCurrentScriptDirectory ~ "../img/stgenm/enmMamizou/img_enm_mamizou.png";
+let img_cdbg_mamizou00 = GetCurrentScriptDirectory ~ "../img/stgenm/enmMamizou/img_cdbg_mamizou00.png";
+let img_cdbg_mamizou01 = GetCurrentScriptDirectory ~ "../img/stgenm/enmMamizou/img_cdbg_mamizou01.png";
+
+/* --------------------------------
+----                           ----
+----     Touhou 14 Images      ----
+----                           ----
+-------------------------------- */
+
+// X----------X Cirno X----------X
+
+// X----------X Wakasagihime X----------X
+
+// X----------X Sekibanki X----------X
+
+// X----------X Kagerou X----------X
+
+// X----------X Benben X----------X
+
+// X----------X Yatsuhashi X----------X
+
+// X----------X Seija X----------X
+
+// ------------ Shinmyoumaru ------------
+let img_enm_sukuna     = GetCurrentScriptDirectory ~ "../img/stgenm/enmShinmyoumaru/img_enm_sukuna.png";
+let img_cdbg_sukuna00 = GetCurrentScriptDirectory ~ "../img/stgenm/enmShinmyoumaru/img_cdbg_sukuna00.png";
+let img_cdbg_sukuna01 = GetCurrentScriptDirectory ~ "../img/stgenm/enmShinmyoumaru/img_cdbg_sukuna01.png";
+let img_cdbg_sukuna02 = GetCurrentScriptDirectory ~ "../img/stgenm/enmShinmyoumaru/img_cdbg_sukuna02.png";
+
+// X----------X Raiko X----------X
+
+/* --------------------------------
+----                           ----
+----     Touhou 15 Images      ----
+----                           ----
+-------------------------------- */
+
+// X----------X Seiran X----------X
+let img_enm_seiran    = GetCurrentScriptDirectory ~ "../img/stgenm/th15/enmSeiran/img_enm_seiran.png";
+let img_ename_seiran  = GetCurrentScriptDirectory ~ "../img/stgenm/th15/enmSeiran/img_ename_seiran.png";
+let img_ct_seiran00   = GetCurrentScriptDirectory ~ "../img/stgenm/th15/enmSeiran/img_ct_seiran.png";
+let img_cdbg_seiran00 = GetCurrentScriptDirectory ~ "../img/stgenm/th15/enmSeiran/img_cdbg_seiran00.png";
+let img_cdbg_seiran01 = GetCurrentScriptDirectory ~ "../img/stgenm/th15/enmSeiran/img_cdbg_seiran01.png";
+
+// X----------X Ringo X----------X
+
+// X----------X Doremy X----------X
+
+// X----------X Sagume X----------X
+
+// X----------X Clownpiece X----------X
+
+// X----------X Jumko X----------X
+
+// X----------X Hecatia X----------X
+
+/* --------------------------------
+----                           ----
+----     Touhou XX Images      ----
+----                           ----
+-------------------------------- */
+
+// ------------ Meiling ------------
+let img_enm_meiling     = GetCurrentScriptDirectory ~ "../img/stgenm/enmMeiling/img_enm_meiling.png";
+let img_cdbg_meiling00 = GetCurrentScriptDirectory ~ "../img/stgenm/enmMeiling/img_cdbg_meiling00.png";
+let img_cdbg_meiling01 = GetCurrentScriptDirectory ~ "../img/stgenm/enmMeiling/img_cdbg_meiling01.png";
+
+// X----------X Patchouli X----------X
+let img_enm_patchouli  = GetCurrentScriptDirectory ~ "../img/stgenm/enmPatchouli/img_enm_patchouli.png";
+
+// ------------ Reimu ------------
+let img_enm_reimu      = GetCurrentScriptDirectory ~ "../img/stgenm/enmReimu/img_enm_reimu.png";
+let img_cdbg_reimu00 = GetCurrentScriptDirectory ~ "../img/stgenm/enmReimu/img_cdbg_reimu00.png";
+let img_cdbg_reimu01 = GetCurrentScriptDirectory ~ "../img/stgenm/enmReimu/img_cdbg_reimu01.png";
+
+
+// ------------ Yakumo ------------
+let img_enm_yukari_ran = GetCurrentScriptDirectory ~ "../img/stgenm/enmYakumo/img_enm_yukari_ran.png";
+let img_cdbg_yukari00  = GetCurrentScriptDirectory ~ "../img/stgenm/enmYakumo/img_cdbg_yukari00.png";
+let img_cdbg_yukari01  = GetCurrentScriptDirectory ~ "../img/stgenm/enmYakumo/img_cdbg_yukari01.png";
+
+
+
+
+//Declare Stage Textures
+let img_bgdebug = GetCurrentScriptDirectory ~ "../img/background/testA.png";
+let img_bgdebugA = GetCurrentScriptDirectory ~ "../img/background/testB.png";
+let img_bgdebugB = GetCurrentScriptDirectory ~ "../img/background/testC.png";
+let img_bgdebugC = GetCurrentScriptDirectory ~ "../img/background/testD.png";
+
+let img_hakugyokurou02_00 = GetCurrentScriptDirectory ~ "../img/background/stg_Hakugyokurou02/img_hakugyokurou02_00.png";
+let img_hakugyokurou02_01 = GetCurrentScriptDirectory ~ "../img/background/stg_Hakugyokurou02/img_hakugyokurou02_01.png";
+let img_hakugyokurou02_02 = GetCurrentScriptDirectory ~ "../img/background/stg_Hakugyokurou02/img_hakugyokurou02_02.png";
+
+let img_youkaimountain00_00 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain00/img_youkaimountain00_00.png";
+let img_youkaimountain00_01 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain00/img_youkaimountain00_01.png";
+let img_youkaimountain00_02 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain00/img_youkaimountain00_02.png";
+let img_youkaimountain00_02b = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain00/img_youkaimountain00_02b.png";
+let img_youkaimountain00_03 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain00/img_youkaimountain00_03.png";
+let img_youkaimountain00_03b = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain00/img_youkaimountain00_03b.png";
+
+let img_youkaimountain01_00 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain01/img_youkaimountain01_00.png";
+let img_youkaimountain01_01 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain01/img_youkaimountain01_01.png";
+
+let img_moriyashrine00_00 = GetCurrentScriptDirectory ~ "../img/background/stg_MoriyaShrine00/img_moriyashrine00_00.png";
+let img_moriyashrine00_01 = GetCurrentScriptDirectory ~ "../img/background/stg_MoriyaShrine00/img_moriyashrine00_01.png";
+let img_moriyashrine00_02 = GetCurrentScriptDirectory ~ "../img/background/stg_MoriyaShrine00/img_moriyashrine00_02.png";
+let img_moriyashrine00_02b = GetCurrentScriptDirectory ~ "../img/background/stg_MoriyaShrine00/img_moriyashrine00_02b.png";
+let img_moriyashrine00_03 = GetCurrentScriptDirectory ~ "../img/background/stg_MoriyaShrine00/img_moriyashrine00_03.png";
+let img_moriyashrine00_03b = GetCurrentScriptDirectory ~ "../img/background/stg_MoriyaShrine00/img_moriyashrine00_03b.png";
+
+let img_youkaimountain07_00 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain07/img_youkaimountain07_00.png";
+let img_youkaimountain07_01 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain07/img_youkaimountain07_01.png";
+let img_youkaimountain07_02 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountain07/img_youkaimountain07_02.png";
+
+let img_youkaimountainlake01_00 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountainLake01/img_youkaimountainlake01_00.png";
+let img_youkaimountainlake01_01 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountainLake01/img_youkaimountainlake01_01.png";
+let img_youkaimountainlake01_02 = GetCurrentScriptDirectory ~ "../img/background/stg_YoukaiMountainLake01/img_youkaimountainlake01_02.png";
+
+let img_nightsky00_00 = GetCurrentScriptDirectory ~ "../img/background/stg_NightSky00/img_nightsky00_00.png";
+let img_nightsky00_01 = GetCurrentScriptDirectory ~ "../img/background/stg_NightSky00/img_nightsky00_01.png";
+let img_nightsky00_02 = GetCurrentScriptDirectory ~ "../img/background/stg_NightSky00/img_nightsky00_02.png";
+
+//Declare Debug Textures
+let img_stgTest_enem00 = GetCurrentScriptDirectory ~ "../img/stgenm/enm03.png";
+
+let img_stgTest_cdbg00a = GetCurrentScriptDirectory ~ "../img/card/cdbg03a.png";
+let img_stgTest_cdbg00b = GetCurrentScriptDirectory ~ "../img/card/cdbg03b.png";
+
+let img_stgTest_cutin00 = GetCurrentScriptDirectory ~ "../img/face/enm00Test/face00ct.png";
+
+let img_stgTest_bg00 = GetCurrentScriptDirectory ~ "../img/background/stgTest/stgTestbg00.png";
+let img_stgTest_bg01 = GetCurrentScriptDirectory ~ "../img/background/stgTest/stgTestbg01.png";
+
+//Declare Stage 1 Textures
+let img_stg01_bg00 = GetCurrentScriptDirectory ~ "../img/background/stg1/stg1bg.png";
+let img_stg01_bg01 = GetCurrentScriptDirectory ~ "../img/background/stg1/stg1bg2.png";
+let img_stg01_bg02 = GetCurrentScriptDirectory ~ "../img/background/stg1/stg1bg3.png";
+let img_stg01_bg03 = GetCurrentScriptDirectory ~ "../img/background/stg1/stg1bg4.png";
+let img_stg01_bg04 = GetCurrentScriptDirectory ~ "../img/background/stg1/stg1bg5.png";
+
+//Load Functions
+function LoadStageBG(bgConst)
+{
+	alternative(bgConst)
+	case(0) //BG_TH10_01
+	{
+		LoadTextures_YoukaiMountain00();
+	}
+	case(1) //incomplete BG_TH10_02
+	{
+		
+	}
+	case(2) //incomplete BG_TH10_03
+	{
+		
+	}
+	case(3) //incomplete BG_TH10_04
+	{
+		
+	}
+	case(4) //BG_TH10_05
+	{
+		LoadTextures_MoriyaShrine00();
+	}
+	case(5) //incomplete BG_TH10_06
+	{
+		
+	}
+	case(6) //incomplete BG_TH10_07
+	{
+		
+	}
+	case(7) //incomplete BG_TH11_01
+	{
+		
+	}
+	case(8) //incomplete BG_TH11_02
+	{
+		
+	}
+	case(9) //incomplete BG_TH11_03
+	{
+		
+	}
+	case(10) //incomplete BG_TH11_04
+	{
+		
+	}
+	case(11) //incomplete BG_TH11_05
+	{
+		
+	}
+	case(12) //incomplete BG_TH11_06
+	{
+		
+	}
+	case(13) //incomplete BG_TH11_07
+	{
+		
+	}
+	case(14) //incomplete BG_TH12_01
+	{
+		
+	}
+	case(15) //incomplete BG_TH12_02
+	{
+		
+	}
+	case(16) //incomplete BG_TH12_03
+	{
+		
+	}
+	case(17) //incomplete BG_TH12_04
+	{
+		
+	}
+	case(18) //incomplete BG_TH12_05
+	{
+		
+	}
+	case(19) //incomplete BG_TH12_06
+	{
+		
+	}
+	case(20) //incomplete BG_TH12_07
+	{
+		
+	}
+	case(21) //incomplete BG_TH13_01
+	{
+		
+	}
+	case(22) //incomplete BG_TH13_02
+	{
+		
+	}
+	case(23) //incomplete BG_TH13_03
+	{
+		
+	}
+	case(24) //incomplete BG_TH13_04
+	{
+		
+	}
+	case(25) //incomplete BG_TH13_05
+	{
+		
+	}
+	case(26) //incomplete BG_TH13_06
+	{
+		
+	}
+	case(27) //incomplete BG_TH13_07
+	{
+		
+	}
+	case(28) //incomplete BG_TH14_01
+	{
+		
+	}
+	case(29) //incomplete BG_TH14_02
+	{
+		
+	}
+	case(30) //incomplete BG_TH14_03
+	{
+		
+	}
+	case(31) //incomplete BG_TH14_04
+	{
+		
+	}
+	case(32) //incomplete BG_TH14_05
+	{
+		
+	}
+	case(33) //incomplete BG_TH14_06
+	{
+		
+	}
+	case(34) //incomplete BG_TH14_07
+	{
+		
+	}
+	case(35) //incomplete BG_TH15_01
+	{
+		
+	}
+	case(36) //incomplete BG_TH15_02
+	{
+		
+	}
+	case(37) //incomplete BG_TH15_03
+	{
+		
+	}
+	case(38) //incomplete BG_TH15_04
+	{
+		
+	}
+	case(39) //incomplete BG_TH15_05
+	{
+		
+	}
+	case(40) //incomplete BG_TH15_06
+	{
+		
+	}
+	case(41) //incomplete BG_TH15_07
+	{
+		
+	}
+}
+
+function RemoveStageBG(bgConst)
+{
+	alternative(bgConst)
+	case(0) //BG_TH10_01
+	{
+		RemoveTextures_YoukaiMountain00();
+	}
+	case(1) //incomplete BG_TH10_02
+	{
+		
+	}
+	case(2) //incomplete BG_TH10_03
+	{
+		
+	}
+	case(3) //incomplete BG_TH10_04
+	{
+		
+	}
+	case(4) //BG_TH10_05
+	{
+		RemoveTextures_MoriyaShrine00();
+	}
+	case(5) //incomplete BG_TH10_06
+	{
+		
+	}
+	case(6) //incomplete BG_TH10_07
+	{
+		
+	}
+	case(7) //incomplete BG_TH11_01
+	{
+		
+	}
+	case(8) //incomplete BG_TH11_02
+	{
+		
+	}
+	case(9) //incomplete BG_TH11_03
+	{
+		
+	}
+	case(10) //incomplete BG_TH11_04
+	{
+		
+	}
+	case(11) //incomplete BG_TH11_05
+	{
+		
+	}
+	case(12) //incomplete BG_TH11_06
+	{
+		
+	}
+	case(13) //incomplete BG_TH11_07
+	{
+		
+	}
+	case(14) //incomplete BG_TH12_01
+	{
+		
+	}
+	case(15) //incomplete BG_TH12_02
+	{
+		
+	}
+	case(16) //incomplete BG_TH12_03
+	{
+		
+	}
+	case(17) //incomplete BG_TH12_04
+	{
+		
+	}
+	case(18) //incomplete BG_TH12_05
+	{
+		
+	}
+	case(19) //incomplete BG_TH12_06
+	{
+		
+	}
+	case(20) //incomplete BG_TH12_07
+	{
+		
+	}
+	case(21) //incomplete BG_TH13_01
+	{
+		
+	}
+	case(22) //incomplete BG_TH13_02
+	{
+		
+	}
+	case(23) //incomplete BG_TH13_03
+	{
+		
+	}
+	case(24) //incomplete BG_TH13_04
+	{
+		
+	}
+	case(25) //incomplete BG_TH13_05
+	{
+		
+	}
+	case(26) //incomplete BG_TH13_06
+	{
+		
+	}
+	case(27) //incomplete BG_TH13_07
+	{
+		
+	}
+	case(28) //incomplete BG_TH14_01
+	{
+		
+	}
+	case(29) //incomplete BG_TH14_02
+	{
+		
+	}
+	case(30) //incomplete BG_TH14_03
+	{
+		
+	}
+	case(31) //incomplete BG_TH14_04
+	{
+		
+	}
+	case(32) //incomplete BG_TH14_05
+	{
+		
+	}
+	case(33) //incomplete BG_TH14_06
+	{
+		
+	}
+	case(34) //incomplete BG_TH14_07
+	{
+		
+	}
+	case(35) //incomplete BG_TH15_01
+	{
+		
+	}
+	case(36) //incomplete BG_TH15_02
+	{
+		
+	}
+	case(37) //incomplete BG_TH15_03
+	{
+		
+	}
+	case(38) //incomplete BG_TH15_04
+	{
+		
+	}
+	case(39) //incomplete BG_TH15_05
+	{
+		
+	}
+	case(40) //incomplete BG_TH15_06
+	{
+		
+	}
+	case(41) //incomplete BG_TH15_07
+	{
+		
+	}
+}
+
+function LoadMenuTextures()
+{
+}
+
+function LoadStageTextures()
+{
+}
+
+function LoadTextures_YoukaiMountain00()
+{
+	LoadTexture(img_youkaimountain00_00);yield;
+	LoadTexture(img_youkaimountain00_01);yield;
+	LoadTexture(img_youkaimountain00_02);yield;
+	LoadTexture(img_youkaimountain00_02b);yield;
+	LoadTexture(img_youkaimountain00_03);yield;
+	LoadTexture(img_youkaimountain00_03b);yield;
+}
+
+function RemoveTextures_YoukaiMountain00()
+{
+	RemoveTexture(img_youkaimountain00_00);yield;
+	RemoveTexture(img_youkaimountain00_01);yield;
+	RemoveTexture(img_youkaimountain00_02);yield;
+	RemoveTexture(img_youkaimountain00_02b);yield;
+	RemoveTexture(img_youkaimountain00_03);yield;
+	RemoveTexture(img_youkaimountain00_03b);yield;
+}
+
+function LoadTextures_MoriyaShrine00()
+{
+	LoadTexture(img_moriyashrine00_00);yield;
+	LoadTexture(img_moriyashrine00_01);yield;
+	LoadTexture(img_moriyashrine00_02);yield;
+	LoadTexture(img_moriyashrine00_02b);yield;
+	LoadTexture(img_moriyashrine00_03);yield;
+	LoadTexture(img_moriyashrine00_03b);yield;
+}
+
+function RemoveTextures_MoriyaShrine00()
+{
+	RemoveTexture(img_moriyashrine00_00);yield;
+	RemoveTexture(img_moriyashrine00_01);yield;
+	RemoveTexture(img_moriyashrine00_02);yield;
+	RemoveTexture(img_moriyashrine00_02b);yield;
+	RemoveTexture(img_moriyashrine00_03);yield;
+	RemoveTexture(img_moriyashrine00_03b);yield;
+}
+
+function LoadTextures_Aya()
+{
+	LoadTexture(img_cdbg_aya00);
+	LoadTexture(img_cdbg_aya01);
+	LoadTexture(img_enm_aya);
+	LoadTexture(img_ct_aya00);
+}
+
+function LoadTextures_Sanae()
+{
+	LoadTexture(img_cdbg_sanae00);
+	LoadTexture(img_cdbg_sanae01);
+	LoadTexture(img_enm_sanae);
+	LoadTexture(img_ct_sanae00);
+}
+
+function RemoveMenuTextures()
+{
+}
+
+function RemoveStageTextures()
+{
+}

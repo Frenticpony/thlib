@@ -1,0 +1,977 @@
+let Stage01BG = BG_TH10_01;
+let Stage01Boss = 0;
+
+function Stage01_Load()
+{
+	
+}
+
+function Stage01_Remove()
+{
+	
+}
+
+function Stage01_MidBossStart()
+{
+	isBossActive = true;
+	canSpawnBoss = false;
+	boss_kisume_bh();
+}
+
+function Stage01_BossStart()
+{
+	boss_debug_bh();
+}
+
+function Stage01_End()
+{
+	thStage_TransitionToStage(0);
+}
+
+function Stage01_Handler()
+{	
+	let ene_CreateX = 0;
+	let ene_CreateY = 0;
+	
+	let stageFrame = 0;
+	
+	let glob_A = 0;
+	
+	thStage_InitHandler();
+	StageBG_Test();
+	//StartStageBG(Stage01BG);
+	
+	task Girl99(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 16);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl99_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl99_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, 5, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_DECELERATE, 0, 60);
+				}
+				case(60)
+				{
+					Girl99_at();
+					thEnemy_SetSpeedAtAngle(objEnemy, 0, 157.5);
+					thEnemy_TransitionSpeedF(objEnemy, 180, 0.005);
+					//SetAccelerationAtAngle(objMonster, 0, 0.005, 157.5);
+				}
+				case(240)
+				{
+					stopAtkTask = true;
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl99_at()
+		{
+			let atFrame = 0;
+			
+			et_set(ecl, 0, STYLE_FAN, 4, ANGLE_AIMED, SHOT_BROUND_RED, 5, 4);
+			et_ang2(ecl, 0, 5);
+			
+			exi_effon(ecl, 0, DELAY_RED, EFFON_DEF, 12);
+			exi_spdown(ecl, 0);
+			
+			while(thEnemy_GetLife(objEnemy) > 0 && !stopAtkTask)
+			{
+				if(atFrame == 10)
+				{
+					et_on(ecl, 0);
+					atFrame = -1;
+				}
+				
+				atFrame++;
+				yield;
+			}
+		}
+	}
+	
+	task Girl01(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl01_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl01_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, 6, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 0, 50);
+				}
+				case(50)
+				{
+					//Girl01_at();
+				}
+				case(350)
+				{
+					thEnemy_SetAngle(objEnemy, 270);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 3, 100);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+	}
+	
+	task RGirl00(x, y, type, life, score, mirror)
+	{
+		//5, 1
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		thEnemy_SetHitbox(objEnemy, 24, 16);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		RGirl00_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function RGirl00_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetAngle(objEnemy, rtd((-1.5707964 + (sRand(-pi, pi) / 32)) + (6.2831855 / 32)));
+					thEnemy_SetSpeed(objEnemy, 8);
+				}
+				case(30)
+				{
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 0, 50);
+				}
+				case(80)
+				{
+					if(GetDifficulty != 0){RGirl00_at();}
+				}
+				case(230)
+				{
+					thEnemy_SetAngle(objEnemy, 22.5);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 3, 100);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task RGirl00_at()
+		{
+			let counter = SetValueD(1, 1, 1, 2);
+			
+			let ecl_layer = SetValueD(1, 3, 3, 5);
+			let ecl_speed = SetValueD(2, 2, 3, 5.5);
+			et_set(ecl, 0, STYLE_FAN, ecl_speed, ANGLE_AIMED, SHOT_ROUND_BLUE, 1, ecl_layer);
+			et_pr(ecl, 0, 49);
+			et_ang2(ecl, 0, 1.875);
+			exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_8);
+			exi_spdown(ecl, 0);
+			
+			while(counter >= 0)
+			{
+				et_on(ecl, 0);
+				counter--;
+				wait(3);
+			}
+		}
+	}
+	
+	task Girl02(x, y, type, life, score, mirror, vA, doFire)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		thEnemy_SetHitbox(objEnemy, 24, 16);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl02_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl02_Main()
+		{
+			let mainFrame = 0;
+			
+			Girl02_at();
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetEllipseMovementA(objEnemy, glob_A, 3,  64, 0,  1, 90);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl02_at()
+		{
+			let ecl_frameA = 0;
+			let ecl_frameB = 0;
+			
+			let ecl_count = 1;
+			let ecl_layer = SetValueD(1, 1, 3, 1);
+			let ecl_speed = SetValueD(2.5, 2.5, 3.5, 4.5);
+			let ecl_loop = SetValueD(1, 1, 1, 3);
+			
+			et_set(ecl, 0, STYLE_CIRCLE, ecl_speed, ANGLE_AIMED, SHOT_ROUND_BLUE, 1, ecl_layer);
+			et_pr(ecl, 0, 49);
+			exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_8);
+			exi_spdown(ecl, 0);
+			
+			if(isDifficulty(HL)){doFire = 1;}
+			
+			let shotCount = SetValueD(1, 1, 10, 20);
+			if(doFire != 0)
+			{
+				wait(round(rand(0, 99999) % 120) + 20);
+				if(isDifficulty(NHL))
+				{
+					et_on(ecl, 0);
+				}
+				
+				if(isDifficulty(L))
+				{
+					while(thEnemy_GetLife(objEnemy) > 0)
+					{
+						loop(ecl_loop)
+						{
+							wait(5);
+							et_on(ecl, 0);
+						}
+						wait(240);
+					}
+				}
+			}
+		}
+	}
+
+	task EGirl(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		thEnemy_SetHitbox(objEnemy, 24, 16);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		EGirl_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		//10, 0
+		function EGirl_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					thEnemy_SetEllipseMovementB(objEnemy, 0, 3,  64, 0,  0,  1, 90,  0);
+					//thEnemy_SetEllipseMovement(objEnemy, 0, 3, 64, 0, 90, 0);
+					//thEnemy_SetSpeedAtAngle(objEnemy, 1, 90);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+	}
+	
+	task RockB(x, y, type, life, score, mirror, extra)
+	{
+		let objEnemy = thEnemy_InitB(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 48, 48);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POINT_S, 1);
+		
+		RockB_Main();
+		thEcl_Finish(ecl);
+		
+		function RockB_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, extra[1], extra[0]);
+					thEnemy_TransitionSpeed(objEnemy, IP_DECELERATE, extra[2], 10);
+				}
+				mainFrame++;
+				yield;
+			}
+			if(!Obj_GetValue(objEnemy, "S")){RockB_Dead();}
+			thEnemy_Finish(objEnemy);
+			wait(10);
+		}
+		
+		function RockB_Dead()
+		{
+			let loc_angle = (z_randAngle / 2) + (180 / 2); //81
+			let loc_speedA = (1.6 + (z_randOne * 2)); //80
+			let loc_speedB = 1; //79
+			RockM(ObjMove_GetX(objEnemy), ObjMove_GetY(objEnemy), ENE_ROCK_M, 100, 1000, false, [loc_angle, loc_speedA, loc_speedB, FP_ITEM_POINT_S]);
+			loop(3)
+			{
+				loc_angle = (z_randAngle / 2) + (180 / 2); //81
+				RockS(ObjMove_GetX(objEnemy), ObjMove_GetY(objEnemy), ENE_ROCK_S, 50, 1000, false, [loc_angle, loc_speedA, loc_speedB, FP_ITEM_POINT_S]);
+			}
+			et_set(ecl, 0, STYLE_CIRCLE, 0, z_randAngle, SHOT_ROUND_YELLOW, 1, 1);
+			//exi_effon(ecl, 0, DELAY_YELLOW, EFFON_DEF, EFFON_8);
+			//exi_spdown(ecl, 0);
+			if(isDifficulty(L))
+			{
+				loop(16)
+				{
+					et_sp(ecl, 0, (z_randOne * 2) + 1);
+					et_ang(ecl, 0, z_randAngle);
+					et_on(ecl, 0);
+				}
+			}
+			//loc_speedA = (1.6 + (z_randOne * 2)); //80
+			//loc_speedB = 1; //79
+		}
+	}
+	
+	task RockM(x, y, type, life, score, mirror, extra)
+	{
+		let objEnemy = thEnemy_InitB(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 48, 48);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, extra[3], 1);
+		
+		RockM_Main();
+		thEcl_Finish(ecl);
+		
+		function RockM_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, extra[1], extra[0]);
+					thEnemy_TransitionSpeed(objEnemy, IP_DECELERATE, extra[2], 60);
+				}
+				mainFrame++;
+				yield;
+			}
+			RockM_Dead();
+			thEnemy_Finish(objEnemy);
+			wait(10);
+		}
+		
+		function RockM_Dead()
+		{
+			let loc_angle = (z_randAngle / 2) + (180 / 2); //81
+			let loc_speedA = (1.6 + (z_randOne * 2)); //80
+			let loc_speedB = 1; //79
+			loop(3)
+			{
+				loc_angle = (z_randAngle / 2) + (180 / 2); //81
+				RockS(ObjMove_GetX(objEnemy), ObjMove_GetY(objEnemy), ENE_ROCK_S, 50, 1000, false, [loc_angle, loc_speedA, loc_speedB, FP_ITEM_POINT_S]);
+			}
+		}
+	}
+	
+	task RockS(x, y, type, life, score, mirror, extra)
+	{
+		let objEnemy = thEnemy_InitB(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 48, 48);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, extra[3], 1);
+		
+		RockS_Main();
+		thEcl_Finish(ecl);
+		
+		function RockS_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, extra[1], extra[0]);
+					thEnemy_TransitionSpeed(objEnemy, IP_DECELERATE, extra[2], 60);
+				}
+				mainFrame++;
+				yield;
+			}
+			thEnemy_Finish(objEnemy);
+		}
+	}
+	
+	task Girl04(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 40, 16);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl04_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl04_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, 6, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 0, 50);
+				}
+				case(50)
+				{
+					Girl04_at();
+					//Girl04_at2();
+				}
+				case(150)
+				{
+					if(isDifficulty(HL))
+					{
+						Girl04_at();
+						//Girl04_at2();
+					}
+				}
+				case(250)
+				{
+					thEnemy_SetSpeedAtAngle(objEnemy, 0, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 3, 100);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl04_at()
+		{
+			let frame = 0;
+			
+			let ecl_loop = SetValueD(20, 30, 30, 30);
+			
+			let ecl_speed = SetValueD(2.5, 3, 5, 5);
+			let ecl_count = SetValueD(1, 3, 3, 3);
+			
+			et_set(ecl, 0, STYLE_FAN, ecl_speed, GetAngleToPlayer(objEnemy) - (180 / 3), SHOT_RICE_BLUE, 1, ecl_count);
+			et_ang2(ecl, 0, 9);
+			exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_8);
+			
+			et_set(ecl, 1, STYLE_FAN, ecl_speed, GetAngleToPlayer(objEnemy) + (180 / 3), SHOT_RICE_RED, 1, ecl_count);
+			et_ang2(ecl, 1, 9);
+			exi_effon(ecl, 1, DELAY_RED, EFFON_DEF, EFFON_8);
+
+			if(isDifficulty(EN))
+			{
+				ex_angvel_osc(ecl, 0, EX_NOWAIT, 30, 50, 4);
+				ex_angvel_osc(ecl, 1, EX_NOWAIT, 30, 50, -4);
+			}
+			else if(isDifficulty(HL))
+			{
+				ex_angvel_osc(ecl, 0, EX_NOWAIT, 16, 50, 7.5);
+				ex_angvel_osc(ecl, 1, EX_NOWAIT, 16, 50, -7.5);
+			}
+			
+			while(thEnemy_GetLife(objEnemy) > 0 && frame < ecl_loop)
+			{
+				et_on(ecl, 0);
+				et_on(ecl, 1);
+				frame++;
+				wait(3);
+			}
+		}
+		
+		task Girl04_at2()
+		{
+			let frame = 0;
+			
+			let ecl_loop = SetValueD(20, 30, 30, 30);
+			
+			let ecl_speed = SetValueD(2.5, 3, 5, 5);
+			let ecl_count = SetValueD(1, 3, 3, 3);
+			
+			et_set(ecl, 1, STYLE_FAN, ecl_speed, GetAngleToPlayer(objEnemy) + (180 / 3), SHOT_RICE_RED, 1, ecl_count);
+			et_ang2(ecl, 1, 9);
+			
+			exi_effon(ecl, 1, DELAY_RED, EFFON_DEF, EFFON_8);
+			
+			if(isDifficulty(EN))
+			{
+				ex_angvel_osc(ecl, 1, EX_WAIT, 30, 5, -4);
+				loop(5)
+				{
+					//ex_angvel(ecl, 1, 30, -4);
+					//ex_angvel(ecl, 1, 30, 4);
+				}
+			}
+			else if(isDifficulty(HL))
+			{
+				ex_angvel_osc(ecl, 1, EX_WAIT, 16, 5, -7.5);
+				loop(5)
+				{
+					//ex_angvel(ecl, 1, 16, -7.5);
+					//ex_angvel(ecl, 1, 16, 7.5);
+				}
+			}
+			
+			while(thEnemy_GetLife(objEnemy) > 0 && frame < ecl_loop)
+			{
+				et_on(ecl, 1);
+				frame++;
+				wait(3);
+			}
+		}
+	}
+	
+	task Girl05(x, y, type, life, score, mirror, doFire)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 24, 16);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl05_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl05_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, 4, ANGLE_AIMED);
+				}
+				case(30)
+				{
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 0, 30);
+				}
+				case(60)
+				{
+					thEnemy_TransitionSpeedAtAngle(objEnemy, IP_LINEAR, 4, (z_randAngle / 2) - (180 / 2), 80);
+				}
+				case(110)
+				{
+					if(isDifficulty(E)){doFire = 0;}
+					else if(isDifficulty(HL)){doFire = 1;}
+					if(doFire)
+					{
+						Girl05_at();
+					}
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl05_at()
+		{
+			let wait_d = 1;
+			let ecl_speed = SetValueD(3, 3, 4, 5);
+			
+			et_set(ecl, 0, STYLE_CIRCLE, ecl_speed, ANGLE_AIMED, SHOT_ROUND_BLUE, 1, 1);
+			et_pr(ecl, 0, 49);
+			exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_8);
+			
+			//wait_d = SetValueD((z_rand % 60) + 20, (z_rand % 60) + 20, (z_rand % 20) + 10, (z_rand % 60) + 20);
+			//WriteLog(wait_d);
+			//wait(wait_d);
+				
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				et_on(ecl, 0);
+				wait_d = SetValueD((z_rand % 60) + 20, (z_rand % 60) + 20, (z_rand % 20) + 10, (z_rand % 60) + 20);
+				wait(wait_d);
+			}
+		}
+	}
+	
+	task tgirl(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 24, 16);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		tgirl_Main();
+		thEcl_Finish(ecl);
+		
+		function tgirl_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task tgirl_at()
+		{
+			while(true)
+			{
+				yield;
+			}
+		}
+	}
+	
+	task Stage01_StageSub00()
+	{
+		wait(60);
+		Girl01(0, -32, ENE_FAIRY01_WHITE, 1200, 1000, false);
+	}
+	
+	task Stage01_StageSub01()
+	{
+		let subFrame = 0;
+		let isMirror = false;
+		let loc_x = 0;
+		
+		loop(20)
+		{
+			if(!isMirror)
+			{
+				loc_x = -192 + ((sRand(0, 1) * 32));
+			}
+			else
+			{
+				loc_x = 192 - ((sRand(0, 1) * 32));
+			}
+			RGirl00(loc_x, 464, ENE_FAIRY00_RED, 20, 1000, isMirror);
+			isMirror = flip(isMirror);
+			wait(10);
+		}
+	}
+	
+	task Stage01_StageSub02()
+	{
+		let subFrame = 0;
+		let loc_x = 160;
+		while(subFrame != -99)
+		{
+			alternative(subFrame)
+			case(0)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(20)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(40)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(60)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(80)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(100)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(120)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(140)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(160)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x -= 32;
+				glob_A += 12;
+			}
+			case(180)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(200)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(220)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(240)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(260)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(280)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(300)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(320)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(340)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				loc_x += 32;
+				glob_A += 12;
+			}
+			case(360)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				subFrame = -100;
+			}
+			subFrame++;
+			yield;
+		}
+	}
+
+	task Stage01_StageSub03()
+	{
+		let sub_angle = 90 + (z_randAngle / 64); //81
+		let sub_speedA = 2.6; //80
+		let sub_speedB = 0.6; //79
+		RockB(CenX + 0, -32, ENE_ROCK_B, 1000, 1000, false, [sub_angle, sub_speedA, sub_speedB]);
+		loop(20)
+		{
+			sub_angle = 90 + (z_randAngle / 16); //81
+			sub_speedA = 2.6 + (z_randOne * 1); //80
+			sub_speedB = 2.6 + (z_randOne * 1); //79
+			RockS(CenX + (z_randNOne * 128), -32, ENE_ROCK_S, 20, 1000, false, [sub_angle, sub_speedA, sub_speedB, FP_ITEM_POINT_STAR]);
+			wait(20);
+		}
+	}
+	
+	task Stage01_StageSub04()
+	{
+		wait(200);
+		Girl04(128, -32, ENE_FAIRY01_WHITE, 700, 1000, false);
+		wait(200);
+		Girl04(-128, -32, ENE_FAIRY01_WHITE, 700, 1000, false);
+	}
+	
+	task Stage01_StageSub05()
+	{
+		Stage01_StageSub05L();
+		Stage01_StageSub05R();
+		Stage01_StageSub05L_t();
+		Stage01_StageSub05R_t();
+	}
+	
+	function Stage01_StageSub05L()
+	{
+		let sub_x = -160;
+
+		Girl05(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_BLUE, 70, 1000, false, 1);
+		sub_x += 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_BLUE, 70, 1000, false, 1);
+		sub_x += 32;
+		wait(20);
+	}
+	
+	function Stage01_StageSub05R()
+	{
+		let sub_x = 160;
+
+		Girl05(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_BLUE, 70, 1000, false, 1);
+		sub_x -= 32;
+		wait(20);
+		Girl05(sub_x, -32, ENE_FAIRY00_BLUE, 70, 1000, false, 1);
+		sub_x -= 32;
+		wait(20);
+	}
+	
+	task Stage01_StageSub05L_t()
+	{
+		Stage01_StageSub05L();
+	}
+	
+	task Stage01_StageSub05R_t()
+	{
+		Stage01_StageSub05R();
+	}
+	
+	while(!stageEnd)
+	{
+		alternative(stageFrame)
+		case(60)
+		{
+			
+			//Stage01_StageSub00();
+			//Stage01_StageSub01();
+			//wait(300);
+			//Stage01_StageSub02();
+			//wait(700);
+			//Stage01_StageSub03();
+			//Stage01_StageSub04();
+			//wait(600);
+			//Stage01_StageSub05();
+			//wait(450);
+			
+			//Stage01_MidBossStart();
+		}
+		stageFrame++;
+		yield;
+	}
+	Stage01_End();
+}

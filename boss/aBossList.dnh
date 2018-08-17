@@ -1,0 +1,57 @@
+/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	FPL Boss List Include (bosslist_lib.dnh)
+	
+	Author: Frenticpony
+	Version -
+	
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+#include"../boss/boss_debug_lib.dnh"
+
+/* --------------------------------
+----                           ----
+----     Touhou 10 Bosses      ----
+----                           ----
+-------------------------------- */
+
+//#include"../boss/mboss_shizuha_lib.dnh"
+//#include"../boss/boss_minoriko_lib.dnh"
+//#include"../boss/boss_hina_lib.dnh"
+//#include"../boss/boss_nitori_lib.dnh"
+//#include"../boss/boss_momizi_lib.dnh"
+//#include"../boss/boss_aya_lib.dnh"
+//#include"../boss/boss_sanae_lib.dnh"
+//#include"../boss/boss_kanako_lib.dnh"
+//#include"../boss/boss_suwako_lib.dnh"
+
+/* --------------------------------
+----                           ----
+----     Touhou 11 Bosses      ----
+----                           ----
+-------------------------------- */
+
+#include"../boss/boss_kisume_lib.dnh"
+
+/* --------------------------------
+----                           ----
+----     Touhou 12 Bosses      ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 13 Bosses      ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 14 Bosses      ----
+----                           ----
+-------------------------------- */
+
+/* --------------------------------
+----                           ----
+----     Touhou 15 Bosses      ----
+----                           ----
+-------------------------------- */

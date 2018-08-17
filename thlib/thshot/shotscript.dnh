@@ -1,0 +1,176 @@
+let img_effect_etbreak_th10 = GetCurrentScriptDirectory ~ "../../img/effect/etbreak_th10.png";
+
+let graphicArray = 
+[
+	1013,
+	1014,
+	1015,
+	1016,
+	1017,
+	1018,
+	1019,
+	1020,
+	1021,
+	1022,
+	1023,
+	1024,
+	1025,
+	1026,
+	1027,
+	1028
+];
+
+let effArray = [
+	[0, 0, 16, 16],
+	[16, 0, 32, 16],
+	[32, 0, 48, 16],
+	[48, 0, 64, 16],
+	[0, 16, 16, 32],
+	[16, 16, 32, 32],
+	[32, 16, 48, 32],
+	[48, 16, 64, 32],
+	[0, 32, 16, 48],
+	[16, 32, 32, 48],
+	[32, 32, 48, 48],
+	[48, 32, 64, 48],
+	[0, 48, 16, 64],
+	[16, 48, 32, 64],
+	[32, 48, 48, 64],
+	[48, 48, 64, 64]
+];
+
+@Initialize
+{
+	//LoadSound(GetCurrentScriptDirectory ~ "../../se/se_etbreak.wav");
+	LoadTexture(img_effect_etbreak_th10);
+	SetShotDeleteEventEnable(EV_DELETE_SHOT_IMMEDIATE, true);
+	SetShotDeleteEventEnable(EV_DELETE_SHOT_FADE, true);
+	SetShotDeleteEventEnable(EV_DELETE_SHOT_TO_ITEM, true);
+	//RaiseError("test");
+}
+
+@MainLoop
+{
+	yield;
+}
+
+@Event
+{
+	alternative(GetEventType)
+	case(EV_DELETE_SHOT_IMMEDIATE)
+	{
+		BulletDelete_th10(GetEventArgument(0), GetEventArgument(1)[0], GetEventArgument(1)[1], 0, 0, ObjShot_GetImageID(GetEventArgument(0)));
+	}
+	case(EV_DELETE_SHOT_FADE)
+	{
+		BulletDelete_th10(GetEventArgument(0), GetEventArgument(1)[0], GetEventArgument(1)[1], 0, 0, ObjShot_GetImageID(GetEventArgument(0)));
+	}
+}
+
+task BulletDelete_th10(id, x, y, speed, angle, graphic)
+{
+	let colorArray = GetShotDataInfoA1(graphic, TARGET_ENEMY, INFO_DELAY_COLOR);
+	let testVal = colorArray[0];
+	testVal = -testVal;
+	testVal += 255;
+	//let nSpeed = ObjMove_GetSpeed(id) / 2;
+
+	function CreateBreakObject(x, y, blend, alpha)
+	{
+		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(obj, img_effect_etbreak_th10);
+		Obj_SetRenderPriorityI(obj, 46);
+		ObjSprite2D_SetSourceRect(obj, effArray[testVal][0], effArray[testVal][1], effArray[testVal][2], effArray[testVal][3]);
+		ObjSprite2D_SetDestCenter(obj);
+		ObjRender_SetPosition(obj, x, y, 0);
+		ObjRender_SetBlendType(obj, blend);
+		ObjRender_SetAlpha(obj, alpha);
+		ObjRender_SetAngleZ(obj, rand(0,360));
+		
+		return obj;
+	}
+	
+	if(x < GetStgFrameWidth + 30 && x > -30 && y < GetStgFrameHeight + 30 && y > -30)
+	{
+		let finishEffect = false;
+		let frameTimer = 0;
+		let eAlpha = 20;
+		let scale = 1;
+		let scaleB = 1;
+		let yMod = 0;
+		//let effectObj = CreateBreakObject(x, y, BLEND_ADD_ARGB, 120);
+		let effectObj = id;
+		if(ObjLaser_GetLength(id) == 0)
+		{
+			ObjShot_SetGraphic(id, graphicArray[testVal]);
+			ObjRender_SetBlendType(id, BLEND_ADD_ARGB);
+			ObjRender_SetAlpha(id, 120);
+			Obj_SetRenderPriorityI(id, 46);
+			
+			let effectObjB = CreateBreakObject(x, y, BLEND_ADD_ARGB, 180);
+			
+			while(!finishEffect)
+			{
+				if(scale <= 0)
+				{
+					Obj_Delete(effectObj);
+				}
+				else
+				{
+					scale -= 0.05;
+					ObjRender_SetScaleXYZ(effectObj, scale, scale, 0);
+				}
+				
+				if(frameTimer == 0)
+				{
+					if(scaleB <= 1.20)
+					{
+						scaleB += 0.030;
+					}
+					else if(scaleB >= 1.20)
+					{
+						ObjRender_SetAlpha(effectObjB, 22);
+						frameTimer++;
+					}
+				}
+				else
+				{
+					scaleB -= 0.03;
+					if(eAlpha > 0)
+					{
+						eAlpha -= 0.8;
+						ObjRender_SetAlpha(effectObjB, eAlpha);
+					}
+					else
+					{
+						finishEffect = true;
+					}
+				}
+				ObjRender_SetScaleXYZ(effectObjB, scaleB, scaleB, 0);
+				ObjRender_SetY(effectObjB, y - yMod);
+
+				yMod += 1.35;
+				yield;
+			}
+			Obj_Delete(effectObjB);	
+		}
+		else
+		{
+			eAlpha = 120;
+			while(!finishEffect)
+			{
+				if(eAlpha <= 0)
+				{
+					Obj_Delete(effectObj);
+					finishEffect = true;
+				}
+				else
+				{
+					eAlpha -= 6;
+					ObjRender_SetAlpha(effectObj, eAlpha);
+				}
+				yield;
+			}
+		}
+	}
+}
