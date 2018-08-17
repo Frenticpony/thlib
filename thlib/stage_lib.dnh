@@ -16,8 +16,6 @@
 
 let DEBUG_MODE = KEY_F15 == 2;
 
-
-let init_seed = rand(1, 9999999);
 let init_seed = rand(1, 9999999);
 
 let store_seed = init_seed;
