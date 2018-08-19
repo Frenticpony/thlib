@@ -240,7 +240,7 @@ function Stage01_Handler()
 				case(0)
 				{
 					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
-					thEnemy_SetEllipseMovementA(objEnemy, glob_A, 3,  64, 0,  1, 90);
+					thEnemy_SetEllipseMovementA(objEnemy, vA, 3,  64, 0,  1, 90);
 				}
 				mainFrame++;
 				yield;
@@ -664,6 +664,102 @@ function Stage01_Handler()
 		}
 	}
 	
+	task Girl05B(x, y, type, life, score, mirror, doFire)
+	{
+		if(!isBossActive)
+		{
+			Girl05(x, y, type, life, score, mirror, doFire);
+		}
+	}
+	
+	task Girl06(x, y, type, life, score, mirror)
+	{
+		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
+		let ecl = thEcl_Init(objEnemy);
+		let stopAtkTask = false;
+		
+		thEnemy_SetHitbox(objEnemy, 40, 16);
+		thEnemy_SetDropArea(objEnemy, 32);
+		thEnemy_AddDrops(objEnemy, FP_ITEM_POWER_S, 1);
+		
+		Girl06_Main();
+		thEnemy_Finish(objEnemy);
+		thEcl_Finish(ecl);
+		
+		function Girl06_Main()
+		{
+			let mainFrame = 0;
+			
+			while(thEnemy_GetLife(objEnemy) > 0)
+			{
+				alternative(mainFrame)
+				case(0)
+				{
+					ObjEnemy_SetDamageRate(objEnemy, 100, 100);
+					thEnemy_SetSpeedAtAngle(objEnemy, 6, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 0, 50);
+				}
+				case(50)
+				{
+					Girl06_at();
+					//Girl04_at2();
+				}
+				case(150)
+				{
+					if(isDifficulty(HL))
+					{
+						Girl06_at();
+						//Girl04_at2();
+					}
+				}
+				case(250)
+				{
+					thEnemy_SetSpeedAtAngle(objEnemy, 0, 90);
+					thEnemy_TransitionSpeed(objEnemy, IP_LINEAR, 3, 100);
+				}
+				mainFrame++;
+				yield;
+			}
+		}
+		
+		task Girl06_at()
+		{
+			let frame = 0;
+			
+			let ecl_loop = SetValueD(20, 30, 30, 30);
+			
+			let ecl_speed = SetValueD(2.5, 3, 5, 5);
+			let ecl_count = SetValueD(1, 1, 1, 1);
+			
+			et_set(ecl, 0, STYLE_FAN, ecl_speed, GetAngleToPlayer(objEnemy) - (180 / 3), SHOT_RICE_BLUE, 1, ecl_count);
+			et_ang2(ecl, 0, 9);
+			exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_8);
+			
+			et_set(ecl, 1, STYLE_FAN, ecl_speed, GetAngleToPlayer(objEnemy) + (180 / 3), SHOT_RICE_RED, 1, ecl_count);
+			et_ang2(ecl, 1, 9);
+			exi_effon(ecl, 1, DELAY_RED, EFFON_DEF, EFFON_8);
+
+			if(isDifficulty(EN))
+			{
+				ex_angvel_osc(ecl, 0, EX_NOWAIT, 30, 50, 4);
+				ex_angvel_osc(ecl, 1, EX_NOWAIT, 30, 50, -4);
+			}
+			else if(isDifficulty(HL))
+			{
+				ex_angvel_osc(ecl, 0, EX_NOWAIT, 16, 50, 7.5);
+				ex_angvel_osc(ecl, 1, EX_NOWAIT, 16, 50, -7.5);
+			}
+			
+			while(thEnemy_GetLife(objEnemy) > 0 && frame < ecl_loop)
+			{
+				et_on(ecl, 0);
+				et_on(ecl, 1);
+				frame++;
+				wait(3);
+			}
+		}
+	}
+	
 	task tgirl(x, y, type, life, score, mirror)
 	{
 		let objEnemy = thEnemy_Init(x, y, life, score, type, mirror);
@@ -734,120 +830,122 @@ function Stage01_Handler()
 	{
 		let subFrame = 0;
 		let loc_x = 160;
+		
+		let ellipseAngle = 0;
 		while(subFrame != -99)
 		{
 			alternative(subFrame)
 			case(0)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(20)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(40)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(60)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(80)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(100)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(120)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(140)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(160)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x -= 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(180)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(200)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(220)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, 10, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(240)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(260)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(280)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, 0, 1);
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(300)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(320)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(340)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				loc_x += 32;
-				glob_A += 12;
+				ellipseAngle += 12;
 			}
 			case(360)
 			{
-				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, 5, 0);
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
 				subFrame = -100;
 			}
 			subFrame++;
@@ -951,24 +1049,407 @@ function Stage01_Handler()
 		Stage01_StageSub05R();
 	}
 	
+	function Stage01_StageSub06()
+	{
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+		Stage01_StageSub06R_t();
+		wait(60);
+		Stage01_StageSub06L_t();
+		wait(60);
+	}
+	
+	function Stage01_StageSub06L()
+	{
+		let sub_x = -160;
+
+		Girl05B(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x += 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 1);
+		sub_x += 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_BLUE, 70, 1000, false, 1);
+		sub_x += 32;
+		wait(20);
+	}
+	
+	function Stage01_StageSub06R()
+	{
+		let sub_x = 160;
+
+		Girl05B(sub_x, -32, ENE_FAIRY00_RED, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 0);
+		sub_x -= 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_GREEN, 70, 1000, false, 1);
+		sub_x -= 32;
+		wait(20);
+		Girl05B(sub_x, -32, ENE_FAIRY00_BLUE, 70, 1000, false, 1);
+		sub_x -= 32;
+		wait(20);
+	}
+	
+	task Stage01_StageSub06L_t()
+	{
+		Stage01_StageSub06L();
+	}
+	
+	task Stage01_StageSub06R_t()
+	{
+		Stage01_StageSub06R();
+	}
+	
+	task Stage01_StageSub07()
+	{
+		Girl06(-128, -32, ENE_FAIRY01_WHITE, 500, 1000, false);
+		Girl06(128, -32, ENE_FAIRY01_WHITE, 500, 1000, false);
+	}
+	
+	function Stage01_StageSub09()
+	{
+		let subFrame = 0;
+		let loc_x = -160;
+		
+		let ellipseAngle = 0;
+		while(subFrame != -99)
+		{
+			alternative(subFrame)
+			case(0)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(20)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(40)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(60)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(80)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(100)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(120)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(140)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(160)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle -= 12;
+			}
+			case(180)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				Girl06(128, -32, ENE_FAIRY01_WHITE, 500, 1000, false);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(200)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(220)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(240)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(260)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(280)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(300)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(320)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(340)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle -= 12;
+			}
+			case(360)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				subFrame = -100;
+			}
+			subFrame++;
+			yield;
+		}
+	}
+
+	function Stage01_StageSub10()
+	{
+		let subFrame = 0;
+		let loc_x = 160;
+		
+		let ellipseAngle = 0;
+		while(subFrame != -99)
+		{
+			alternative(subFrame)
+			case(0)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(20)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(40)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(60)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(80)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(100)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(120)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(140)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(160)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x -= 32;
+				ellipseAngle += 12;
+			}
+			case(180)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				Girl06(-128, -32, ENE_FAIRY01_WHITE, 500, 1000, false);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(200)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(220)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_GREEN, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(240)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(260)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(280)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_BLUE, 60, 1000, false, ellipseAngle, 1);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(300)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(320)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(340)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				loc_x += 32;
+				ellipseAngle += 12;
+			}
+			case(360)
+			{
+				Girl02(loc_x, -32, ENE_FAIRY00_RED, 60, 1000, false, ellipseAngle, 0);
+				subFrame = -100;
+			}
+			subFrame++;
+			yield;
+		}
+	}
+
+	task Stage01_StageSub09_t()
+	{
+		Stage01_StageSub09();
+	}
+	
+	task Stage01_StageSub10_t()
+	{
+		Stage01_StageSub10();
+	}
+	
 	while(!stageEnd)
 	{
 		alternative(stageFrame)
 		case(60)
 		{
-			
-			//Stage01_StageSub00();
-			//Stage01_StageSub01();
-			//wait(300);
-			//Stage01_StageSub02();
-			//wait(700);
-			//Stage01_StageSub03();
-			//Stage01_StageSub04();
-			//wait(600);
-			//Stage01_StageSub05();
-			//wait(450);
-			
-			//Stage01_MidBossStart();
+			Stage01_StageSub00();
+			Stage01_StageSub01();
+			wait(300);
+			Stage01_StageSub02();
+			wait(700);
+			Stage01_StageSub03();
+			Stage01_StageSub04();
+			wait(600);
+			Stage01_StageSub05();
+			wait(450);
+			Stage01_MidBossStart();
+			wait(600);
+			Stage01_StageSub06();
+			while(isBossActive){yield;}
+			Stage01_StageSub07();
+			wait(120);
+			Stage01_StageSub03();
+			wait(300);
+			Stage01_StageSub07();
+			wait(120);
+			Stage01_StageSub09();
+			Stage01_StageSub10();
+			wait(120);
+			Stage01_StageSub09_t();
+			Stage01_StageSub10_t();
+			wait(600);
 		}
 		stageFrame++;
 		yield;

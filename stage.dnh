@@ -20,7 +20,7 @@ let test;
 	renderTarget = thStage_InitRenderTarget();
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 	thStage_Timeline;
-	debug_InterpolateTest();
+	//debug_InterpolateTest();
 }
 
 @MainLoop

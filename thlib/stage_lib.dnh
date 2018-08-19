@@ -28,7 +28,7 @@ let positionArrayY = [];
 let stageEnd = false;
 let stageCurrent = 1;
 let stageWait = 0;
-
+let stageAutoCollectY = 128;
 
 let stageFrame = 0;
 
@@ -123,18 +123,11 @@ function thStage_Initialize()
 	SetShotAutoDeleteClip(64, 64, 64, 64);
 	SetDefaultBonusItemEnable(false);
 	
-	//let shader = ObjShader_Create;
-	//ObjShader_SetShaderF(shader, GetCurrentScriptDirectory ~ "shader/HLSL_DisableFilter.fx");
-	//ObjShader_SetTechnique(shader, "TecDisableFilter");
-	//SetShaderI(shader, 0, 100);
-	
 	__thStage_InitFrameObjects_th11();
-	//__thStage_ManageAllShotCollision;
 	
 	__thStage_DebugHandler();
 	__thStage_BulletDebug();
 	__thStage_DebugCollision();
-	//__thStage_DebugRendering();
 }
 
 function thStage_InitRenderTarget()
@@ -1508,103 +1501,115 @@ task __thStage_DrawDifficulty
 {
 	let diffdraw = ObjPrim_Create(OBJ_SPRITE_2D);
 	let diffdrawyscale = 0;
-	ObjPrim_SetTexture(diffdraw, img_front_rank00);
-
-	//Easy
-	if(GetCommonData("Difficulty", 0) == 0)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 0, 136, 16);
-	}
-	//Normal
-	if(GetCommonData("Difficulty", 0) == 1)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 16, 136, 32);
-	}
-	//Hard
-	if(GetCommonData("Difficulty", 0) == 2)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 32, 136, 48);
-	}
-	//Lunatic
-	if(GetCommonData("Difficulty", 0) == 3)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 48, 136, 64);
-	}
-	//Extra
-	if(GetCommonData("Difficulty", 0) == 4)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 64, 136, 80);
-	}
-	//???
-	if(GetCommonData("Difficulty", 0) == 5)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 80, 136, 96);
-	}
-	//Thunderstorm
-	if(GetCommonData("Difficulty", 0) == 6)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 96, 136, 112);
-	}
-	//Overdrive
-	if(GetCommonData("Difficulty", 0) == 7)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 112, 136, 128);
-	}
-	//Last Word
-	if(GetCommonData("Difficulty", 0) == 8)
-	{
-		ObjSprite2D_SetSourceRect(diffdraw, 0, 128, 136, 144);
-	}
+	ObjPrim_SetTexture(diffdraw, img_front_front00_th11);
+	ObjSprite2D_SetSourceRect(diffdraw, 256, 304, 338, 320);
 	ObjSprite2D_SetDestCenter(diffdraw);
 	Obj_SetRenderPriorityI(diffdraw, 84);
-	ObjRender_SetPosition(diffdraw, GetStgFrameWidth/2 + 33, 30, 0);
-
-	while(diffdrawyscale < 1)
+	
+	let __currentDifficulty = GetCommonData("Difficulty", 0);
+	
+	__diffDraw_update();
+	while(true)
 	{
-		ObjRender_SetScaleY(diffdraw, diffdrawyscale);
-		diffdrawyscale += 0.1;
+		if(__currentDifficulty != GetCommonData("Difficulty", 0))
+		{
+			__currentDifficulty = GetCommonData("Difficulty", 0);
+			__diffDraw_update();
+		}
 		yield;
 	}
-
-	diffdrawyscale = 1;
-	ObjRender_SetScaleY(diffdraw, diffdrawyscale);
-
-	loop(15)
+	
+	task __diffDraw_update()
 	{
-		ObjRender_SetColor(diffdraw,155,155,155);
-		loop(3){yield;}
-		ObjRender_SetColor(diffdraw,255,255,255);
-		loop(3){yield;}
+		let __loc_currentDifficulty = __currentDifficulty;
+		let __phase = 0;
+		let __counter = 0;
+		
+		ObjSprite2D_SetSourceRect(diffdraw, 256, 304 + (16 * __loc_currentDifficulty), 338, 320 + (16 * __loc_currentDifficulty));
+		
+		while(__loc_currentDifficulty == __currentDifficulty)
+		{
+			if(__phase == 0)
+			{
+				ObjRender_SetPosition(diffdraw, GetStgFrameWidth/2 + 33, 30, 0);
+				__phase = 1;
+			}
+			if(__phase == 1)
+			{
+				if(diffdrawyscale < 1)
+				{
+					diffdrawyscale += 0.1;
+					if(diffdrawyscale > 1){diffdrawyscale = 1;}
+					ObjRender_SetScaleY(diffdraw, diffdrawyscale);
+				}
+				else
+				{
+					diffdrawyscale = 1;
+					ObjRender_SetScaleY(diffdraw, diffdrawyscale);
+					__phase = 2;
+				}
+			}
+			if(__phase == 2)
+			{
+				if(__counter == 0)
+				{
+					__DiffFlash;
+				}
+				
+				if(__counter == 180)
+				{
+					__phase = 3;
+				}
+				else
+				{
+					__counter++;
+				}
+			}
+			if(__phase == 3)
+			{
+				if(diffdrawyscale > 0)
+				{
+					diffdrawyscale -= 0.1;
+					if(diffdrawyscale < 0){diffdrawyscale = 0;}
+					ObjRender_SetScaleY(diffdraw, diffdrawyscale);
+				}
+				else
+				{
+					diffdrawyscale = 0;
+					ObjRender_SetScaleY(diffdraw, diffdrawyscale);
+					ObjRender_SetPosition(diffdraw, 488 + 40, 30, 0);
+					__phase = 4;
+				}	
+			}
+			if(__phase == 4)
+			{
+				if(diffdrawyscale < 1)
+				{
+					diffdrawyscale += 0.1;
+					if(diffdrawyscale > 1){diffdrawyscale = 1;}
+					ObjRender_SetScaleY(diffdraw, diffdrawyscale);
+				}
+				else
+				{
+					ObjRender_SetScaleY(diffdraw, 1);
+					__phase = -1;
+				}
+			}
+			yield;
+		}
+		
+		task __DiffFlash
+		{
+			loop(15)
+			{
+				ObjRender_SetColor(diffdraw,155,155,155);
+				loop(3){yield;}
+				ObjRender_SetColor(diffdraw,255,255,255);
+				loop(3){yield;}
+			}
+		}
 	}
-
-	loop(90)
-	{
-		yield;
-	}
-
-	while(diffdrawyscale > 0)
-	{
-		ObjRender_SetScaleY(diffdraw, diffdrawyscale);
-		diffdrawyscale -= 0.1;
-		yield;
-	}
-
-	ObjRender_SetPosition(diffdraw, 488 + 40, 30, 0);
-
-	while(diffdrawyscale < 1)
-	{
-		ObjRender_SetScaleY(diffdraw, diffdrawyscale);
-		diffdrawyscale += 0.1;
-		yield;
-	}
-
-	diffdrawyscale = 1;
-	ObjRender_SetScaleY(diffdraw, diffdrawyscale);
-	while(GetCommonData("isGameStarted", false) == true)
-	{
-		yield;
-	}
-	Obj_Delete(diffdraw);
+	
 }
 
 task __thStage_DrawIGL
@@ -1613,30 +1618,30 @@ task __thStage_DrawIGL
 	let ddalpha = 255;
 
 	let drawigl = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(drawigl, img_front_front00);
-	ObjRender_SetBlendType(drawigl, BLEND_ADD_RGB);
+	ObjPrim_SetTexture(drawigl, img_front_front00_th11);
+	ObjRender_SetBlendType(drawigl, BLEND_ADD_ARGB);
 	ObjSprite2D_SetSourceRect(drawigl, 256, 258, 448, 286);
 	ObjSprite2D_SetDestRect(drawigl, 0, -14, 192, 14);
 	Obj_SetRenderPriorityI(drawigl, 68);
-	ObjRender_SetPosition(drawigl, 96, 127, 0);
+	ObjRender_SetPosition(drawigl, 96, stageAutoCollectY - 1, 0);
 	ObjRender_SetScaleY(drawigl, yscale);
 
 	let drawiglr = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(drawiglr, img_front_front00);
-	ObjRender_SetBlendType(drawiglr, BLEND_ADD_RGB);
+	ObjPrim_SetTexture(drawiglr, img_front_front00_th11);
+	ObjRender_SetBlendType(drawiglr, BLEND_ADD_ARGB);
 	ObjSprite2D_SetSourceRect(drawiglr, 258, 290, 370, 294);
 	ObjSprite2D_SetDestRect(drawiglr, 0, -2, 112, 2);
 	Obj_SetRenderPriorityI(drawiglr, 68);
-	ObjRender_SetPosition(drawiglr, 272, 128, 0);
+	ObjRender_SetPosition(drawiglr, 272, stageAutoCollectY, 0);
 	ObjRender_SetScaleY(drawiglr, yscale);
 
 	let drawigll = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(drawigll, img_front_front00);
-	ObjRender_SetBlendType(drawigll, BLEND_ADD_RGB);
+	ObjPrim_SetTexture(drawigll, img_front_front00_th11);
+	ObjRender_SetBlendType(drawigll, BLEND_ADD_ARGB);
 	ObjSprite2D_SetSourceRect(drawigll, 258, 290, 370, 294);
 	ObjSprite2D_SetDestRect(drawigll, 0, -2, -112, 2);
 	Obj_SetRenderPriorityI(drawigll, 68);
-	ObjRender_SetPosition(drawigll, 111, 128, 0);
+	ObjRender_SetPosition(drawigll, 111, stageAutoCollectY, 0);
 	ObjRender_SetScaleY(drawigll, yscale);
 
 	loop(80){yield;}
@@ -2349,13 +2354,15 @@ task __thItem_CreateItemA1(type, x, y, score)
 {
 	let objItem = CreateItemU1(type, x, y, 0);
 	ObjItem_SetRenderScoreEnable(objItem, false);
+	ObjItem_SetAutoCollectEnable(objItem, false);
 	Obj_SetRenderPriorityI(objItem, 48);
+	
 	let loc_x = ObjMove_GetX(objItem);
 	let loc_y = ObjMove_GetY(objItem);
 	let loc_angle = 45;
 	let loc_angleB = 0;
 	let loc_frame = 0;
-	let loc_accel = 0;
+	let loc_accel = 0.15;
 	let loc_xVel = 0;
 	let loc_yVel = 0;
 	let collect_flag = false;
@@ -2364,9 +2371,6 @@ task __thItem_CreateItemA1(type, x, y, score)
 	let flag = round(rand(0, 1));
 	
 	let startSpeed = -2.6;
-	
-	ObjMove_SetSpeed(objItem, startSpeed);
-	ObjMove_SetAngle(objItem, 90);
 
 	while(!Obj_IsDeleted(objItem))
 	{
@@ -2376,37 +2380,50 @@ task __thItem_CreateItemA1(type, x, y, score)
 		if(collect_flag)
 		{
 			loc_angleB = GetAngleFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY);
-			ObjMove_SetSpeed(objItem, 1.5 + loc_accel);
 			ObjMove_SetAngle(objItem, loc_angleB);
-
-			loc_accel += 0.15;
+			startSpeed = 0;
+			if(GetPlayerState != STATE_NORMAL)
+			{
+				collect_flag = false;
+				ObjMove_SetSpeed(objItem, 0);
+				ObjMove_SetAcceleration(objItem, 0.05);
+				ObjMove_SetMaxSpeed(objItem, 2.5);
+				ObjMove_SetAngle(objItem, 90);
+			}
 		}
 		else
 		{
-			if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+			if(GetPlayerState == STATE_NORMAL)
 			{
-				if(GetDistanceFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY) <= 64)
+				if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
 				{
-					collect_flag = true;
+					if(GetDistanceFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY) <= 64)
+					{
+						collect_flag = true;
+						ObjMove_SetSpeed(objItem, 1.5);
+						ObjMove_SetAcceleration(objItem, loc_accel);
+						ObjMove_SetMaxSpeed(objItem, 999);
+					}
+				}
+				else
+				{
+					if(GetDistanceFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY) <= 30)
+					{
+						collect_flag = true;
+						ObjMove_SetSpeed(objItem, 1.5);
+						ObjMove_SetAcceleration(objItem, loc_accel);
+						ObjMove_SetMaxSpeed(objItem, 999);
+					}
 				}
 			}
-			else
-			{
-				if(GetDistanceFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY) <= 30)
-				{
-					collect_flag = true;
-				}
-			}
-
-			if(startSpeed < 2.5)
-			{
-				ObjMove_SetSpeed(objItem, startSpeed);
-				startSpeed += 0.03;
-			}
-			else
-			{
-				ObjMove_SetSpeed(objItem, 2.5);
-			}
+		}
+		
+		if(GetPlayerY < stageAutoCollectY && GetPlayerState == STATE_NORMAL)
+		{
+			collect_flag = true;
+			ObjMove_SetSpeed(objItem, 8);
+			ObjMove_SetAcceleration(objItem, 0.15);
+			ObjMove_SetMaxSpeed(objItem, 999);
 		}
 
 		if(loc_y > 520)
@@ -2439,48 +2456,87 @@ task __thItem_CreateItemA2(type, x, y, score)
 {
 	let objItem = CreateItemU1(type, x, y, 0);
 	ObjItem_SetRenderScoreEnable(objItem, false);
+	ObjItem_SetAutoCollectEnable(objItem, false);
 	ObjRender_SetBlendType(objItem, BLEND_ADD_ARGB);
 	ObjRender_SetAlpha(objItem, 128);
-	Obj_SetRenderPriorityI(objItem, 45);
+	Obj_SetRenderPriorityI(objItem, 48);
 	
 	let loc_x = ObjMove_GetX(objItem);
 	let loc_y = ObjMove_GetY(objItem);
 	let loc_angle = 45;
 	let loc_angleB = 0;
 	let loc_frame = 0;
-	let loc_accel = 0;
-	let collect_flag = false;
+	let loc_accel = 0.15;
+	let loc_xVel = 0;
+	let loc_yVel = 0;
 	let collect_frame = 20;
+	let collect_flag = false;
 	let isOffScreen = false;
-	let startSpeed = -0.5;
 	
+	let flag = round(rand(0, 1));
+	
+	let startSpeed = -0.5;
 	ObjMove_SetSpeed(objItem, startSpeed);
-	ObjMove_SetAngle(objItem, 90);
 
 	while(!Obj_IsDeleted(objItem))
 	{
 		loc_x = ObjMove_GetX(objItem);
 		loc_y = ObjMove_GetY(objItem);
-	
+
 		if(collect_flag)
 		{
 			loc_angleB = GetAngleFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY);
-			ObjMove_SetSpeed(objItem, 2.5 + loc_accel);
 			ObjMove_SetAngle(objItem, loc_angleB);
-			loc_accel += 0.2;
+			startSpeed = 0;
+			if(GetPlayerState != STATE_NORMAL)
+			{
+				collect_flag = false;
+				ObjMove_SetSpeed(objItem, 0);
+				ObjMove_SetAcceleration(objItem, 0.05);
+				ObjMove_SetMaxSpeed(objItem, 2.5);
+				ObjMove_SetAngle(objItem, 90);
+			}
 		}
 		else
 		{
-			if(collect_frame > 0)
+			if(GetPlayerState == STATE_NORMAL)
 			{
-				ObjMove_SetSpeed(objItem, startSpeed);
-				startSpeed += 0.01;
-				collect_frame--;
+				if(GetVirtualKeyState(VK_SLOWMOVE) == KEY_HOLD)
+				{
+					if(GetDistanceFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY) <= 64)
+					{
+						collect_flag = true;
+						ObjMove_SetSpeed(objItem, 1.5);
+						ObjMove_SetAcceleration(objItem, loc_accel);
+						ObjMove_SetMaxSpeed(objItem, 999);
+					}
+				}
+				else
+				{
+					if(GetDistanceFromTo(loc_x, loc_y, GetPlayerX, GetPlayerY) <= 30)
+					{
+						collect_flag = true;
+						ObjMove_SetSpeed(objItem, 1.5);
+						ObjMove_SetAcceleration(objItem, loc_accel);
+						ObjMove_SetMaxSpeed(objItem, 999);
+					}
+				}
 			}
-			else
-			{
-				collect_flag = true;
-			}
+		}
+		
+		if(collect_frame > 0)
+		{
+			ObjMove_SetSpeed(objItem, startSpeed);
+			startSpeed += 0.01;
+			collect_frame--;
+		}
+		else if(collect_frame == 0)
+		{
+			collect_flag = true;
+			ObjMove_SetSpeed(objItem, 2.5);
+			ObjMove_SetAcceleration(objItem, 0.2);
+			ObjMove_SetMaxSpeed(objItem, 999);
+			collect_frame--;
 		}
 
 		if(loc_y > 520)
@@ -2503,36 +2559,7 @@ task __thItem_CreateItemA2(type, x, y, score)
 	}
 	if(!isOffScreen)
 	{
-		//NotifyEvent(GetPlayerScriptID, 1100, type);
-	}
-}
-
-task __thItem_CreateItemDebug(type, x, y, score)
-{
-	let objItem = CreateItemU1(type, x, y, 0);
-	ObjItem_SetRenderScoreEnable(objItem, false);
-	ObjRender_SetBlendType(objItem, BLEND_ADD_ARGB);
-	ObjRender_SetAlpha(objItem, 128);
-	Obj_SetRenderPriorityI(objItem, 45);
-	
-	let loc_x = ObjMove_GetX(objItem);
-	let loc_y = ObjMove_GetY(objItem);
-	let loc_angle = 45;
-	let loc_angleB = 0;
-	let loc_frame = 0;
-	let loc_accel = 0;
-	let collect_flag = false;
-	let collect_frame = 20;
-	let isOffScreen = false;
-	let startSpeed = -0.5;
-	
-	ObjMove_SetSpeed(objItem, startSpeed);
-	ObjMove_SetAngle(objItem, 90);
-
-	loop
-	{
-		ObjMove_SetPosition(objItem, loc_x, loc_y);
-		yield;
+		AddScore(10);
 	}
 }
 
@@ -2799,8 +2826,6 @@ task __thStage_BulletDebug()
 		if(GetMouseState(MOUSE_RIGHT) == KEY_PUSH)
 		{
 			//thStage_ClearAllShots(CenX, CenY);
-			
-			
 			loop(10)
 			{
 				__thItem_CreateItemA1(0, GetMouseX - 32 + sRand(-64, 64), GetMouseY - 16 + sRand(-64, 64), 50);
@@ -2900,25 +2925,6 @@ task __thStage_DebugCollision()
 	}
 }
 
-task __thStage_DebugRendering()
-{
-	__thItem_CreateItemDebug(FP_ITEM_POWER, 60, 200, 10);
-	__thItem_CreateItemDebug(FP_ITEM_POWER, 60, 200, 10);
-	__thItem_CreateItemDebug(FP_ITEM_POWER, 60, 200, 10);
-	__thItem_CreateItemDebug(FP_ITEM_POWER, 60, 200, 10);
-	__thItem_CreateItemDebug(FP_ITEM_POWER, 60, 200, 10);
-	let filterCatch = 0;
-
-	ascent(i in 0..2)
-	{
-		__thItem_CreateItemDebug(FP_ITEM_POWER, 60, 200, 10);
-		filterCatch = CreateCurveLaserA1(60 + (i * 20), rand(100, 300), 5, 90, 12, 16, SHOT_LASER_RED, 0);
-		ObjShot_SetAutoDelete(filterCatch, false);
-		ObjShot_IsSpellResist(filterCatch);
-		ObjMove_SetAngularVelocity(filterCatch, 10);
-		ObjShot_SetIntersectionEnable(filterCatch, false);
-	}
-}
 
 
 

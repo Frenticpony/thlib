@@ -131,7 +131,7 @@ function et_set_ll(obj, id, pattern, speed, angle, graphic, count, layer, lLengt
 {
 	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType]];
 	let l_scale = 1;
-	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale, ETAMA_LASER_LOOSE]];
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_laser00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale, ETAMA_LASER_LOOSE]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -139,10 +139,7 @@ function et_set_lc(obj, id, pattern, speed, angle, graphic, count, layer, lLengt
 {
 	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType]];
 	let l_scale = 1;
-	//if(graphic >= 1013 && graphic <= 1028){l_scale = 0.47;}
-	//if(graphic >= 286 && graphic <= 289){l_scale = 0.67;}
-	//if(graphic >= 162 && graphic <= 177){l_scale = 0.64;}
-	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  -1,  50,  lLength, lWidth, l_scale, ETAMA_LASER_CURVE]];
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_laser00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  -1,  50,  lLength, lWidth, l_scale, ETAMA_LASER_CURVE]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -150,10 +147,7 @@ function et_set_ls(obj, id, pattern, delay, angle, graphic, count, layer, lLengt
 {
 	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType]];
 	let l_scale = 1;
-	//if(graphic >= 1013 && graphic <= 1028){l_scale = 0.47;}
-	//if(graphic >= 286 && graphic <= 289){l_scale = 0.67;}
-	//if(graphic >= 162 && graphic <= 177){l_scale = 0.64;}
-	let ar = [[pattern, graphic,  count, layer,  angle, 0,  delay, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale, ETAMA_LASER_STRAIGHT]];
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  delay, 0.5,  0,  0, 0,  0,  se_laser00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  lLength, lWidth, l_scale, ETAMA_LASER_STRAIGHT]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -797,7 +791,7 @@ function et_on(obj, id)
 			}
 			else if(ar[0][0] == STYLE_FAN)
 			{
-				//ecl_initShots = _et_on_fan_ll(x, y, -999, ar[0]);
+				ecl_initShots = _et_on_fan_ll(x, y, -999, ar[0]);
 			}
 			else if(ar[0][0] == STYLE_WAVE)
 			{

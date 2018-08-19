@@ -25,6 +25,7 @@ function thBoss_SetUpA(n_obj, c_id, n_x, n_y)
 	ObjEnemy_SetDamageRate(n_obj, 0, 0);
 	ObjMove_SetPosition(n_obj, CenX + n_x, n_y);
 	Obj_SetValue(n_obj, "DR", [0, 0]);
+	Obj_SetValue(n_obj, "I", 0);
 	
 	thEnemy_ClearDrops(n_obj);
 	thBoss_SetBossMoveField(n_obj, 96, 280, 100);
@@ -82,7 +83,6 @@ function thBoss_InitSpellcard(n_obj, n_life, n_time, n_score, s_title)
 	__eff_bossRingB(n_obj);
 	SpellCutIn(n_obj, "AYA", s_title);
 	isBossSpell = true;
-	isBossInvincible = true;
 	thSE_Play(se_cat00);
 }
 
@@ -109,6 +109,10 @@ function thBoss_SetDamageRate(n_obj, rateA, rateB)
 	Obj_SetValue(n_obj, "DR", [rateA, rateB]);
 }
 
+function thBoss_SetInvincibilityTime(n_obj, n_time)
+{
+	Obj_SetValue(n_obj, "I", n_time);
+}
 // -=-=-=-=-=-=-=-=-=-=- Boss Value Get -=-=-=-=-=-=-=-=-=-=-
 
 function thBoss_GetBossMoveField(n_obj)
@@ -127,6 +131,10 @@ function thBoss_GetDamageRate(n_obj)
 	return Obj_GetValueD(n_obj, "DR", [100, 100]);
 }
 
+function thBoss_GetInvincibilityTime(n_obj)
+{
+	return Obj_GetValueD(n_obj, "I", 0);
+}
 // -=-=-=-=-=-=-=-=-=-=- Boss Main Loop -=-=-=-=-=-=-=-=-=-=-
 
 function thBoss_MainLoop(n_obj)
@@ -136,9 +144,10 @@ function thBoss_MainLoop(n_obj)
 	GetBossY = ObjMove_GetY(n_obj);
 	
 	ObjEnemy_SetIntersectionCircleToShot(n_obj, GetBossX, GetBossY, 25);
-
-	if(isBossInvincible == true)
+	
+	if(thBoss_GetInvincibilityTime(n_obj) > 0)
 	{
+		thBoss_SetInvincibilityTime(n_obj, thBoss_GetInvincibilityTime(n_obj) - 1);
 		ObjEnemy_SetDamageRate(n_obj, 0, 0);
 	}
 	else

@@ -869,6 +869,7 @@ task thEnemy_TransitionSpeed(n_obj, c_method, n_speed, n_time)
 	{
 		curSpeed = InterpolateValue(startSpeed, endSpeed, loc_frame, c_method, n_time);
 		ObjMove_SetSpeed(n_obj, curSpeed);
+		__objB_ConfineToMoveField(n_obj);
 		loc_frame++;
 		yield;
 	}
@@ -2402,4 +2403,27 @@ task __objB_SetRandomMoveSpeed_t(n_obj, b_condition, c_method, n_speed, n_time)
 	__objB_SetRandomMoveSpeed(n_obj, b_condition, c_method, n_speed, n_time);
 }
 
-
+function __objB_ConfineToMoveField(n_obj)
+{
+	let __confX1 = Obj_GetValueD(n_obj, "BX1", -1000);
+	let __confY1 = Obj_GetValueD(n_obj, "BY1", -1000);
+	let __confX2 = Obj_GetValueD(n_obj, "BX2", 1000);
+	let __confY2 = Obj_GetValueD(n_obj, "BY2", 1000);
+	
+	if(ObjMove_GetX(n_obj) < __confX1)
+	{
+		ObjMove_SetX(n_obj, __confX1);
+	}
+	if(ObjMove_GetY(n_obj) < __confY1)
+	{
+		ObjMove_SetY(n_obj, __confY1);
+	}
+	if(ObjMove_GetX(n_obj) > __confX2)
+	{
+		ObjMove_SetX(n_obj, __confX2);
+	}
+	if(ObjMove_GetY(n_obj) > __confY2)
+	{
+		ObjMove_SetY(n_obj, __confY2);
+	}
+}

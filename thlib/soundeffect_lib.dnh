@@ -142,13 +142,13 @@ let allSEArray =
 	"se_warp_n",
 	"se_warp_r",
 	"se_wolf",
-	"se_bonus3",
-	"se_geiger00",
-	"se_geiger01",
-	"se_geiger02",
-	"se_geiger03",
-	"se_geiger04",
-	"se_geiger05",
+	"se_bonus3"//,
+	//"se_geiger00",
+	//"se_geiger01",
+	//"se_geiger02",
+	//"se_geiger03",
+	//"se_geiger04",
+	//"se_geiger05",
 ];
 
 let se_alert    = 0;
@@ -243,11 +243,11 @@ function FP_LoadAllSE()
     //let vol = GetSoundVolume();
     ascent (i in 0 .. length(allSEArray))
     {
-        //LoadSound(GetCurrentScriptDirectory ~ "../se/" ~ allSEArray[i] ~ ".wav");
-        //let objSound = ObjSound_Create();
-        //ObjSound_Load(objSound, GetCurrentScriptDirectory ~ "../se/" ~ allSEArray[i] ~ ".wav");
-        //ObjSound_SetSoundDivision(objSound, SOUND_SE);
-        //seArray = seArray ~ [objSound];
+        LoadSound(GetCurrentScriptDirectory ~ "../se/" ~ allSEArray[i] ~ ".wav");
+        let objSound = ObjSound_Create();
+        ObjSound_Load(objSound, GetCurrentScriptDirectory ~ "../se/" ~ allSEArray[i] ~ ".wav");
+        ObjSound_SetSoundDivision(objSound, SOUND_SE);
+        seArray = seArray ~ [objSound];
     }  
 }
 
@@ -261,17 +261,17 @@ function FP_UpdateAllSEVolume()
 
 function FP_PlaySE(se)
 {
-	//ObjSound_SetPanRate(seArray[se], 0);
-	//ObjSound_Play(seArray[se]);
+	ObjSound_SetPanRate(seArray[se], 0);
+	ObjSound_Play(seArray[se]);
 }
 
 function FP_PlayPanSE(x, se)
 {
-	//let xPos_percent = x / GetStgFrameWidth;
-	//let panRateValue = 200 * xPos_percent;
+	let xPos_percent = x / GetStgFrameWidth;
+	let panRateValue = 200 * xPos_percent;
 	
-	//ObjSound_SetPanRate(seArray[se], (panRateValue - 100) / 5);
-	//ObjSound_Play(seArray[se]);
+	ObjSound_SetPanRate(seArray[se], (panRateValue - 100) / 5);
+	ObjSound_Play(seArray[se]);
 }
 
 function rip()

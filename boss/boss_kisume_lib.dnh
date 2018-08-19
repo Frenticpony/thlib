@@ -25,7 +25,6 @@ task boss_kisume_bh()
 			case(0)
 			{
 				boss_kisume_ns01(objBoss);
-				//boss_kisume_sc01(objBoss);
 			}
 			case(1)
 			{
@@ -82,6 +81,7 @@ function boss_kisume_ns01(obj)
 	let bossAdvance = false;
 	
 	thBoss_InitPattern(obj, 4000, 600);
+	thBoss_SetBossMoveField(obj, CenY, 384, 999);
 	thBoss_SetDamageRate(obj, 100, 100);
 	
 	MainTask;
@@ -177,6 +177,7 @@ function boss_kisume_ns02(obj)
 	let bossAdvance = false;
 	
 	thBoss_InitPattern(obj, 4300, 600);
+	thBoss_SetBossMoveField(obj, CenY, 384, 999);
 	thBoss_SetDamageRate(obj, 100, 100);
 	
 	MainTask;
@@ -196,12 +197,10 @@ function boss_kisume_ns02(obj)
 			case(0)
 			{
 				thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 160, 60, false);
-				//thBoss_Delay(60, bossAdvance);
 			}
 			case(60)
 			{
-				isBossInvincible = false;
-				//chargeupeffect
+				thEffect_Play(obj, EFF_CHARGE);
 			}
 			case(120)
 			{
@@ -342,9 +341,12 @@ function boss_kisume_sc01(obj)
 {	
 	let ecl = thEcl_Init(obj);
 	let bossAdvance = false;
+	isBossInvincible = true;
 	
-	thBoss_InitSpellcard(obj, 2160, 600, 500000, "Horror 'Well-bucket-dropping Monster'");
-	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_InitSpellcard(obj, 2160, 600, 500000, "怪奇「釣瓶落としの怪」");
+	thBoss_SetBossMoveField(obj, 72, 384, 16);
+	thBoss_SetDamageRate(obj, 33, 100);
+	thBoss_SetInvincibilityTime(obj, 60);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
@@ -364,19 +366,16 @@ function boss_kisume_sc01(obj)
 			alternative(main_frame)
 			case(0)
 			{
-				thBoss_SetBossMoveField(obj, 160, 280, 64);
-				thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 160, 60, false);
-				//thBoss_Delay(60, bossAdvance);
+				thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 80, 60, false);
 			}
 			case(60)
 			{
-				//if(!flag){sc01_at1(); flag = true;}
-				//isBossInvincible = false;
-				//thBoss_SetRandomMoveSpeed(obj, bossAdvance, IP_DECELERATE, 2, 60, false);
+				thEffect_Play(obj, EFF_CHARGE);
 			}
 			case(150)
 			{
-				sc01_at1
+				sc01_at1;
+				sc01_at2;
 			}
 			main_frame++;
 			yield;
@@ -386,25 +385,51 @@ function boss_kisume_sc01(obj)
 	task sc01_at1()
 	{
 		let ecl_speed = 0;
-		let ecl_angle = 180;
-		let ecl_wait = SetValueD(2, 2, 1, 1);
+		let ecl_angle = 90;
+		let ecl_wait = SetValueD(5, 5, 5, 5);
 		
 		et_set(ecl, 0, STYLE_CIRCLE, ecl_speed, ecl_angle, SHOT_LROUND_ICE, 1, 1);
-		et_rad(ecl, 0, 20);
 		
-		exi_effon(ecl, 0, DELAY_PURPLE, EFFON_DEF, EFFON_25);
-		
+		exi_effon(ecl, 0, DELAY_ICE, EFFON_LARGE, EFFON_25);
+		ex_wait(ecl, 0, 180);
+		ex_spup(ecl, 0, 120, 0.066);
 		//ex_spup(ecl, 0, 0, ECL_NULL, 2 + ecl_speed, 60);
 		
 		while(!bossAdvance)
 		{
-			et_ang(ecl, 0, ecl_angle);
-			ecl_angle += 222.49;
-			if(isDifficulty(NHL))
-			{
-				et_on(ecl, 0);
-			}
+			et_ofs2(ecl, 0, sRand(0, 360), sRand(-1, 1) * 80);
+			et_on(ecl, 0);
 			wait(ecl_wait);
+		}
+	}
+	
+	task sc01_at2()
+	{
+		let ecl_frame = 0;
+		let ecl_count = SetValueD(1, 1, 1, 3);
+		
+		et_set_ll(ecl, 1, STYLE_FAN, 4, 90, SHOT_LROUND_RED, 1, ecl_count, 224, 64);
+		et_blend(ecl, 1, BLEND_ADD_ARGB);
+		et_ang2(ecl, 1, 30);
+		while(!bossAdvance)
+		{
+			alternative(ecl_frame)
+			case(60)
+			{
+				if(ObjMove_GetX(obj) > GetPlayerX)
+				{
+					thEnemy_SetSpeedAtAngle(obj, (4 * z_randOne) + 1.5, 180);
+				}
+				else
+				{
+					thEnemy_SetSpeedAtAngle(obj, (4 * z_randOne) + 1.5, 0);
+				}
+				thEnemy_TransitionSpeed(obj, IP_DECELERATE, 0, 60);
+				et_on(ecl, 1);
+				ecl_frame = -1;
+			}
+			ecl_frame++;
+			yield;
 		}
 	}
 }
