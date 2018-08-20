@@ -1,60 +1,60 @@
 //Main int that will hold boss obj ID
-let objBoss = 0;
+let boss_Kisume;
 
 //Main Boss Handler/Timeline/Plural
 task boss_kisume_bh()
 {
-	objBoss = ObjEnemy_Create(OBJ_ENEMY);
+	boss_Kisume = ObjEnemy_Create(OBJ_ENEMY);
 	
-	thBoss_Init(objBoss);
+	thBoss_Init(boss_Kisume);
 
 	while(!isBossActive)
 	{
 		yield;
 	}
 
-	thBoss_SetUpA(objBoss, BOSS_KISUME, 0, -32);
-	thBoss_SetUpB(objBoss);
-	boss_kisume_loop(objBoss);
+	thBoss_SetUpA(boss_Kisume, BOSS_KISUME, 0, -32);
+	thBoss_SetUpB(boss_Kisume);
+	boss_kisume_loop(boss_Kisume);
 	
 	while(!bossEnd)
 	{
-		if(Obj_GetValueD(objBoss, "NA", false) == true)
+		if(Obj_GetValueD(boss_Kisume, "NA", false) == true)
 		{
 			alternative(bossAttackState)
 			case(0)
 			{
-				boss_kisume_ns01(objBoss);
+				boss_kisume_ns01(boss_Kisume);
 			}
 			case(1)
 			{
-				boss_kisume_ns02(objBoss);
+				boss_kisume_ns02(boss_Kisume);
 			}
 			case(2)
 			{
 				if(isDifficulty(HL))
 				{
-					boss_kisume_sc01(objBoss);
+					boss_kisume_sc01(boss_Kisume);
 				}
 				else
 				{
-					boss_kisume_ns03(objBoss);
+					boss_kisume_ns03(boss_Kisume);
 				}
 			}
 			case(999)
 			{
-				debug_FinishMid_th10(objBoss);
+				debug_FinishMid_th10(boss_Kisume);
 				bossEnd = true;
 			}
 			others
 			{
 				if(bossTimeout)
 				{
-					thBoss_EscapeMid(objBoss, 0, -32, 60);
+					thBoss_EscapeMid(boss_Kisume, 0, -32, 60);
 				}
 				else
 				{
-					thBoss_FinishMid(objBoss);
+					thBoss_FinishMid(boss_Kisume);
 				}
 				bossEnd = true;
 			}

@@ -1,0 +1,69 @@
+//Main int that will hold boss obj ID
+let boss_Yamame;
+
+//Main Boss Handler/Timeline/Plural
+task boss_yamame_bh()
+{
+	boss_Yamame = ObjEnemy_Create(OBJ_ENEMY);
+	
+	thBoss_Init(boss_Yamame);
+
+	while(!isBossActive)
+	{
+		yield;
+	}
+
+	thBoss_SetUpA(boss_Yamame, BOSS_YAMAME, 0, -32);
+	thBoss_SetUpB(boss_Yamame);
+	boss_kisume_loop(boss_Yamame);
+	
+	while(!bossEnd)
+	{
+		if(Obj_GetValueD(boss_Yamame, "NA", false) == true)
+		{
+			alternative(bossAttackState)
+			case(0)
+			{
+				
+			}
+			others
+			{
+				
+			}
+		}
+		yield;
+	}
+}
+
+//Similar to @MainLoop, runs until boss object is deleted
+task boss_yamame_loop(obj)
+{
+	isBossInitialized = true;
+	while(!Obj_IsDeleted(obj))
+	{
+		thBoss_MainLoop(obj);
+		yield;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
