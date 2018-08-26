@@ -213,7 +213,7 @@ task thEnemy_AnimateFairyA1(n_obj, c_type)
 	//2 == Moving
 
 	let imgObj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(imgObj, img_enemy_enemy01);
+	ObjPrim_SetTexture(imgObj, img_th11_enemy);
 	ObjSprite2D_SetSourceRect(imgObj, 0, 0, 32, 32);
 	ObjSprite2D_SetDestCenter(imgObj);
 	Obj_SetRenderPriorityI(imgObj, 41);
@@ -248,9 +248,9 @@ task thEnemy_AnimateFairyA1(n_obj, c_type)
 		];
 
 		x_min = 0;
-		y_min = 319;
+		y_min = 256;
 		x_max = 32;
-		y_max = 351;
+		y_max = 288;
 
 		offsetX = 32;
 		offsetY = 32;
@@ -276,9 +276,9 @@ task thEnemy_AnimateFairyA1(n_obj, c_type)
 		];
 
 		x_min = 0;
-		y_min = 351;
+		y_min = 288;
 		x_max = 32;
-		y_max = 383;
+		y_max = 320;
 
 		offsetX = 32;
 		offsetY = 32;
@@ -304,9 +304,9 @@ task thEnemy_AnimateFairyA1(n_obj, c_type)
 		];
 
 		x_min = 0;
-		y_min = 383;
+		y_min = 320;
 		x_max = 32;
-		y_max = 415;
+		y_max = 352;
 
 		offsetX = 32;
 		offsetY = 32;
@@ -332,9 +332,9 @@ task thEnemy_AnimateFairyA1(n_obj, c_type)
 		];
 
 		x_min = 0;
-		y_min = 415;
+		y_min = 352;
 		x_max = 32;
-		y_max = 447;
+		y_max = 384;
 
 		offsetX = 32;
 		offsetY = 32;
@@ -360,9 +360,9 @@ task thEnemy_AnimateFairyA1(n_obj, c_type)
 		];
 
 		x_min = 0;
-		y_min = 319;
+		y_min = 256;
 		x_max = 64;
-		y_max = 383;
+		y_max = 320;
 
 		offsetX = 64;
 		offsetY = 64;
@@ -569,7 +569,7 @@ task thEnemy_AnimateWispA1(n_obj, c_type)
 	let yOffset = 0;
 	let fpsA = 2;
 	let imgObj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(imgObj, img_enemy_enemy00);
+	ObjPrim_SetTexture(imgObj, img_th11_enemy2);
 	ObjSprite2D_SetSourceRect(imgObj, 0, 0, 32, 32);
 	ObjSprite2D_SetDestCenter(imgObj);
 	Obj_SetRenderPriorityI(imgObj, 41);
@@ -586,7 +586,7 @@ task thEnemy_AnimateWispA1(n_obj, c_type)
 		let effFrame = round(rand(1, 39));
 		let effYOffset = yOffset;
 		let effObj = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(effObj, img_enemy_enemy00);
+		ObjPrim_SetTexture(effObj, img_th11_enemy2);
 		Obj_SetRenderPriorityI(effObj, 40);
 
 		effX += rand(-6, 6);
@@ -646,16 +646,16 @@ task thEnemy_AnimateYinYangA1(n_obj, c_type)
 	let effAngleB = 0;
 
 	let imgObj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(imgObj, img_enemy_enemy01);
+	ObjPrim_SetTexture(imgObj, img_th11_enemy);
 	Obj_SetRenderPriorityI(imgObj, 41);
 
 	let effObjA = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(effObjA, img_enemy_enemy01);
+	ObjPrim_SetTexture(effObjA, img_th11_enemy);
 	Obj_SetRenderPriorityI(effObjA, 40);
 	ObjRender_SetBlendType(effObjA, BLEND_ALPHA);
 
 	let effObjB = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(effObjB, img_enemy_enemy01);
+	ObjPrim_SetTexture(effObjB, img_th11_enemy);
 	Obj_SetRenderPriorityI(effObjB, 40);
 
 	ObjRender_SetBlendType(effObjB, BLEND_ADD_ARGB);
@@ -715,25 +715,25 @@ task thEnemy_AnimateRock(n_obj, c_type)
 	let randAngle = 0;
 
 	let imgObj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(imgObj, img_enemy_enemy01);
+	ObjPrim_SetTexture(imgObj, img_th11_enemy);
 	Obj_SetRenderPriorityI(imgObj, 41);
 	
 	alternative(c_type)
 	case(ENE_ROCK_B)
 	{
-		ObjSprite2D_SetSourceRect(imgObj, 0, 192, 64, 256);
+		ObjSprite2D_SetSourceRect(imgObj, 128, 128, 192, 192);
 		ObjSprite2D_SetDestCenter(imgObj);
 	}
 	case(ENE_ROCK_M)
 	{
 		randTex = rand2(0, 1);
-		ObjSprite2D_SetSourceRect(imgObj, 64 + (randTex * 48), 192, 112 + (randTex * 48), 240);
+		ObjSprite2D_SetSourceRect(imgObj, 192 + (randTex * 48), 128, 240 + (randTex * 48), 176);
 		ObjSprite2D_SetDestCenter(imgObj);
 	}
 	case(ENE_ROCK_S)
 	{
 		randTex = rand2(0, 2);
-		ObjSprite2D_SetSourceRect(imgObj, 160 + (randTex * 32), 192, 192 + (randTex * 32), 224);
+		ObjSprite2D_SetSourceRect(imgObj, 288 + (randTex * 32), 128, 320 + (randTex * 32), 160);
 		ObjSprite2D_SetDestCenter(imgObj);
 	}
 	
@@ -1376,7 +1376,7 @@ task __eff_hex(SnowEnemyObject)
 
 	ObjRender_SetBlendType(objStar, BLEND_ALPHA);
 	Obj_SetRenderPriority(objStar, 0.39);
-	ObjPrim_SetTexture(objStar, img_enemy_enemy00);
+	ObjPrim_SetTexture(objStar, img_th11_enemy);
 
 	alternative(effType)
 	case(ENE_FAIRY00_RED)
@@ -1495,7 +1495,7 @@ task __eff_bossRingA(objEnem)
 	ObjPrim_SetVertexCount(obj, countVertex);
 	ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
 	Obj_SetRenderPriorityI(obj, 27);
-	ObjPrim_SetTexture(obj, img_effect_magiccircle00);
+	ObjPrim_SetTexture(obj, img_th11_etama3);
 	ObjRender_SetPosition(obj, destinationx, destinationy, 0);
 	ascent(iVert in 0..countVertex / 2)
 	{
@@ -1608,7 +1608,7 @@ task __eff_bossRingB(objEnem)
 	ObjPrim_SetVertexCount(obj, countVertex);
 	ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
 	Obj_SetRenderPriorityI(obj, 27);
-	ObjPrim_SetTexture(obj, img_effect_magiccircle01);
+	ObjPrim_SetTexture(obj, img_th11_etama3);
 	ObjRender_SetPosition(obj, destinationx, destinationy, 0);
 	ascent(iVert in 0..countVertex / 2)
 	{
@@ -1706,254 +1706,6 @@ task __eff_bossRingB(objEnem)
 		yield;
 	}
 	Obj_Delete(obj);
-}
-
-function __eff_DrawLife_th13(obj, type)
-{
-	__eff_LifeCircle_th13(type, true, 100, 0, obj);
-}
-
-task __eff_LifeCircle_th13(type,heel,place,alpha,enm) //Code "borrowed, ze" from Mystical Power Plant
-{
-	let obj1 = ObjPrim_Create(OBJ_SPRITE_2D);
-	let obj2 = ObjPrim_Create(OBJ_SPRITE_2D);
-	let obj3 = ObjPrim_Create(OBJ_SPRITE_2D);
-	let obj4 = ObjPrim_Create(OBJ_SPRITE_2D);
-	let pc1 = 0;
-	let pc2 = 1;
-	let i1 = 0;
-	let i2 = 1;
-	let riy = 69;
-	let id = 0;
-	let EnmX = ObjMove_GetX(enm);
-	let EnmY = ObjMove_GetY(enm);
-	let GetEnemyLife = ObjEnemy_GetInfo(enm, INFO_LIFE);
-	let GEL = ObjEnemy_GetInfo(enm, INFO_LIFE);
-	let i = 0;
-	let h = 0;
-	let obj_ac = [60.25-3/5, 12.5, 72.5];
-	let GELMX;
-
-	alternative(type)
-	case("Normal")
-	{
-		id=0;
-	}
-	case("Spell")
-	{
-		id=1;
-	}
-	case("NotSplit")
-	{
-		id=2;
-	}
-
-	GELMX = (GetEnemyLife * 10) / (GEL / obj_ac[id]);
-
-	ObjRender_SetPosition(obj1, CenX, CenY, 0);
-	ObjPrim_SetTexture(obj1, img_effect_lifebar);
-	Obj_SetRenderPriorityI(obj1, riy);
-	ObjPrim_SetPrimitiveType(obj1, PRIMITIVE_TRIANGLESTRIP);
-	ObjRender_SetBlendType(obj1, BLEND_ALPHA);
-	ObjRender_SetAngleXYZ(obj1, 0, 0, 180);
-	ObjRender_SetScaleXYZ(obj1, 1, 1, 0);
-	ObjRender_SetColor(obj1, 255, 255, 255);
-	ObjPrim_SetVertexCount(obj1, 722);
-
-	ObjRender_SetPosition(obj2, CenX, CenY, 0);
-	ObjPrim_SetTexture(obj2, img_effect_lifebar);
-	Obj_SetRenderPriorityI(obj2, riy);
-	ObjPrim_SetPrimitiveType(obj2, PRIMITIVE_TRIANGLESTRIP);
-	ObjRender_SetBlendType(obj2, BLEND_ALPHA);
-	ObjRender_SetAngleXYZ(obj2, 0, 0, 180);
-	ObjRender_SetScaleXYZ(obj2, 1, 1, 0);
-	ObjRender_SetColor(obj2, 255, 255, 255);
-	ObjPrim_SetVertexCount(obj2, 722);
-
-	ObjRender_SetPosition(obj3, CenX, CenY, 0);
-	ObjPrim_SetTexture(obj3, img_effect_lifebar);
-	Obj_SetRenderPriorityI(obj3, riy);
-	ObjPrim_SetPrimitiveType(obj3, PRIMITIVE_TRIANGLESTRIP);
-	ObjRender_SetBlendType(obj3, BLEND_ALPHA);
-	ObjRender_SetAngleXYZ(obj3, 0, 0, 180);
-	ObjRender_SetScaleXYZ(obj3, 1, 1, 0);
-	ObjRender_SetColor(obj3, 255, 255, 255);
-	ObjPrim_SetVertexCount(obj3, 722);
-
-	ObjRender_SetPosition(obj4, CenX, CenY, 0);
-	ObjPrim_SetTexture(obj4, img_effect_lifebar);
-	Obj_SetRenderPriorityI(obj4, riy);
-	ObjPrim_SetPrimitiveType(obj4, PRIMITIVE_TRIANGLESTRIP);
-	ObjRender_SetBlendType(obj4, BLEND_ALPHA);
-	ObjRender_SetScaleXYZ(obj4, 1.25, 2, 0);
-	ObjRender_SetColor(obj4, 255, 255, 255);
-	ObjSprite2D_SetSourceRect(obj4, 1, 2, 6, 8);
-	ObjSprite2D_SetDestCenter(obj4);
-	ObjRender_SetAlpha(obj4, alpha);
-
-	loop(722)
-	{
-		ObjPrim_SetVertexPosition(obj1, i1, 64*sin(pc1),64*cos(pc1),0);
-		ObjPrim_SetVertexPosition(obj1, i2, 60*sin(pc2),60*cos(pc2),0);
-		ObjPrim_SetVertexUVT(obj1, i1, 0+pc1, 9);
-		ObjPrim_SetVertexUVT(obj1, i2, 0+pc2, 13);
-		ObjRender_SetAlpha(obj1, 0);
-
-		if(heel==true&&type=="NotSplit")
-		{
-			ObjRender_SetAlpha(obj1, 0);
-		}
-		else if(type=="NotSplit")
-		{
-			ObjRender_SetAlpha(obj1, 255);
-		}
-
-		ObjPrim_SetVertexPosition(obj2, i1, 64*sin(pc1),64*cos(pc1),0);
-		ObjPrim_SetVertexPosition(obj2, i2, 60*sin(pc2),60*cos(pc2),0);
-		ObjPrim_SetVertexUVT(obj2, i1, 0+pc1, 9);
-		ObjPrim_SetVertexUVT(obj2, i2, 0+pc2, 13);
-		ObjPrim_SetVertexAlpha(obj2, i1, 0);
-		ObjPrim_SetVertexAlpha(obj2, i2, 0);
-
-		ObjPrim_SetVertexPosition(obj3, i1, 64*sin(pc1),64*cos(pc1),0);
-		ObjPrim_SetVertexPosition(obj3, i2, 60*sin(pc2),60*cos(pc2),0);
-		ObjPrim_SetVertexUVT(obj3, i1, 0+pc1, 14);
-		ObjPrim_SetVertexUVT(obj3, i2, 0+pc2, 18);
-		ObjRender_SetAlpha(obj3, 255);
-		pc1+=1;
-		pc2+=1;
-		i1+=2;
-		i2+=2;
-	}
-	pc1=0;
-	pc2=0;
-	i1=0;
-	i2=0;
-
-	while(h < GELMX && type == "Spell")
-	{
-		ObjPrim_SetVertexAlpha(obj1, 0 + h, 255);
-		h++;
-	}
-	h = 0;
-
-	if(type == "Normal")
-	{
-		loop(GELMX)
-		{
-			ObjPrim_SetVertexAlpha(obj2, 0 + h / 4.51, 255);
-			h++;
-		}
-		h = 0;
-	}
-	else
-	{
-		Obj_Delete(obj2);
-	}
-
-	while(ObjEnemy_GetInfo(enm, INFO_LIFE) > 0)
-	{
-		let EnmX = ObjMove_GetX(enm);
-		let EnmY = ObjMove_GetY(enm);
-		let pri = (GetEnemyLife * 10) / (GEL / obj_ac[id]);
-		let GEL2 = GELMX - pri;
-
-		GetEnemyLife = ObjEnemy_GetInfo(enm, INFO_LIFE);
-
-		alternative(type)
-		case("Normal")
-		{
-			let ang	= -128;
-			ObjRender_SetPosition(obj4, EnmX + 63*sin(ang + 10), EnmY + 63*cos(ang + 10), 0);
-			ObjRender_SetAngleXYZ(obj4, 0, 0, ang*-1);
-			ObjRender_SetAngleXYZ(obj1, 0, 0, 115);
-			if(heel == true && h < pri)
-			{
-				loop(10)
-				{
-					ObjPrim_SetVertexAlpha(obj1, 0+h, 255);
-					h++;
-				}
-			}
-			if(GetEnemyLife > 0)
-			{
-				ObjPrim_SetVertexAlpha(obj1, 0 + pri, 0);
-			}
-			if(pri <= GELMX)
-			{
-				ObjRender_SetAlpha(obj4, alpha);
-				loop(GEL2 + 10)
-				{
-					ObjPrim_SetVertexAlpha(obj1, 0 + pri + i, 0);
-					i++;
-				}
-				i = 0;
-			}
-		}
-		case("Spell")
-		{
-			let ang	= -128;
-			ObjRender_SetPosition(obj4, EnmX + 63*sin(ang + 10), EnmY + 63*cos(ang + 10), 0);
-			ObjRender_SetAngleXYZ(obj4, 0, 0, ang*-1);
-			if(heel == true && h < pri)
-			{
-				loop(10)
-				{
-					ObjPrim_SetVertexAlpha(obj1, 0 + h, 255);
-					h++;
-				}
-			}
-			if(GetEnemyLife > 0)
-			{
-				ObjPrim_SetVertexAlpha(obj1,0+pri,0);
-			}
-			if(pri <= GELMX)
-			{
-				ObjRender_SetAlpha(obj2, alpha);
-				ObjRender_SetAlpha(obj4, alpha);
-				loop(GEL2 + 5)
-				{
-					ObjPrim_SetVertexAlpha(obj1, 0 + pri + i, 0);
-					i++;
-				}
-				i = 0;
-			}
-		}
-		case("NotSplit")
-		{
-			if(heel == true && h < pri)
-			{
-				loop(10)
-				{
-					ObjPrim_SetVertexAlpha(obj1,0 + h,255);
-					h++;
-				}
-			}
-			if(GetEnemyLife > 0)
-			{
-				ObjPrim_SetVertexAlpha(obj1,0 + pri,0);
-				ObjRender_SetAlpha(obj4,0);
-			}
-			if(pri <= GELMX)
-			{
-				loop(GEL2)
-				{
-					ObjPrim_SetVertexAlpha(obj1, 0 + pri + i, 0);
-					i++;
-				}
-				i=0;
-			}
-		}
-
-		ObjRender_SetPosition(obj1, EnmX, EnmY, 0);
-		ObjRender_SetPosition(obj2, EnmX, EnmY, 0);
-		ObjRender_SetPosition(obj3, EnmX, EnmY, 0);
-		yield;
-	}
-	Obj_Delete(obj1);
-	Obj_Delete(obj2);
-	Obj_Delete(obj3);
-	Obj_Delete(obj4);
 }
 
 // -=-=-=-=-=-=-=-=-=-=- Internal Use Functions -=-=-=-=-=-=-=-=-=-=-

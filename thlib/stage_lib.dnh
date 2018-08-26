@@ -659,7 +659,7 @@ task __thStage_BulletDelete_th10(x, y, speed, angle, graphic)
 	function CreateBreakObject(x, y, blend, alpha)
 	{
 		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(obj, img_effect_etbreak_th10);
+		ObjPrim_SetTexture(obj, img_th11_etama);
 		Obj_SetRenderPriorityI(obj, 46);
 		ObjSprite2D_SetSourceRect(obj, effSourceRect[0], effSourceRect[1], effSourceRect[2], effSourceRect[3]);
 		ObjSprite2D_SetDestCenter(obj);
@@ -1275,7 +1275,7 @@ task __thStage_InitFrameObjects_th10()
 
 task __thStage_InitFrameObjects_th11()
 {
-	let loc_front = img_front_front00_th11;
+	let loc_front = img_th11_front00;
 	
 	let __frameScore = GetScore();
 	let __frameScoreDis = __frameScore;
@@ -1283,11 +1283,11 @@ task __thStage_InitFrameObjects_th11()
 	
 	task FrameHiScore_th11()
 	{
-		let objA = Create2DSpriteObject(img_front_front00_th11, 256, 0, 352, 18);
+		let objA = Create2DSpriteObject(img_th11_front00, 256, 0, 352, 18);
 		Obj_SetRenderPriorityI(objA, 83);
 		ObjRender_SetPosition(objA, 428, 46, 0);
 		
-		let drawScore = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 12, 0, 216, 16, 16, 1);
+		let drawScore = thDraw_CreateNumericSpriteList(img_th11_ascii, 12, 0, 216, 16, 16, 1);
 		thDraw_SetNumericSpriteListValue(drawScore, 0);
 		thDraw_SetMaxCharacterWidth(drawScore, 9);
 		thDraw_SetNumericSpriteListJustification(drawScore, 2);
@@ -1305,11 +1305,11 @@ task __thStage_InitFrameObjects_th11()
 
 	task FrameScore_th11()
 	{
-		let objA = Create2DSpriteObject(img_front_front00_th11, 256, 18, 352, 36);
+		let objA = Create2DSpriteObject(img_th11_front00, 256, 18, 352, 36);
 		Obj_SetRenderPriorityI(objA, 83);
 		ObjRender_SetPosition(objA, 428, 70, 0);
 		
-		let drawScore = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 12, 0, 216, 16, 16, 1);
+		let drawScore = thDraw_CreateNumericSpriteList(img_th11_ascii, 12, 0, 216, 16, 16, 1);
 		thDraw_SetNumericSpriteListValue(drawScore, 0);
 		thDraw_SetMaxCharacterWidth(drawScore, 9);
 		thDraw_SetNumericSpriteListJustification(drawScore, 2);
@@ -1336,7 +1336,7 @@ task __thStage_InitFrameObjects_th11()
 
 	task FramePlayerLife_th11()
 	{
-		let objA = Create2DSpriteObject(img_front_front00_th11, 256, 35, 352, 56);
+		let objA = Create2DSpriteObject(img_th11_front00, 256, 35, 352, 56);
 		Obj_SetRenderPriorityI(objA, 83);
 		ObjRender_SetPosition(objA, 428, 101, 0);
 
@@ -1344,7 +1344,7 @@ task __thStage_InitFrameObjects_th11()
 		let currentLives = GetPlayerLife;
 
 		let objB = ObjPrim_Create(OBJ_SPRITE_LIST_2D);
-		ObjPrim_SetTexture(objB, img_front_front00_th11);
+		ObjPrim_SetTexture(objB, img_th11_front00);
 		ObjRender_SetBlendType(objB, BLEND_ALPHA);
 		Obj_SetRenderPriorityI(objB, 83);
 		ObjRender_SetY(objB, 104);
@@ -1400,30 +1400,30 @@ task __thStage_InitFrameObjects_th11()
 
 	task FramePlayerPower_th11()
 	{
-		let objA = Create2DSpriteObject(img_front_front00_th11, 256, 57, 352, 75);
+		let objA = Create2DSpriteObject(img_th11_front00, 256, 57, 352, 75);
 		Obj_SetRenderPriorityI(objA, 83);
 		ObjRender_SetPosition(objA, 428, 125, 0);
 		
-		let drawPowerAA = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 12, 0, 216, 16, 16, 1);
+		let drawPowerAA = thDraw_CreateNumericSpriteList(img_th11_ascii, 12, 0, 216, 16, 16, 1);
 		thDraw_SetNumericSpriteListValue(drawPowerAA, 0);
 		thDraw_SetNumericSpriteListJustification(drawPowerAA, 2);
 		Obj_SetRenderPriorityI(drawPowerAA, 83);
 		ObjRender_SetPosition(drawPowerAA, 520, 128, 0);
 		
-		let drawPowerAB = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 7, 0, 216, 16, 16, 0.625);
+		let drawPowerAB = thDraw_CreateNumericSpriteList(img_th11_ascii, 7, 0, 216, 16, 16, 0.625);
 		thDraw_SetNumericSpriteListValue(drawPowerAB, 0);
 		thDraw_SetMaxCharacterWidth(drawPowerAB, 2);
 		thDraw_SetNumericSpriteListJustification(drawPowerAB, 2);
 		Obj_SetRenderPriorityI(drawPowerAB, 83);
 		ObjRender_SetPosition(drawPowerAB, 547, 135, 0);
 		
-		let drawPowerBA = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 12, 0, 216, 16, 16, 1);
+		let drawPowerBA = thDraw_CreateNumericSpriteList(img_th11_ascii, 12, 0, 216, 16, 16, 1);
 		thDraw_SetNumericSpriteListValue(drawPowerBA, 5);
 		thDraw_SetNumericSpriteListJustification(drawPowerBA, 2);
 		Obj_SetRenderPriorityI(drawPowerBA, 83);
 		ObjRender_SetPosition(drawPowerBA, 566, 128, 0);
 		
-		let drawPowerBB = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 7, 0, 216, 16, 16, 0.625);
+		let drawPowerBB = thDraw_CreateNumericSpriteList(img_th11_ascii, 7, 0, 216, 16, 16, 0.625);
 		thDraw_SetNumericSpriteListValue(drawPowerBB, 0);
 		thDraw_SetMaxCharacterWidth(drawPowerBB, 2);
 		thDraw_SetNumericSpriteListJustification(drawPowerBB, 2);
@@ -1433,7 +1433,7 @@ task __thStage_InitFrameObjects_th11()
 		task SlashDot(x, y, type)
 		{
 			let dot = ObjPrim_Create(OBJ_SPRITE_2D);
-			ObjPrim_SetTexture(dot, img_ascii_ascii_th11);
+			ObjPrim_SetTexture(dot, img_th11_ascii);
 			ObjRender_SetBlendType(dot, BLEND_ALPHA);
 			Obj_SetRenderPriorityI(dot, 84);
 			ObjSprite2D_SetSourceRect(dot, 176, 0, 192, 18);
@@ -1466,11 +1466,11 @@ task __thStage_InitFrameObjects_th11()
 
 	task FrameGraze_th11()
 	{
-		let objA = Create2DSpriteObject(img_front_front00_th11, 352, 0, 416, 18);
+		let objA = Create2DSpriteObject(img_th11_front00, 352, 0, 416, 18);
 		Obj_SetRenderPriorityI(objA, 83);
 		ObjRender_SetPosition(objA, 444, 150, 0);
 		
-		let drawGraze = thDraw_CreateNumericSpriteList(img_ascii_ascii_th11, 12, 0, 216, 16, 16, 1);
+		let drawGraze = thDraw_CreateNumericSpriteList(img_th11_ascii, 12, 0, 216, 16, 16, 1);
 		thDraw_SetNumericSpriteListValue(drawGraze, 0);
 		thDraw_SetNumericSpriteListJustification(drawGraze, 0);
 		Obj_SetRenderPriorityI(drawGraze, 83);
@@ -1483,7 +1483,7 @@ task __thStage_InitFrameObjects_th11()
 		}
 	}
 	
-	__thStage_InitFrame(img_front_front00_th11);
+	__thStage_InitFrame(img_th11_front00);
 	__thStage_InitSubFrame();
 	__thStage_DrawIGL();
 	__thStage_DrawDifficulty();
@@ -1501,7 +1501,7 @@ task __thStage_DrawDifficulty
 {
 	let diffdraw = ObjPrim_Create(OBJ_SPRITE_2D);
 	let diffdrawyscale = 0;
-	ObjPrim_SetTexture(diffdraw, img_front_front00_th11);
+	ObjPrim_SetTexture(diffdraw, img_th11_front00);
 	ObjSprite2D_SetSourceRect(diffdraw, 256, 304, 338, 320);
 	ObjSprite2D_SetDestCenter(diffdraw);
 	Obj_SetRenderPriorityI(diffdraw, 84);
@@ -1618,7 +1618,7 @@ task __thStage_DrawIGL
 	let ddalpha = 255;
 
 	let drawigl = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(drawigl, img_front_front00_th11);
+	ObjPrim_SetTexture(drawigl, img_th11_front00);
 	ObjRender_SetBlendType(drawigl, BLEND_ADD_ARGB);
 	ObjSprite2D_SetSourceRect(drawigl, 256, 258, 448, 286);
 	ObjSprite2D_SetDestRect(drawigl, 0, -14, 192, 14);
@@ -1627,7 +1627,7 @@ task __thStage_DrawIGL
 	ObjRender_SetScaleY(drawigl, yscale);
 
 	let drawiglr = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(drawiglr, img_front_front00_th11);
+	ObjPrim_SetTexture(drawiglr, img_th11_front00);
 	ObjRender_SetBlendType(drawiglr, BLEND_ADD_ARGB);
 	ObjSprite2D_SetSourceRect(drawiglr, 258, 290, 370, 294);
 	ObjSprite2D_SetDestRect(drawiglr, 0, -2, 112, 2);
@@ -1636,7 +1636,7 @@ task __thStage_DrawIGL
 	ObjRender_SetScaleY(drawiglr, yscale);
 
 	let drawigll = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(drawigll, img_front_front00_th11);
+	ObjPrim_SetTexture(drawigll, img_th11_front00);
 	ObjRender_SetBlendType(drawigll, BLEND_ADD_ARGB);
 	ObjSprite2D_SetSourceRect(drawigll, 258, 290, 370, 294);
 	ObjSprite2D_SetDestRect(drawigll, 0, -2, -112, 2);
@@ -1730,7 +1730,7 @@ task __thStage_GetSpellCardScore()
 		let loc_frame = 0;
 
 		let objGet = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(objGet, img_front_front00);
+		ObjPrim_SetTexture(objGet, img_th11_front00);
 		if(GetCommonData("FP_IS_SPELLCARD_GET", false) == true) //Get
 		{
 			ObjSprite2D_SetSourceRect(objGet, 256, 96, 494, 128);
@@ -1772,7 +1772,7 @@ task __thStage_GetSpellCardScore()
 		let oldY = y;
 
 		let objDigit = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(objDigit, img_ascii_numbers);
+		ObjPrim_SetTexture(objDigit, img_th11_ascii);
 
 		alternative(value)
 		case(0)
@@ -1891,13 +1891,13 @@ task __thStage_TitleAnim_th10()
 	let logo_frame = 0;
 	
 	let logo_main = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(logo_main, img_st01logo_th10);
+	ObjPrim_SetTexture(logo_main, img_th11_st01logo);
 	ObjSprite2D_SetSourceRect(logo_main, 0, 0, 64, 352);
 	ObjSprite2D_SetDestRect(logo_main, 0, 0, 64, 352);
 	ObjRender_SetPosition(logo_main, 163, 16, 0);
 	
 	let logo_sub = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(logo_sub, img_st01logo_th10);
+	ObjPrim_SetTexture(logo_sub, img_th11_st01logo);
 	ObjSprite2D_SetSourceRect(logo_sub, 0, 488, 128, 512);
 	ObjSprite2D_SetDestRect(logo_sub, 0, 0, 128, 24);
 	ObjRender_SetPosition(logo_sub, 224, 312, 0);
@@ -1946,7 +1946,7 @@ task __thStage_BossTimer_th10(enemy)
 	let colorGB = 255;
 
 	let obj = ObjPrim_Create(OBJ_SPRITE_LIST_2D);
-	ObjPrim_SetTexture(obj, img_ascii_numbers);
+	ObjPrim_SetTexture(obj, img_th11_ascii);
 	ObjRender_SetBlendType(obj, BLEND_ALPHA);
 	Obj_SetRenderPriority(obj, 0.75);
 	ObjRender_SetX(obj, 368);
@@ -2055,7 +2055,7 @@ task __thStage_DrawBossStars_th10(obj, total)
 	function MakeStar(id, x, y)
 	{
 		let obj2 = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(obj2, img_front_front00);
+		ObjPrim_SetTexture(obj2, img_th11_front00);
 		ObjSprite2D_SetSourceRect(obj2, 392, 80, 408, 96);
 		ObjSprite2D_SetDestRect(obj2, 0, 0, 16, 16);
 		ObjRender_SetPosition(obj2, x, y, 0);
@@ -2589,7 +2589,7 @@ task __thItem_DrawScore(type, x, y, score)
 	loc_y = 0;
 	
 	let drawScore = ObjPrim_Create(OBJ_SPRITE_LIST_2D);
-	ObjPrim_SetTexture(drawScore, img_ascii_ascii);
+	ObjPrim_SetTexture(drawScore, img_th11_ascii);
 	UpdateScoreSpriteList(0);
 	
 	loc_x = x;

@@ -10,7 +10,7 @@
 
 //GetMainPackageScriptPath
 
-let path_img = GetCurrentScriptDirectory ~ "../img";
+let path_img = GetCurrentScriptDirectory ~ "../img/";
 
 let img_ename_current = "";
 let img_ct_current = "";
@@ -19,8 +19,68 @@ let img_ct_current = "";
 let img_front_front00_th10 = GetCurrentScriptDirectory ~ "../img/th10/front/front00.png";
 
 //Declate SA Textures
-let img_ascii_ascii_th11 = GetCurrentScriptDirectory ~ "../img/th11/ascii/ascii.png";
-let img_front_front00_th11 = GetCurrentScriptDirectory ~ "../img/th11/front/front00.png";
+let img_th11_ascii               = path_img ~ "th11/ascii/ascii.png";
+let img_th11_loading             = path_img ~ "th11/ascii/loading.png";
+let img_th11_pause               = path_img ~ "th11/ascii/pause.png";
+let img_th11_bg_stage01a         = path_img ~ "th11/background/stage01/stage01a.png";
+let img_th11_bg_stage01b         = path_img ~ "th11/background/stage01/stage01b.png";
+let img_th11_bg_stage02a         = path_img ~ "th11/background/stage02/stage02a.png";
+let img_th11_bg_stage02b         = path_img ~ "th11/background/stage02/stage02b.png";
+let img_th11_bg_stage031         = path_img ~ "th11/background/stage03/stage03a.png";
+let img_th11_bg_stage03b         = path_img ~ "th11/background/stage03/stage03b.png";
+let img_th11_bg_stage03c         = path_img ~ "th11/background/stage03/stage03c.png";
+let img_th11_bg_stage03d         = path_img ~ "th11/background/stage03/stage03d.png";
+let img_th11_bg_stage03e         = path_img ~ "th11/background/stage03/stage03e.png";
+let img_th11_bg_stage03f         = path_img ~ "th11/background/stage03/stage03f.png";
+let img_th11_eff01               = path_img ~ "th11/bullet/eff01.png";
+let img_th11_etama               = path_img ~ "th11/bullet/etama.png";
+let img_th11_etama2              = path_img ~ "th11/bullet/etama2.png";
+let img_th11_etama3              = path_img ~ "th11/bullet/etama3.png";
+let img_th11_etama6              = path_img ~ "th11/bullet/etama6.png";
+let img_th11_etama7a             = path_img ~ "th11/bullet/etama7a.png";
+let img_th11_etama7b             = path_img ~ "th11/bullet/etama7b.png";
+let img_th11_etama8              = path_img ~ "th11/bullet/etama8.png";
+let img_th11_cdbg_kisumeyamame00 = path_img ~ "th11/card/cdbg01a.png";
+let img_th11_cdbg_kisumeyamame01 = path_img ~ "th11/card/cdbg01b.png";
+let img_th11_cdbg_parsee00       = path_img ~ "th11/card/cdbg02a.png";
+let img_th11_cdbg_parsee01       = path_img ~ "th11/card/cdbg02b.png";
+let img_th11_cdbg_yuugi00        = path_img ~ "th11/card/cdbg03a.png";
+let img_th11_cdbg_yuugi01        = path_img ~ "th11/card/cdbg03b.png";
+let img_th11_enemy               = path_img ~ "th11/enemy/enemy.png";
+let img_th11_enemy2              = path_img ~ "th11/enemy/enemy2.png";
+let img_th11_ct_yamame           = path_img ~ "th11/face/enemy1/face01ct.png";
+let img_th11_ct_kisume           = path_img ~ "th11/face/enemy1m/face01mct.png";
+let img_th11_ct_parsee           = path_img ~ "th11/face/enemy2/face02ct.png";
+let img_th11_ct_yuugi            = path_img ~ "th11/face/enemy3/face03ct.png";
+let img_th11_ename               = path_img ~ "th11/front/ename.png";
+let img_th11_front00             = path_img ~ "th11/front/front00.png";
+let img_th11_front01             = path_img ~ "th11/front/front01.png";
+let img_th11_st01logo            = path_img ~ "th11/front/st01logo.png";
+let img_th11_st02logo            = path_img ~ "th11/front/st02logo.png";
+let img_th11_st03logo            = path_img ~ "th11/front/st03logo.png";
+let img_th11_sig                 = path_img ~ "th11/loading/sig.png";
+let img_th11_enm_kisumeyamame    = path_img ~ "th11/stgenm/stg1enm.png";
+let img_th11_enm_parsee          = path_img ~ "th11/stgenm/stg2enm.png";
+let img_th11_enm_yuugi           = path_img ~ "th11/stgenm/stg3enm.png";
+let img_th11_title_rank00        = path_img ~ "th11/title/rank00.png";
+let img_th11_title_result00      = path_img ~ "th11/title/result00.png";
+let img_th11_title_select00      = path_img ~ "th11/title/select00.png";
+let img_th11_title_select00b     = path_img ~ "th11/title/select00b.png";
+let img_th11_title_select01      = path_img ~ "th11/title/select01.png";
+let img_th11_title_sl_player     = path_img ~ "th11/title/sl_pl00.png";
+let img_th11_title_sl_reimu      = path_img ~ "th11/title/sl_pl00b.png";
+let img_th11_title_sl_marisa     = path_img ~ "th11/title/sl_pl01b.png";
+let img_th11_title_logo          = path_img ~ "th11/title/title_logo.png";
+let img_th11_title_ver           = path_img ~ "th11/title/title_ver.png";
+let img_th11_title00a            = path_img ~ "th11/title/title00a.png";
+let img_th11_title01             = path_img ~ "th11/title/title01.png";
+let img_th11_weapon              = path_img ~ "th11/title/weapon.png";
+let img_th11_weapon_00a          = path_img ~ "th11/title/weapon_00a.png";
+let img_th11_weapon_00b          = path_img ~ "th11/title/weapon_00b.png";
+let img_th11_weapon_00c          = path_img ~ "th11/title/weapon_00c.png";
+let img_th11_weapon_01a          = path_img ~ "th11/title/weapon_01a.png";
+let img_th11_weapon_01b          = path_img ~ "th11/title/weapon_01b.png";
+let img_th11_weapon_01c          = path_img ~ "th11/title/weapon_01c.png";
 
 //Declare Main textures
 let img_null = GetCurrentScriptDirectory ~ "../img/null.png";
@@ -160,28 +220,6 @@ let img_cdbg_suwako01 = GetCurrentScriptDirectory ~ "../img/stgenm/th10/enmSuwak
 ----                           ----
 -------------------------------- */
 
-// *----------* Kisume/Yamame *----------*
-let img_enm_kisumeyamame    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_enm_kisumeyamame.png";
-let img_ename_kisume        = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ename_kisume.png";
-let img_ename_yamame        = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ename_yamame.png";
-let img_ct_kisume           = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ct_kisume.png";
-let img_ct_yamame           = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_ct_yamame.png";
-let img_cdbg_kisumeyamame00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_cdbg_kisumeyamame00.png";
-let img_cdbg_kisumeyamame01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmKisumeYamame/img_cdbg_kisumeyamame01.png";
-
-// *----------* Parsee *----------*
-let img_enm_parsee    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_enm_parsee.png";
-let img_ename_parsee  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_ename_parsee.png";
-let img_ct_parsee     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_ct_parsee.png";
-let img_cdbg_parsee00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_cdbg_parsee00.png";
-let img_cdbg_parsee01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmParsee/img_cdbg_parsee01.png";
-
-// X----------X Yuugi X----------X
-let img_enm_yuugi    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_enm_yuugi.png";
-let img_ename_yuugi  = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_ename_yuugi.png";
-let img_ct_yuugi     = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_ct_yuugi.png";
-let img_cdbg_yuugi00 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_cdbg_yuugi00.png";
-let img_cdbg_yuugi01 = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmYuugi/img_cdbg_yuugi01.png";
 
 // X----------X Satori X----------X
 let img_enm_satori    = GetCurrentScriptDirectory ~ "../img/stgenm/th11/enmSatori/img_enm_satori.png";
@@ -389,10 +427,10 @@ let img_cdbg_yukari01  = GetCurrentScriptDirectory ~ "../img/stgenm/enmYakumo/im
 
 
 //Declare Stage Textures
-let img_bgdebug = GetCurrentScriptDirectory ~ "../img/background/testA.png";
-let img_bgdebugA = GetCurrentScriptDirectory ~ "../img/background/testB.png";
-let img_bgdebugB = GetCurrentScriptDirectory ~ "../img/background/testC.png";
-let img_bgdebugC = GetCurrentScriptDirectory ~ "../img/background/testD.png";
+let img_bgdebug = path_img~ "other/background/testA.png";
+let img_bgdebugA = path_img~ "other/background/testB.png";
+let img_bgdebugB = path_img~ "other/background/testC.png";
+let img_bgdebugC = path_img~ "other/background/testD.png";
 
 let img_hakugyokurou02_00 = GetCurrentScriptDirectory ~ "../img/background/stg_Hakugyokurou02/img_hakugyokurou02_00.png";
 let img_hakugyokurou02_01 = GetCurrentScriptDirectory ~ "../img/background/stg_Hakugyokurou02/img_hakugyokurou02_01.png";
@@ -435,8 +473,8 @@ let img_stgTest_cdbg00b = GetCurrentScriptDirectory ~ "../img/card/cdbg03b.png";
 
 let img_stgTest_cutin00 = GetCurrentScriptDirectory ~ "../img/face/enm00Test/face00ct.png";
 
-let img_stgTest_bg00 = GetCurrentScriptDirectory ~ "../img/background/stgTest/stgTestbg00.png";
-let img_stgTest_bg01 = GetCurrentScriptDirectory ~ "../img/background/stgTest/stgTestbg01.png";
+let img_stgTest_bg00 = GetCurrentScriptDirectory ~ "../img/other/background/stgTest/stgTestbg00.png";
+let img_stgTest_bg01 = GetCurrentScriptDirectory ~ "../img/other/background/stgTest/stgTestbg01.png";
 
 //Declare Stage 1 Textures
 let img_stg01_bg00 = GetCurrentScriptDirectory ~ "../img/background/stg1/stg1bg.png";

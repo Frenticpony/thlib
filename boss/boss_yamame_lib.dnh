@@ -15,7 +15,7 @@ task boss_yamame_bh()
 
 	thBoss_SetUpA(boss_Yamame, BOSS_YAMAME, 0, -32);
 	thBoss_SetUpB(boss_Yamame);
-	boss_kisume_loop(boss_Yamame);
+	boss_yamame_loop(boss_Yamame);
 	
 	while(!bossEnd)
 	{

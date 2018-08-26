@@ -195,7 +195,7 @@ task __eff_bossPentagram(SnowEnemyObject)
 
 	ObjRender_SetBlendType(objStar, BLEND_ADD_ARGB);
 	Obj_SetRenderPriority(objStar, 0.39);
-	ObjPrim_SetTexture(objStar, img_effect_magicsquare00);
+	ObjPrim_SetTexture(objStar, img_th11_etama2);
 	ObjSprite2D_SetSourceRect(objStar, 0, 0, 128, 128);
 	ObjSprite2D_SetDestRect(objStar, -63.5, -63.5, 64.5, 64.5);
 	ObjRender_SetColor(objStar, 150,150,150);
@@ -301,9 +301,9 @@ task __eff_bossAura(EnemyObject, colorR, colorG, colorB)
 		colorBPlus = colorB / timestofade;
 
 		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		ObjRender_SetBlendType(obj, BLEND_ADD_ARGB);
 		Obj_SetRenderPriority(obj, 0.4);
-		ObjPrim_SetTexture(obj, img_effect_aura00);
+		ObjPrim_SetTexture(obj, img_th11_eff01);
 		ObjSprite2D_SetSourceRect(obj, 9, 4, 42, 44);
 		ObjSprite2D_SetDestRect(obj, -21, -44, 21, 0);
 		ObjSprite2D_SetDestCenter(obj);
@@ -369,9 +369,9 @@ task __eff_bossAura(EnemyObject, colorR, colorG, colorB)
 		}
 
 		let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+		ObjRender_SetBlendType(obj, BLEND_ADD_ARGB);
 		Obj_SetRenderPriority(obj, 0.4);
-		ObjPrim_SetTexture(obj, img_effect_aura00);
+		ObjPrim_SetTexture(obj, img_th11_eff01);
 		ObjSprite2D_SetSourceRect(obj, 53, 6, 90, 43);
 		ObjSprite2D_SetDestRect(obj, -19, -19, 19, 19);
 		//ObjSprite2D_SetDestCenter(obj);
@@ -420,8 +420,8 @@ task __eff_bossAura(EnemyObject, colorR, colorG, colorB)
 task __eff_enemyMarker(EneObject)
 {
 	let enemark = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(enemark, img_front_front00);
-	ObjSprite2D_SetSourceRect(enemark, 466, 496, 512, 512);
+	ObjPrim_SetTexture(enemark, img_th11_ascii);
+	ObjSprite2D_SetSourceRect(enemark, 210, 240, 256, 256);
 	ObjSprite2D_SetDestRect(enemark,0, 0, 46, 16);
 	ObjRender_SetPosition(enemark, 0, 464, 0);
 	Obj_SetRenderPriorityI(enemark, 82);
@@ -471,27 +471,27 @@ task __eff_eneDown_th10(enemyObj, x, y)
 	let loc_alpha = 200;
 
 	let objEffA = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(objEffA, img_effect_deadcircle);
+	ObjPrim_SetTexture(objEffA, img_th11_etama2);
 
 	let objEffB = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(objEffB, img_effect_deadcircle);
+	ObjPrim_SetTexture(objEffB, img_th11_etama2);
 
 	alternative(effType)
 	case(ENE_FAIRY00_RED, ENE_FAIRY02_RED, ENE_FAIRY03_RED, ENE_YINYANG00_RED, ENE_YINYANG01_RED, ENE_WISP00_RED)
 	{
-		effRect = [0, 0, 64, 64];
+		effRect = [129, 17, 191, 79];
 	}
 	case(ENE_FAIRY00_BLUE, ENE_FAIRY02_BLUE, ENE_FAIRY03_BLUE, ENE_YINYANG00_BLUE, ENE_YINYANG01_BLUE, ENE_WISP00_BLUE, ENE_FAIRY01_WHITE, ENE_ROCK_S)
 	{
-		effRect = [64, 0, 128, 64];
+		effRect = [193, 17, 255, 79];
 	}
 	case(ENE_FAIRY00_YELLOW, ENE_YINYANG00_PURPLE, ENE_YINYANG01_PURPLE, ENE_WISP00_YELLOW, ENE_ROCK_B, ENE_ROCK_M)
 	{
-		effRect = [0, 64, 64, 128];
+		effRect = [1, 81, 63, 143];
 	}
 	case(ENE_FAIRY00_GREEN, ENE_YINYANG00_GREEN, ENE_YINYANG01_GREEN, ENE_WISP00_GREEN)
 	{
-		effRect = [64, 64, 128, 128];
+		effRect = [66, 81, 128, 143];
 	}
 
 	ObjSprite2D_SetSourceRect(objEffA, effRect[0], effRect[1], effRect[2], effRect[3]);
@@ -561,9 +561,9 @@ task __eff_charge_th10(x, y)
 		let loc_effX = x + effDistance * cos(angle);
 		let loc_effY = y + effDistance * sin(angle);
 		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(objEff, img_effect_maple);
-		ObjSprite2D_SetSourceRect(objEff, 0, 0, 32, 32);
-		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjPrim_SetTexture(objEff, img_th11_etama2);
+		ObjSprite2D_SetSourceRect(objEff, 32, 224, 64, 256);
+		ObjSprite2D_SetDestCenter(objEff);
 		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
 		ObjRender_SetAlpha(objEff, loc_alpha);
 
@@ -635,9 +635,9 @@ task __eff_discharge_th10(x, y)
 		let loc_effX = x + effDistance * cos(angle);
 		let loc_effY = y + effDistance * sin(angle);
 		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(objEff, img_effect_maple);
-		ObjSprite2D_SetSourceRect(objEff, 0, 0, 32, 32);
-		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjPrim_SetTexture(objEff, img_th11_etama2);
+		ObjSprite2D_SetSourceRect(objEff, 32, 224, 64, 256);
+		ObjSprite2D_SetDestCenter(objEff);
 		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
 		ObjRender_SetAlpha(objEff, loc_alpha);
 
@@ -709,9 +709,9 @@ task __eff_explode_th10(x, y)
 		let loc_effX = x + effDistance * cos(angle);
 		let loc_effY = y + effDistance * sin(angle);
 		let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
-		ObjPrim_SetTexture(objEff, img_effect_maple);
-		ObjSprite2D_SetSourceRect(objEff, 0, 0, 32, 32);
-		ObjSprite2D_SetDestRect(objEff, -17.5, -17.5, 15.5, 15.5);
+		ObjPrim_SetTexture(objEff, img_th11_etama2);
+		ObjSprite2D_SetSourceRect(objEff, 32, 224, 64, 256);
+		ObjSprite2D_SetDestCenter(objEff);
 		ObjRender_SetBlendType(objEff, BLEND_ADD_ARGB);
 		ObjRender_SetAlpha(objEff, loc_alpha);
 
@@ -767,8 +767,8 @@ task __eff_explodeB_th10(x, y)
 	let loc_alpha = 200;
 
 	let objEff = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(objEff, img_effect_deadcircle);
-	ObjSprite2D_SetSourceRect(objEff, 0, 0, 64, 64);
+	ObjPrim_SetTexture(objEff, img_th11_etama2);
+	ObjSprite2D_SetSourceRect(objEff, 129, 17, 191, 79);
 	ObjSprite2D_SetDestCenter(objEff);
 	ObjRender_SetBlendType(objEff, BLEND_ALPHA);
 

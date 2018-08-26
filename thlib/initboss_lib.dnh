@@ -266,8 +266,8 @@ function InitBoss(FPEnemy, value)
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
 		AnimateKisume(FPEnemy);
 		SpellCardBGKisumeYamame(FPEnemy);
-		img_ename_current = img_ename_kisume;
-		img_ct_current = img_ct_kisume;
+		img_ename_current = img_th11_ename;
+		img_ct_current = img_th11_ct_kisume;
 	}
 	case(BOSS_YAMAME)
 	{
@@ -279,8 +279,8 @@ function InitBoss(FPEnemy, value)
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
 		AnimateYamame(FPEnemy);
 		SpellCardBGKisumeYamame(FPEnemy);
-		img_ename_current = img_ename_yamame;
-		img_ct_current = img_ct_yamame;
+		img_ename_current = img_th11_ename;
+		img_ct_current = img_th11_ct_yamame;
 	}
 	case(BOSS_PARSEE)
 	{
@@ -292,8 +292,8 @@ function InitBoss(FPEnemy, value)
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
 		AnimateParsee(FPEnemy);
 		SpellCardBGParsee(FPEnemy);
-		img_ename_current = img_ename_parsee;
-		img_ct_current = img_ct_parsee;
+		img_ename_current = img_th11_ename;
+		img_ct_current = img_th11_ct_parsee;
 	}
 	case(BOSS_YUUGI)
 	{
@@ -305,8 +305,8 @@ function InitBoss(FPEnemy, value)
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
 		AnimateYuugi(FPEnemy);
 		SpellCardBGYuugi(FPEnemy);
-		img_ename_current = img_ename_yuugi;
-		img_ct_current = img_ct_yuugi;
+		img_ename_current = img_th11_ename;
+		img_ct_current = img_th11_ct_yuugi;
 	}
 	case(BOSS_SATORI)
 	{

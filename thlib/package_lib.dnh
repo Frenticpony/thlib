@@ -853,7 +853,7 @@ task PauseHandler()
 			let tB = 108;
 
 			let objSprite = ObjPrim_Create(OBJ_SPRITE_2D);
-			ObjPrim_SetTexture(objSprite, img_ascii_pause);
+			ObjPrim_SetTexture(objSprite, img_th11_pause);
 			ObjSprite2D_SetSourceRect(objSprite, 0, 0, 48, 220);
 			ObjSprite2D_SetDestCenter(objSprite);
 			Obj_SetRenderPriorityI(objSprite, 100);
@@ -949,7 +949,7 @@ task PauseHandler()
 			let alpha = 255;
 
 			let objSprite = ObjPrim_Create(OBJ_SPRITE_2D);
-			ObjPrim_SetTexture(objSprite, img_ascii_pause);
+			ObjPrim_SetTexture(objSprite, img_th11_pause);
 			alternative(type)
 			case(TYPE_INGAME)
 			{
@@ -1039,7 +1039,7 @@ task PauseHandler()
 			let destinationy = y;
 
 			let objSprite = ObjPrim_Create(OBJ_SPRITE_2D);
-			ObjPrim_SetTexture(objSprite, img_ascii_pause);
+			ObjPrim_SetTexture(objSprite, img_th11_pause);
 			if(sprID == 0)
 			{
 				ObjSprite2D_SetSourceRect(objSprite, 48, 32, 196, 64);
@@ -1212,7 +1212,7 @@ task PauseHandler()
 			let destinationy = 272;
 
 			let objSprite = ObjPrim_Create(OBJ_SPRITE_2D);
-			ObjPrim_SetTexture(objSprite, img_ascii_pause);
+			ObjPrim_SetTexture(objSprite, img_th11_pause);
 			if(id == 0)
 			{
 				ObjSprite2D_SetSourceRect(objSprite, 176, 64, 240, 96);
@@ -1342,7 +1342,7 @@ task PauseHandler()
 			let alpha = 0;
 
 			let objSprite = ObjPrim_Create(OBJ_SPRITE_2D);
-			ObjPrim_SetTexture(objSprite, img_ascii_pause);
+			ObjPrim_SetTexture(objSprite, img_th11_pause);
 			ObjSprite2D_SetSourceRect(objSprite, 48, 156, 204, 188);
 			ObjSprite2D_SetDestRect(objSprite, 0, 0, 156, 32);
 			Obj_SetRenderPriorityI(objSprite, 100);

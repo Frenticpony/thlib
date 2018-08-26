@@ -1,4 +1,4 @@
-let img_effect_etbreak_th10 = GetCurrentScriptDirectory ~ "../../img/effect/etbreak_th10.png";
+let img_effect_etbreak_th10 = GetCurrentScriptDirectory ~ "etbreak_th10.png";
 
 let graphicArray = 
 [

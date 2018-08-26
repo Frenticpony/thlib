@@ -1386,7 +1386,7 @@ task AnimateKisume(FPEnemy)
 	let fpsB = 3;
 	
 	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(obj, img_enm_kisumeyamame);
+	ObjPrim_SetTexture(obj, img_th11_enm_kisumeyamame);
 	Obj_SetRenderPriority(obj, 0.41);
 	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
 	ObjSprite2D_SetDestCenter(obj);
@@ -1461,7 +1461,7 @@ task AnimateYamame(FPEnemy)
 	let fpsB = 3;
 	
 	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(obj, img_enm_kisumeyamame);
+	ObjPrim_SetTexture(obj, img_th11_enm_kisumeyamame);
 	Obj_SetRenderPriority(obj, 0.41);
 	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
 	ObjSprite2D_SetDestCenter(obj);
@@ -1599,7 +1599,7 @@ task AnimateParsee(FPEnemy)
 	let fpsB = 3;
 	
 	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(obj, img_enm_parsee);
+	ObjPrim_SetTexture(obj, img_th11_enm_parsee);
 	Obj_SetRenderPriority(obj, 0.41);
 	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
 	ObjSprite2D_SetDestCenter(obj);
@@ -1737,7 +1737,7 @@ task AnimateYuugi(FPEnemy)
 	let fpsB = 3;
 	
 	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(obj, img_enm_yuugi);
+	ObjPrim_SetTexture(obj, img_th11_enm_yuugi);
 	Obj_SetRenderPriority(obj, 0.41);
 	ObjSprite2D_SetSourceRect(obj, x_min, y_min, x_max, y_max);
 	ObjSprite2D_SetDestCenter(obj);
