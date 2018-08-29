@@ -180,11 +180,11 @@ task __eff_laserLightBase(obj, type, x, y, delay, speed, time, graphic, scale)
 	Obj_Delete(eff);
 }
 
-task __eff_bossPentagram(SnowEnemyObject)
+task __eff_bossPentagram(obj)
 {
 	let objStar = ObjPrim_Create(OBJ_SPRITE_2D);
-	let objxpos = ObjMove_GetX(SnowEnemyObject);
-	let objypos = ObjMove_GetY(SnowEnemyObject);
+	let objxpos = ObjMove_GetX(obj);
+	let objypos = ObjMove_GetY(obj);
 	let object_time = 30;
 	let obj_angle = 330;
 	let osize = 0;
@@ -196,15 +196,15 @@ task __eff_bossPentagram(SnowEnemyObject)
 	ObjRender_SetBlendType(objStar, BLEND_ADD_ARGB);
 	Obj_SetRenderPriority(objStar, 0.39);
 	ObjPrim_SetTexture(objStar, img_th11_etama2);
-	ObjSprite2D_SetSourceRect(objStar, 0, 0, 128, 128);
-	ObjSprite2D_SetDestRect(objStar, -63.5, -63.5, 64.5, 64.5);
+	ObjSprite2D_SetSourceRect(objStar, 128, 80, 256, 208);
+	ObjSprite2D_SetDestCenter(objStar);
 	ObjRender_SetColor(objStar, 150,150,150);
 	ObjRender_SetAlpha(objStar, 205);
 
-	while(!Obj_IsDeleted(SnowEnemyObject))
+	while(!Obj_IsDeleted(obj))
 	{
-		objxpos = ObjMove_GetX(SnowEnemyObject);
-		objypos = ObjMove_GetY(SnowEnemyObject);
+		objxpos = ObjMove_GetX(obj);
+		objypos = ObjMove_GetY(obj);
 
 		StarSize;
 		ObjRender_SetX(objStar, objxpos);
@@ -415,6 +415,80 @@ task __eff_bossAura(EnemyObject, colorR, colorG, colorB)
 		OAura(EnemyObject, colorR, colorG, colorB);
 		loop(5){yield;}
 	}
+}
+
+task __eff_bossDistort(obj)
+{
+	CreateRenderTarget("A");
+	RenderToTextureA1("A", 20, 22, false);
+
+	let frame = 0;
+	let baseEffectRadius = 0;
+	let outerFluct = 5;
+	let effectRadius = 0;
+
+	let priEffectMin = 20;
+	let priEffectMax = 28;
+
+	let frameWidth = GetStgFrameWidth();
+	let frameHeight = GetStgFrameHeight();
+	let frameLeft = GetStgFrameLeft();
+	let frameRight = frameLeft + frameWidth;
+	let frameTop = GetStgFrameTop();
+	let frameBottom = frameTop + frameHeight;
+
+	let objWave = ObjPrim_Create(OBJ_SPRITE_2D);
+	Obj_SetRenderPriorityI(objWave, 25);
+	ObjPrim_SetTexture(objWave, "A");
+	ObjSprite2D_SetSourceRect(objWave, frameLeft, frameTop, frameRight, frameBottom);
+	ObjSprite2D_SetDestRect(objWave, 0, 0, frameWidth, frameHeight);
+	Obj_SetRenderPriorityI(objWave, priEffectMax + 1);
+
+	let pathShader = GetCurrentScriptDirectory ~ "SamplePS03_HLSL.txt";
+	ObjShader_SetShaderF(objWave, pathShader);
+	ObjShader_SetTechnique(objWave, "TecWave");
+	
+	let objCircle = ObjPrim_CreateEffectCircle(32, BLEND_MULTIPLY);
+	ObjEffCircle_SetRadiusC(objCircle, 0, 160);
+	ObjEffCircle_SetColorC(objCircle, [255, 100, 100], [255, 255, 255]);
+	Obj_SetRenderPriorityI(objCircle, 29);
+	
+	let objCircleB = ObjPrim_CreateEffectCircle(32, BLEND_MULTIPLY);
+	ObjEffCircle_SetRadiusC(objCircleB, 0, 160);
+	ObjEffCircle_SetColorC(objCircleB, [255, 150, 150], [255, 255, 255]);
+	Obj_SetRenderPriorityI(objCircleB, 22);
+
+	while(!Obj_IsDeleted(obj))
+	{
+		if(baseEffectRadius < 128)
+		{
+			baseEffectRadius = InterpolateDecelerate(0, 128, frame, 60);
+			ObjEffCircle_SetRadiusC(objCircle, 0, InterpolateDecelerate(0, 160, frame, 60));
+			ObjEffCircle_SetRadiusC(objCircleB, 0, InterpolateDecelerate(0, 160, frame, 60));
+		}
+
+		effectRadius = baseEffectRadius + outerFluct * (sin(frame*4) / 2);
+
+		let enemyX = ObjMove_GetX(obj);
+		let enemyY = ObjMove_GetY(obj);
+
+		RenderToTextureA1("A", priEffectMin, priEffectMax, true);
+
+		ObjShader_SetFloat(objWave, "frame_", frame);
+		ObjShader_SetFloat(objWave, "enemyX_", enemyX + frameLeft);
+		ObjShader_SetFloat(objWave, "enemyY_", enemyY + frameTop);
+		ObjShader_SetFloat(objWave, "waveRadius_", effectRadius);
+		
+		ObjRender_SetPosition(objCircle, enemyX, enemyY, 0);
+		ObjRender_SetPosition(objCircleB, enemyX, enemyY, 0);
+
+		frame++;
+		yield;
+	}
+
+	Obj_Delete(objWave);
+	Obj_Delete(objCircle);
+	Obj_Delete(objCircleB);
 }
 
 task __eff_enemyMarker(EneObject)

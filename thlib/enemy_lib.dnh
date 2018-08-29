@@ -1493,16 +1493,16 @@ task __eff_bossRingA(objEnem)
 	let obj = ObjPrim_Create(OBJ_PRIMITIVE_2D);
 	ObjPrim_SetPrimitiveType(obj, PRIMITIVE_TRIANGLESTRIP);
 	ObjPrim_SetVertexCount(obj, countVertex);
-	ObjRender_SetBlendType(obj, BLEND_ADD_RGB);
+	ObjRender_SetBlendType(obj, BLEND_ADD_ARGB);
 	Obj_SetRenderPriorityI(obj, 27);
 	ObjPrim_SetTexture(obj, img_th11_etama3);
 	ObjRender_SetPosition(obj, destinationx, destinationy, 0);
 	ascent(iVert in 0..countVertex / 2)
 	{
-		let left = iVert * 128;
+		let left = iVert * 16;
 		let indexVert = iVert * 2;
-		ObjPrim_SetVertexUVT(obj, indexVert + 0, left, 0);
-		ObjPrim_SetVertexUVT(obj, indexVert + 1, left, 64);
+		ObjPrim_SetVertexUVT(obj, indexVert + 0, 48, left);
+		ObjPrim_SetVertexUVT(obj, indexVert + 1, 64, left);
 	}
 
 	let objBoss = objEnem;
@@ -1612,10 +1612,10 @@ task __eff_bossRingB(objEnem)
 	ObjRender_SetPosition(obj, destinationx, destinationy, 0);
 	ascent(iVert in 0..countVertex / 2)
 	{
-		let left = iVert * 128;
+		let left = iVert * 16;
 		let indexVert = iVert * 2;
-		ObjPrim_SetVertexUVT(obj, indexVert + 0, left, 0);
-		ObjPrim_SetVertexUVT(obj, indexVert + 1, left, 64);
+		ObjPrim_SetVertexUVT(obj, indexVert + 0, 80, left);
+		ObjPrim_SetVertexUVT(obj, indexVert + 1, 96, left);
 	}
 
 	let objBoss = objEnem;

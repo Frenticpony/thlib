@@ -35,7 +35,7 @@ let stageFrame = 0;
 let unloadStage = false;
 
 let bossID = 0;
-let bossAttackState = 0;
+let bossAttackState = 1;
 let bossSpellScore = 0;
 let bossTimer = 0;
 let bossTimeout = false;
@@ -1777,47 +1777,47 @@ task __thStage_GetSpellCardScore()
 		alternative(value)
 		case(0)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 0, 0, 16, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 0, 216, 16, 232);
 		}
 		case(1)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 16, 0, 32, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 16, 216, 32, 232);
 		}
 		case(2)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 32, 0, 48, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 32, 216, 48, 232);
 		}
 		case(3)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 48, 0, 64, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 48, 216, 64, 232);
 		}
 		case(4)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 64, 0, 80, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 64, 216, 80, 232);
 		}
 		case(5)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 80, 0, 96, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 80, 216, 96, 232);
 		}
 		case(6)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 96, 0, 112, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 96, 216, 112, 232);
 		}
 		case(7)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 112, 0, 128, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 112, 216, 128, 232);
 		}
 		case(8)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 128, 0, 144, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 128, 216, 144, 232);
 		}
 		case(9)
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 144, 0, 160, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 144, 216, 160, 232);
 		}
 		case(10) //comma
 		{
-			ObjSprite2D_SetSourceRect(objDigit, 224, 0, 240, 16);
+			ObjSprite2D_SetSourceRect(objDigit, 224, 216, 240, 232);
 		}
 
 		ObjSprite2D_SetDestCenter(objDigit);
@@ -2028,6 +2028,115 @@ task __thStage_BossTimer_th10(enemy)
 	//Obj_Delete(objDot);
 }
 
+task __thStage_BossTimer_th11(enemy)
+{
+	let numStore = 0;
+	let scale = 1;
+	let colorGB = 255;
+
+	let drawTimeA = thDraw_CreateNumericSpriteList(img_th11_ascii, 12, 0, 216, 16, 16, 1);
+	thDraw_SetNumericSpriteListValue(drawTimeA, 0);
+	thDraw_SetMaxCharacterWidth(drawTimeA, 2);
+	thDraw_SetNumericSpriteListJustification(drawTimeA, 2);
+	Obj_SetRenderPriorityI(drawTimeA, 60);
+	ObjRender_SetPosition(drawTimeA, 354, 0, 0);
+	
+	let drawTimeB = thDraw_CreateNumericSpriteList(img_th11_ascii, 7, 0, 216, 16, 16, 0.625);
+	thDraw_SetNumericSpriteListValue(drawTimeB, 0);
+	thDraw_SetMaxCharacterWidth(drawTimeB, 2);
+	thDraw_SetNumericSpriteListJustification(drawTimeB, 0);
+	Obj_SetRenderPriorityI(drawTimeB, 60);
+	ObjRender_SetPosition(drawTimeB, 370, 6, 0);
+	
+	let drawTimeDot = SlashDot(362, 0, '.');
+
+	let glob_y = 200;
+	//let seconds  = GetCommonData("FP_BOSS_TIMER", 0) / 60 * 100;
+	let seconds  = bossTimer / 60 * 100;
+	let miliseconds  = bossTimer / 60 * 100;
+	let loc_timer = 0;
+	let listNum = DigitToArray(seconds, 4);
+	numStore = listNum[1];
+	let objScene = ID_INVALID;
+	while(isBossActive)
+	{
+		if(bossTimer > 5999.4)
+		{
+			loc_timer = 5999.4;
+		}
+		else
+		{
+			loc_timer = bossTimer;
+		}
+		seconds  = loc_timer / 60;
+		miliseconds  = loc_timer / 60 * 100;
+		listNum = DigitToArray(seconds, 4);
+
+		thDraw_SetNumericSpriteListValue(drawTimeA, seconds);
+		thDraw_SetNumericSpriteListValue(drawTimeB, miliseconds);
+		
+		Obj_SetValue(drawTimeA, "d", 2);
+		Obj_SetValue(drawTimeB, "d", 2);
+
+		if(seconds <= 1000)
+		{
+			if(listNum[1] <= 10 && listNum[1] > 4)
+			{
+				if(numStore != listNum[1])
+				{
+					thSE_Play(se_timeout);
+					numStore = listNum[1];
+					scale = 1.25;
+					colorGB = 125;
+				}
+			}
+			if(listNum[1] <= 4 && listNum[1] > -1)
+			{
+				if(numStore != listNum[1])
+				{
+					thSE_Play(se_timeout2);
+					numStore = listNum[1];
+					scale = 1.5;
+					colorGB = 50;
+				}
+			}
+		}
+		else
+		{
+			colorGB = 255;
+		}
+		if(scale > 1)
+		{
+			scale -= 0.05;
+		}
+		yield;
+	}
+	Obj_Delete(drawTimeA);
+	Obj_Delete(drawTimeB);
+	Obj_Delete(drawTimeDot);
+	
+	function SlashDot(x, y, type)
+	{
+		let dot = ObjPrim_Create(OBJ_SPRITE_2D);
+		ObjPrim_SetTexture(dot, img_th11_ascii);
+		ObjRender_SetBlendType(dot, BLEND_ALPHA);
+		Obj_SetRenderPriorityI(dot, 60);
+		ObjSprite2D_SetSourceRect(dot, 176, 0, 192, 18);
+		ObjSprite2D_SetDestRect(dot, 0, 0, 16, 16);
+		if(type == '.')
+		{
+			ObjSprite2D_SetSourceRect(dot, 176, 216, 192, 232);
+		}
+		if(type == '/')
+		{
+			ObjSprite2D_SetSourceRect(dot, 160, 216, 176, 232);
+		}
+		ObjRender_SetX(dot, x);
+		ObjRender_SetY(dot, y);
+		return dot;
+	}
+}
+
 task __thStage_DrawBossName_th10(ene, texture, id)
 {
 	let alpha = 0;
@@ -2119,7 +2228,7 @@ task __thStage_DrawBossLife_th10(obj, type)
 	let GetEnemyLifeTotal = ObjEnemy_GetInfo(obj, INFO_LIFE);
 	let GetEnemyLife = ObjEnemy_GetInfo(obj, INFO_LIFE);
 
-	let segmentLength = 342;
+	let segmentLength = 330;
 	let growFlag = true;
 	let growPart = 0;
 	let growValue = 0;
@@ -2190,7 +2299,7 @@ task __thStage_DrawBossLife_th10(obj, type)
 	case("Normal")
 	{
 		id = 0;
-		segmentLength = 250;
+		segmentLength = 238;
 	}
 	case("Spell")
 	{
@@ -2202,7 +2311,7 @@ task __thStage_DrawBossLife_th10(obj, type)
 	case("NotSplit")
 	{
 		id = 2;
-		segmentLength = 342;
+		segmentLength = 330;
 		ObjRender_SetAlpha(barSpell, 0);
 		ObjRender_SetAlpha(barSpell_S, 0);
 	}
