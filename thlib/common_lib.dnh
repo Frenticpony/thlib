@@ -822,7 +822,15 @@ function thDraw_CreateNumericSpriteList(texture, spacing, spX, spY, spWidth, spH
 				}
 				chArr = tempArray ~ chArr;
 			}
-		
+			else if(loc_c != -1 && length(chArr) > loc_c)
+			{
+				let tempArray = [];
+				ascent(i in (length(chArr) - loc_c) + 1..length(chArr))
+				{
+					tempArray = tempArray ~ [chArr[i]];
+				}
+				chArr = chArr[length(chArr) - loc_c .. length(chArr)];
+			}
 			stLength = length(chArr);
 			
 			alternative(Obj_GetValue(__nsl_drawNumber, "b"))
