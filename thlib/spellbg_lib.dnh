@@ -550,7 +550,7 @@ task SpellCardBGKisumeYamame(FPEnemy)
 	let hue = 0;
 	
 	let objBG1 = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(objBG1, img_th11_cdbg_kisumeyamame00);		//Set first texture
+	ObjPrim_SetTexture(objBG1, img_th11_cdbg_kisumeyamame01);		//Set first texture
 	Obj_SetRenderPriorityI(objBG1,22);
 	ObjRender_SetPosition(objBG1, 0, 0, 0);
 	ObjRender_SetBlendType(objBG1, BLEND_ALPHA);
@@ -559,7 +559,7 @@ task SpellCardBGKisumeYamame(FPEnemy)
 	ObjRender_SetScaleXYZ(objBG1, 1, 1, 1);
 		
 	let objBG2 = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(objBG2, img_th11_cdbg_kisumeyamame01);		//Set overlay texture
+	ObjPrim_SetTexture(objBG2, img_th11_cdbg_kisumeyamame00);		//Set overlay texture
 	Obj_SetRenderPriorityI(objBG2,23);
 	ObjRender_SetPosition(objBG2, 0, 0, 0);
 	ObjRender_SetBlendType(objBG2, BLEND_ADD_ARGB);
@@ -575,12 +575,12 @@ task SpellCardBGKisumeYamame(FPEnemy)
 		
 		if(isBossSpell)
 		{
-			ObjSprite2D_SetSourceRect(objBG1, 0, 0 + bgY1, 1024, 1024 + bgY1);
-			ObjSprite2D_SetSourceRect(objBG2, 0 + bgX2, 0 + bgY2, 1024 + bgX2, 1024 + bgY2);
+			ObjSprite2D_SetSourceRect(objBG2, 0, 0 + bgY1, 1024, 1024 + bgY1);
+			ObjSprite2D_SetSourceRect(objBG1, 0 + bgX2, 0 + bgY2, 1024 + bgX2, 1024 + bgY2);
 			
-			bgY1 += 0.5;
-			bgX2 -= 0.5;
-			bgY2 -= 0.5;
+			bgY1 += 0.75;
+			bgX2 -= 0.75;
+			bgY2 -= 0.75;
 			if(alpha < 255)
 			{
 				alpha += 4;
