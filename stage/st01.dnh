@@ -20,7 +20,9 @@ function Stage01_MidBossStart()
 
 function Stage01_BossStart()
 {
-	boss_debug_bh();
+	isBossActive = true;
+	canSpawnBoss = false;
+	boss_yamame_bh();
 }
 
 function Stage01_End()
@@ -1424,6 +1426,7 @@ function Stage01_Handler()
 		alternative(stageFrame)
 		case(60)
 		{
+			/*
 			Stage01_StageSub00();
 			Stage01_StageSub01();
 			wait(300);
@@ -1434,6 +1437,7 @@ function Stage01_Handler()
 			wait(600);
 			Stage01_StageSub05();
 			wait(450);
+			*/
 			Stage01_MidBossStart();
 			wait(600);
 			Stage01_StageSub06();
@@ -1450,6 +1454,7 @@ function Stage01_Handler()
 			Stage01_StageSub09_t();
 			Stage01_StageSub10_t();
 			wait(600);
+			Stage01_BossStart();
 		}
 		stageFrame++;
 		yield;

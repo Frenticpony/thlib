@@ -157,7 +157,7 @@ function boss_debug_ns01(obj)
 
 	bossAdvance = true;
 	thEcl_Finish(ecl);
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 
 	task MainTask
 	{
@@ -188,7 +188,7 @@ function boss_debug_ns02(obj)
 	thBoss_WaitForZeroLife(obj);
 
 	bossAdvance = true;
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 	thEcl_Finish(ecl);
 
 	task MainTask
@@ -224,7 +224,7 @@ function boss_debug_sc01(obj)
 
 	bossAdvance = true;
 	thEcl_Finish(ecl);
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 
 	task at1()
 	{
@@ -366,7 +366,7 @@ function boss_debug_sc02(obj)
 
 	bossAdvance = true;
 	thEcl_Finish(ecl);
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 
 	task at1()
 	{
@@ -512,7 +512,7 @@ function boss_debug_dpsTest(obj)
 	
 	bossAdvance = true;
 	thEcl_Finish(ecl);
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 	
 	task MainTask
 	{
