@@ -22,31 +22,23 @@ task boss_kisume_bh()
 		if(Obj_GetValueD(boss_Kisume, "NA", false) == true)
 		{
 			alternative(bossAttackState)
-			case(0)
+			case(1)
 			{
 				boss_kisume_ns01(boss_Kisume);
 			}
-			case(1)
+			case(2)
 			{
 				boss_kisume_ns02(boss_Kisume);
 			}
-			case(2)
+			case(3)
 			{
-				if(isDifficulty(HL))
-				{
-					boss_kisume_sc01(boss_Kisume);
-				}
-				else
-				{
-					boss_kisume_ns03(boss_Kisume);
-				}
+				boss_kisume_ns03(boss_Kisume);
 			}
-			case(999)
+			case(4)
 			{
-				debug_FinishMid_th10(boss_Kisume);
-				bossEnd = true;
+				boss_kisume_sc01(boss_Kisume);
 			}
-			others
+			case(0) //End
 			{
 				if(bossTimeout)
 				{
@@ -56,6 +48,11 @@ task boss_kisume_bh()
 				{
 					thBoss_FinishMid(boss_Kisume);
 				}
+				bossEnd = true;
+			}
+			case(999) //Debug
+			{
+				debug_FinishMid_th10(boss_Kisume);
 				bossEnd = true;
 			}
 		}
@@ -80,15 +77,16 @@ function boss_kisume_ns01(obj)
 	let ecl = thEcl_Init(obj);
 	let bossAdvance = false;
 	
-	thBoss_InitPattern(obj, 4000, 600);
+	thBoss_InitPattern(obj, 4000, 110);
 	thBoss_SetBossMoveField(obj, CenY, 384, 999);
 	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetNextPhaseB(obj, 2, 0);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
 
 	bossAdvance = true;
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 	thEcl_Finish(ecl);
 
 	task MainTask
@@ -105,22 +103,22 @@ function boss_kisume_ns01(obj)
 			}
 			case(100)
 			{
-				isBossInvincible = false;
-				ns01_at1();
-				thEnemy_SetSpeedAtAngle(obj, 5.5, 90);
-				thEnemy_TransitionSpeed(obj, IP_DECELERATE, 0, 100);
+				//isBossInvincible = false;
+				//ns01_at1();
+				//thEnemy_SetSpeedAtAngle(obj, 5.5, 90);
+				//thEnemy_TransitionSpeed(obj, IP_DECELERATE, 0, 100);
 			}
 			case(200)
 			{
-				ns01_at2();
+				//ns01_at2();
 			}
 			case(230)
 			{
-				thEnemy_SetMovePosition(obj, IP_DECELERATE, ObjMove_GetX(GetPlayerObjectID) - CenX, 128, 60, false);
+				//thEnemy_SetMovePosition(obj, IP_DECELERATE, ObjMove_GetX(GetPlayerObjectID) - CenX, 128, 60, false);
 			}
 			case(290)
 			{
-				main_frame = 99;
+				//main_frame = 99;
 			}
 			main_frame++;
 			yield;
@@ -179,12 +177,13 @@ function boss_kisume_ns02(obj)
 	thBoss_InitPattern(obj, 4300, 600);
 	thBoss_SetBossMoveField(obj, CenY, 384, 999);
 	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetNextPhaseB(obj, SetValueD(3, 3, 4, 4), 0);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
 
 	bossAdvance = true;
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 	thEcl_Finish(ecl);
 
 	task MainTask
@@ -226,15 +225,11 @@ function boss_kisume_ns02(obj)
 		
 		if(isDifficulty(L))
 		{
-			//ex_spup(ecl, 0, 0, ECL_NULL, 2.10 + ecl_speed, 60);
-			//ex_spup(ecl, 1, 0, ECL_NULL, 3.00 + ecl_speed, 60);
 			ex_spup(ecl, 0, 60, 0.035);
 			ex_spup(ecl, 1, 60, 0.05);
 		}
 		else
 		{
-			//ex_spup(ecl, 0, 0, ECL_NULL, 1.69 + ecl_speed, 60);
-			//ex_spup(ecl, 1, 0, ECL_NULL, 2.19 + ecl_speed, 60);
 			ex_spup(ecl, 0, 60, 0.0366);
 			ex_spup(ecl, 1, 60, 0.0283);
 		}
@@ -262,13 +257,15 @@ function boss_kisume_ns03(obj)
 	let bossAdvance = false;
 	
 	thBoss_InitPattern(obj, 4300, 600);
+	thBoss_SetBossMoveField(obj, 160, 280, 64);
 	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetNextPhaseA(obj, 0);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
 
 	bossAdvance = true;
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 	thEcl_Finish(ecl);
 
 	task MainTask
@@ -282,9 +279,7 @@ function boss_kisume_ns03(obj)
 			alternative(main_frame)
 			case(0)
 			{
-				thBoss_SetBossMoveField(obj, 160, 280, 64);
 				thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 160, 60, false);
-				//thBoss_Delay(60, bossAdvance);
 			}
 			case(60)
 			{
@@ -314,9 +309,6 @@ function boss_kisume_ns03(obj)
 		et_copy(ecl, 0, 1);
 		et_gr(ecl, 1, SHOT_YOUMU_PINK);
 		
-		//ex_spup(ecl, 0, 0, ECL_NULL, 2 + ecl_speed, 60);
-		//ex_spup(ecl, 1, 0, ECL_NULL, 2.5 + ecl_speed, 60);
-		
 		ex_spup(ecl, 0, 60, 0.0333);
 		ex_spup(ecl, 1, 60, 0.0416);
 		
@@ -343,16 +335,17 @@ function boss_kisume_sc01(obj)
 	let bossAdvance = false;
 	isBossInvincible = true;
 	
-	thBoss_InitSpellcard(obj, 2160, 600, 500000, "怪奇「釣瓶落としの怪」");
+	thBoss_InitSpellcard(obj, 2160, 60, 500000, "怪奇「釣瓶落としの怪」");
 	thBoss_SetBossMoveField(obj, 72, 384, 16);
 	thBoss_SetDamageRate(obj, 33, 100);
+	thBoss_SetNextPhaseA(obj, 0);
 	thBoss_SetInvincibilityTime(obj, 60);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
 
 	bossAdvance = true;
-	thBoss_FinishA(obj);
+	thBoss_Finish(obj);
 	thEcl_Finish(ecl);
 
 	task MainTask
@@ -433,7 +426,6 @@ function boss_kisume_sc01(obj)
 		}
 	}
 }
-
 
 
 

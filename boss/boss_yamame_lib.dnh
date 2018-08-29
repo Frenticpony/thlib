@@ -7,6 +7,7 @@ task boss_yamame_bh()
 	boss_Yamame = ObjEnemy_Create(OBJ_ENEMY);
 	
 	thBoss_Init(boss_Yamame);
+	__eff_bossDistort(boss_Yamame);
 
 	while(!isBossActive)
 	{

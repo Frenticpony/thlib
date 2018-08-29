@@ -15,7 +15,7 @@
 function thBoss_Init(n_obj)
 {
 	bossID = n_obj;
-	bossAttackState = 0;
+	bossAttackState = 1;
 	bossEnd = false;
 }
 
@@ -40,7 +40,7 @@ function thBoss_SetUpB(n_obj)
 	__thStage_DrawBossStars_th10(n_obj, 0);
 	__eff_bossC(n_obj);
 	//TDistortion(n_obj, 50, 150, 50);
-	__thStage_BossTimer_th10(n_obj);
+	__thStage_BossTimer_th11(n_obj);
 }
 
 // -=-=-=-=-=-=-=-=-=-=- Attack Initialization -=-=-=-=-=-=-=-=-=-=-
@@ -113,6 +113,7 @@ function thBoss_SetInvincibilityTime(n_obj, n_time)
 {
 	Obj_SetValue(n_obj, "I", n_time);
 }
+
 // -=-=-=-=-=-=-=-=-=-=- Boss Value Get -=-=-=-=-=-=-=-=-=-=-
 
 function thBoss_GetBossMoveField(n_obj)
@@ -135,6 +136,7 @@ function thBoss_GetInvincibilityTime(n_obj)
 {
 	return Obj_GetValueD(n_obj, "I", 0);
 }
+
 // -=-=-=-=-=-=-=-=-=-=- Boss Main Loop -=-=-=-=-=-=-=-=-=-=-
 
 function thBoss_MainLoop(n_obj)
@@ -185,6 +187,18 @@ function thBoss_MainLoop(n_obj)
 
 // -=-=-=-=-=-=-=-=-=-=- Boss Progression Functions -=-=-=-=-=-=-=-=-=-=-
 
+function thBoss_SetNextPhaseA(n_obj, phase)
+{
+	Obj_SetValue(n_obj, "PH", phase);
+	Obj_SetValue(n_obj, "PT", phase);
+}
+
+function thBoss_SetNextPhaseB(n_obj, phase, phaseTimeout)
+{
+	Obj_SetValue(n_obj, "PH", phase);
+	Obj_SetValue(n_obj, "PT", phaseTimeout);
+}
+
 function thBoss_Pause(n_time)
 {
 	isTimerPaused = true;
@@ -192,7 +206,7 @@ function thBoss_Pause(n_time)
 	wait(n_time);
 }
 
-function thBoss_FinishA(n_obj)
+function thBoss_Finish(n_obj)
 {
 	if(!isFinalBossAttack)
 	{
@@ -207,25 +221,8 @@ function thBoss_FinishA(n_obj)
 		thStage_ClearAllShots(ObjMove_GetX(n_obj), ObjMove_GetY(n_obj));
 	}
 	useAtkAnim = 0;
-	bossAttackState++;
-}
-
-function thBoss_FinishB(n_obj, n_state)
-{
-	if(!isFinalBossAttack)
-	{
-		if(isBossSpell)
-		{
-			endSpellcard = true;
-			isBossSpell = false;
-			thSE_Play(se_tan00);
-			__thStage_GetSpellCardScore();
-		}
-		
-		thStage_ClearAllShots(ObjMove_GetX(n_obj), ObjMove_GetY(n_obj));
-	}
-	useAtkAnim = 0;
-	bossAttackState = n_state;
+	if(bossTimeout){bossAttackState = Obj_GetValueD(n_obj, "PT", bossAttackState + 1);}
+	else{bossAttackState = Obj_GetValueD(n_obj, "PH", bossAttackState + 1);}
 }
 
 function thBoss_FinishC(n_obj)
