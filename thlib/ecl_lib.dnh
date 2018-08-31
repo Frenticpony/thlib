@@ -1034,6 +1034,14 @@ function _ex(obj, id, array, patternCount)
 	{
 		_ex_bounce(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6]);
 	}
+	else if(ar[patternCount][0] == _EX_ARMOR)
+	{
+		_ex_armor(array, ar[patternCount][1]);
+	}
+	else if(ar[patternCount][0] == _EX_OOB)
+	{
+		_ex_oob(array, ar[patternCount][1]);
+	}
 	else if(ar[patternCount][0] == _EX_GR)
 	{
 		//_ex_gr(array, ar[patternCount][1]);
@@ -2406,7 +2414,7 @@ function _ex_spav(array, time, accel, angvel, minSpeed)
 	{
 		ascent(i in 0..length(array))
 		{
-			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -accel, angvel, minSpeed);
+			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, angvel, minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0,      999);
 			AddPatternSE(array[i], _frameHelper, se_kira00);
 		}
@@ -2552,7 +2560,6 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			decel = speed / frame;
@@ -2569,6 +2576,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2578,13 +2586,13 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
 			{
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2594,6 +2602,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2610,7 +2619,6 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			decel = speed / frame;
@@ -2629,6 +2637,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2638,7 +2647,6 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -2646,6 +2654,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2656,6 +2665,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2672,7 +2682,6 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			decel = speed / frame;
@@ -2689,6 +2698,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2698,13 +2708,13 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
 			{
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2714,6 +2724,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2739,7 +2750,6 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..repeat - 1)
@@ -2760,6 +2770,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				angle = mangle + sRand(-rangleRange, rangleRange);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2769,7 +2780,6 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -2779,6 +2789,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2790,6 +2801,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				angle = mangle + sRand(-rangleRange, rangleRange);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2806,7 +2818,6 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..repeat - 1)
@@ -2831,6 +2842,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2840,7 +2852,6 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -2851,6 +2862,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2864,6 +2876,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2880,7 +2893,6 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..repeat - 1)
@@ -2904,6 +2916,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2913,7 +2926,6 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -2923,6 +2935,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2935,6 +2948,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2959,7 +2973,6 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..repeat - 1)
@@ -2980,6 +2993,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				angle = sRand(rangleA, rangleB);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -2989,7 +3003,6 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -2999,6 +3012,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3010,6 +3024,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				angle = sRand(rangleA, rangleB);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3026,7 +3041,6 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..repeat - 1)
@@ -3051,6 +3065,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3060,7 +3075,6 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -3071,6 +3085,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3084,6 +3099,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3100,7 +3116,6 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..repeat - 1)
@@ -3124,6 +3139,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3133,7 +3149,6 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 			{
 				decel = ObjRender_GetZ(array[i]) / frame;
 				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper += frame;
 			ascent(i in 0..length(array))
@@ -3143,6 +3158,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3155,6 +3171,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, se_kira00);
 			}
 			_frameHelper++;
 		}
@@ -3170,6 +3187,22 @@ function _ex_bounce(array, repeat, speed, sleft, sright, stop, sbottom)
 	ascent(i in 0..length(array))
 	{
 		_ex_bounce_t(array[i], repeat, speed, sleft, sright, stop, sbottom);
+	}
+}
+
+function _ex_armor(array, time)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_armor_t(array[i], time);
+	}
+}
+
+function _ex_oob(array, time)
+{
+	ascent(i in 0..length(array))
+	{
+		_ex_oob_t(array[i], time);
 	}
 }
 
@@ -3968,6 +4001,18 @@ task _ex_spav_osc_t(shot, delay, time, repeat, accel, angvel)
 	ObjMove_SetAngularVelocity(shot, 0);
 }
 
+task _ex_armor_t(shot, time)
+{
+	//ObjShot_SetAutoDelete(shot, false);
+	//loop(_frameHelper + time){yield;}
+	//ObjShot_SetAutoDelete(shot, true);
+}
+
+task _ex_oob_t(shot, time)
+{
+	ObjShot_SetAutoDeleteDelay(shot, _frameHelper + time);
+}
+
 // --------------- Other ---------------
 
 task _ecl_CreateCurveLaser(obj, id, x, y, speed, angle, lLength, lWidth, graphic)
@@ -4094,12 +4139,7 @@ function AddPattern_SetShotDrawScale(array, scale)
 
 task AddPatternSE(id, endFrame, soundEffect)
 {
-	let loc_framec = 0;
-	while(loc_framec < endFrame)
-	{
-		loc_framec++;
-		yield;
-	}
+	loop(endFrame){yield;}
 	if(!Obj_IsDeleted(id))
 	{
 		thSE_Play(soundEffect);
