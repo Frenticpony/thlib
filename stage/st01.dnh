@@ -1437,7 +1437,7 @@ function Stage01_Handler()
 			wait(600);
 			Stage01_StageSub05();
 			wait(450);
-			*/
+			
 			Stage01_MidBossStart();
 			wait(600);
 			Stage01_StageSub06();
@@ -1454,6 +1454,7 @@ function Stage01_Handler()
 			Stage01_StageSub09_t();
 			Stage01_StageSub10_t();
 			wait(600);
+			*/
 			Stage01_BossStart();
 		}
 		stageFrame++;

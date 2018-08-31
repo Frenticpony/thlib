@@ -180,7 +180,7 @@ SetCommonData("RP",
 // ---------- Common Data ----------
 //to do: remove unused commondata, redefine existing ones to fit thlib naming
 
-SetCommonData("Difficulty", 3);
+SetCommonData("Difficulty", 1);
 SetCommonData("Stage", 1);
 SetCommonData("isDebugEnabled", true);
 SetCommonData("isGameStarted", false);

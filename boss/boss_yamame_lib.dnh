@@ -7,7 +7,6 @@ task boss_yamame_bh()
 	boss_Yamame = ObjEnemy_Create(OBJ_ENEMY);
 	
 	thBoss_Init(boss_Yamame);
-	__eff_bossDistort(boss_Yamame);
 
 	while(!isBossActive)
 	{
@@ -16,6 +15,7 @@ task boss_yamame_bh()
 
 	thBoss_SetUpA(boss_Yamame, BOSS_YAMAME, 0, -32);
 	thBoss_SetUpB(boss_Yamame);
+	thBoss_SetUpEffects(boss_Yamame);
 	boss_yamame_loop(boss_Yamame);
 	
 	while(!bossEnd)
@@ -23,13 +23,18 @@ task boss_yamame_bh()
 		if(Obj_GetValueD(boss_Yamame, "NA", false) == true)
 		{
 			alternative(bossAttackState)
-			case(0)
+			case(1)
 			{
-				
+				boss_yamame_ns01(boss_Yamame);
 			}
-			others
+			case(2)
 			{
-				
+				boss_yamame_sc01(boss_Yamame);
+			}
+			case(0) //End
+			{
+				thBoss_FinishBoss(boss_Yamame);
+				bossEnd = true;
 			}
 		}
 		yield;
@@ -47,8 +52,259 @@ task boss_yamame_loop(obj)
 	}
 }
 
+//Non-spell #1
+function boss_yamame_ns01(obj)
+{	
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	thBoss_InitPattern(obj, 4000, 110);
+	thBoss_SetBossMoveField(obj, 128, 280, 128);
+	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetNextPhaseA(obj, 2);
+	
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
 
+	bossAdvance = true;
+	thBoss_Finish(obj);
+	thEcl_Finish(ecl);
 
+	task MainTask
+	{
+		let main_frame = 0;
+		
+		let val_A = SetValueD(90, 90, 40, 40);
+		let val_B = 0;
+		let val_C = 0;
+		
+		thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 128, 60, false);
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(40)
+			{
+				val_B = 45;
+				val_C = SetValueD(-5.625, -5.625, -3.75, -3.75);
+				ns01_at1_t(obj, val_B, val_C);
+			}
+			case(64)
+			{
+				thBoss_SetRandomMoveSpeed(obj, bossAdvance, IP_DECELERATE, 4, 40, false);
+			}
+			case(105)
+			{
+				val_B = -45;
+				val_C = SetValueD(5.625, 5.625, 3.75, 3.75);
+				if(isDifficulty(NHL))
+				{ns01_at1_t(obj, val_B, val_C);}
+			}
+			case(289)
+			{
+				thBoss_SetRandomMoveSpeed(obj, bossAdvance, IP_DECELERATE, 4, 40, false);
+			}
+			case(330)
+			{
+				main_frame = -1;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+	
+	function ns01_at1(obj, angleA, angleB)
+	{
+		let ecl_times = SetValueD(8, 8, 14, 16);
+		let ecl_speed = SetValueD(1.6, 1.6, 1.0, 1.0);
+		let ecl_angle = angleA;
+		let ecl_count = SetValueD(4, 4, 4, 8);
+		
+		et_set(ecl, 0, STYLE_CIRCLE, ecl_speed, 0, SHOT_ROUND_BLUE, ecl_count, 1);
+		et_ofs(ecl, 0, 8, -32);
+		et_rad(ecl, 0, 24);
+		exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_15);
+		exi_spdown(ecl, 0);
+		
+		et_set(ecl, 1, STYLE_CIRCLE, ecl_speed, 0, SHOT_ROUND_BLUE, ecl_count, 1);
+		et_ofs(ecl, 1, 8, -32);
+		et_rad(ecl, 1, 24);
+		exi_effon(ecl, 1, DELAY_BLUE, EFFON_DEF, EFFON_15);
+		exi_spdown(ecl, 1);
+		
+		ex_wait(ecl, 1, 20);
+		ex_angmod(ecl, 1, TYPE_AIMED, 35, 1, 0, 1);
+		ex_gr2(ecl, 1, SHOT_ROUND_RED, DELAY_BLUE, EFFON_DEF, EFFON_8);
+		ex_wait(ecl, 1, 40);
+		ex_spup(ecl, 1, 120, 0.019);
+		
+		let timesCounter = 0;
+		let ecl_counter = -8;
+		
+		while(!bossAdvance && timesCounter < ecl_times)
+		{
+			alternative(ecl_counter)
+			case(0)
+			{
+				et_sp(ecl, 0, ecl_speed);
+				et_ang(ecl, 0, ecl_angle);
+				et_on(ecl, 0);
+				ecl_speed += 0.1;
+				if(isDifficulty(H)) {ecl_speed -= 0.02;}
+				if(isDifficulty(L)) {ecl_speed -= 0.005;}
+				ecl_angle += angleB;
+			}
+			case(1)
+			{
+				et_sp(ecl, 1, ecl_speed);
+				et_ang(ecl, 1, ecl_angle);
+				et_on(ecl, 1);
+				ecl_speed += 0.1;
+				if(isDifficulty(H)) {ecl_speed -= 0.02;}
+				if(isDifficulty(L)) {ecl_speed -= 0.005;}
+				ecl_angle += angleB;
+				ecl_counter = -1;
+				timesCounter++;
+			}
+			ecl_counter++;
+			yield;
+		}
+	}
+	
+	task ns01_at1_t(obj, angleA, angleB)
+	{
+		ns01_at1(obj, angleA, angleB);
+	}
+}
+
+//Spellcard #1
+function boss_yamame_sc01(obj)
+{	
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	let eString = "罠符「キャプチャーウェブ」";
+	let hString = "蜘蛛「石窟の蜘蛛の巣」";
+	let dString = SetValueD(eString, eString, hString, hString);
+	thBoss_InitSpellcard(obj, 2100, 60, 500000, dString);
+	thBoss_SetBossMoveField(obj, 128, 280, 256);
+	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetNextPhaseA(obj, 1);
+	
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
+
+	bossAdvance = true;
+	thBoss_Finish(obj);
+	thEcl_Finish(ecl);
+
+	task MainTask
+	{
+		let main_frame = 0;
+		
+		let varY = 144;
+		let varB = 180;
+		let varC = 0.35;
+		let varGraphicA = [SHOT_RICE_PINK, DELAY_PURPLE];
+		let varGraphicB = [SHOT_RICE_PINK, DELAY_PURPLE];
+		let varGraphicC = [SHOT_RICE_LIME, DELAY_GREEN];
+		
+		
+		thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 128, 60, false);
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(60)
+			{
+				thEffect_Play(obj, EFF_CHARGE);
+			}
+			case(150)
+			{
+				sc01_at_t(obj, varB, varC, varGraphicA);
+			}
+			case(330)
+			{
+				if(isDifficulty(E))
+				{	
+					if(varY < 160)
+					{	
+						varY += 10;
+					}
+				}
+				else
+				{
+					if(varY < 160)
+					{	
+						varY += 12;
+					}
+				}
+				thBoss_SetMovePosition(obj, bossAdvance, IP_DECELERATE, sRand(0, 16), varY, 60, false);
+			}
+			case(390)
+			{
+				varB = -varB;
+				varC = -varC;
+				if(varGraphicA == varGraphicB){varGraphicA = varGraphicC;}
+				else if(varGraphicA == varGraphicC){varGraphicA = varGraphicB;}
+				main_frame = 149;
+			}
+			case(1390)
+			{
+				main_frame = -1;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+	
+	function sc01_at(obj, loc_a, loc_b, graphics)
+	{
+		let ecl_offset = 8;
+		
+		let ecl_times = 46;
+		let ecl_delay = 46;
+		let ecl_count = SetValueD(6, 8, 12, 16);
+		let ecl_angle = GetAngleToPlayer(obj);
+		
+		let ecl_spmEN = -3 / 60;
+		let ecl_spmHL = -2.5 / 60;
+		
+		et_set(ecl, 0, STYLE_CIRCLE, 0, ecl_angle, graphics[0], ecl_count, 1);
+		et_ofs(ecl, 0, 8, -32);
+		
+		exi_effon(ecl, 0, graphics[1], EFFON_DEF, EFFON_15);
+		ex_oob(ecl, 0, 120);
+		ex_armor(ecl, 0, 20);
+		ex_wait(ecl, 0, ecl_delay);
+		ex_angmod(ecl, 0, TYPE_RELATIVE, 1, 0, 180, 0.01);
+		ex_spup(ecl, 0, 60, 4 / 60);
+		ex_spav(ecl, 0, 60, SetValueD(ecl_spmEN, ecl_spmEN, ecl_spmHL, ecl_spmHL), 0);
+		
+		while(!bossAdvance && ecl_times > 0)
+		{
+			ecl_times--;
+			ecl_delay--;
+			
+			exm_modify(ecl, 0, 4, 1, ecl_delay);
+			exm_modify(ecl, 0, 5, 4, loc_a);
+			exm_modify(ecl, 0, 7, 3, (z_randAngle / 6) / 60);
+			
+			et_rad(ecl, 0, ecl_offset);
+			et_ang(ecl, 0, (((ecl_angle + ((360/ecl_count) / 2))) + (z_randAngle / 64)));
+			et_on(ecl, 0);
+			
+			loc_a -= loc_b;
+			ecl_offset += 8;
+			yield;
+		}
+	}
+	
+	task sc01_at_t(obj, a, b, graphic)
+	{
+		sc01_at(obj, a, b, graphic)
+	}
+}
 
 
 

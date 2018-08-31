@@ -31,6 +31,7 @@
 -------------------------------- */
 
 #include"../boss/boss_kisume_lib.dnh"
+#include"../boss/boss_yamame_lib.dnh"
 
 /* --------------------------------
 ----                           ----

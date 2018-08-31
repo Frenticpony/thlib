@@ -271,9 +271,9 @@ function InitBoss(FPEnemy, value)
 	}
 	case(BOSS_YAMAME)
 	{
-		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 80);
-		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 80);
-		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 160);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_R", 225);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_G", 64);
+		Obj_SetValue(FPEnemy, "BOSS_COLOR_B", 64);
 		Obj_SetValue(FPEnemy, "CT_X", 256);
 		Obj_SetValue(FPEnemy, "CT_Y", 512);
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
