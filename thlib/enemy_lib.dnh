@@ -1345,13 +1345,11 @@ function __eff_bossA(obj, circletype, colorR, colorG, colorB)
 {
 	__eff_bossPentagram(obj);
 	__eff_bossAura(obj, colorR, colorG, colorB);
-	__eff_enemyMarker(obj);
 }
 
 function __eff_bossB(obj)
 {
 	__eff_bossPentagram(obj);
-	__eff_enemyMarker(obj);
 }
 
 function __eff_bossC(obj)
@@ -2112,27 +2110,27 @@ function __objB_SetRandomMoveSpeed(n_obj, b_condition, c_method, n_speed, n_time
 	
 	let isOOB = false;
 
-	function RandOOBCheck
+function RandOOBCheck
+{
+	loc_angle = sRand(0, 360);
+	isOOB = false;
+	endX = startX + (testDistance * (cos(loc_angle)));
+	endY = startY + (testDistance * (sin(loc_angle)));
+
+	if(endX < bx1 || endX > bx2)
 	{
-		loc_angle = sRand(0, 360);
-		isOOB = false;
-		endX = startX + (testDistance * (cos(loc_angle)));
-		endY = startY + (testDistance * (sin(loc_angle)));
-
-		if(endX < bx1 || endX > bx2)
-		{
-			isOOB = true;
-		}
-		if(endY < by1 || endY > by2)
-		{
-			isOOB = true;
-		}
-
-		if(isOOB == true)
-		{
-			RandOOBCheck;
-		}
+		isOOB = true;
 	}
+	if(endY < by1 || endY > by2)
+	{
+		isOOB = true;
+	}
+
+	if(isOOB == true)
+	{
+		RandOOBCheck;
+	}
+}
 
 	RandOOBCheck;
 

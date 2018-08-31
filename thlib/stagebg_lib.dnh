@@ -3108,7 +3108,7 @@ task StageBG_Test()
 	{
 		if(CheckModulo(frame, rand2(5, 9)))
 		{
-			EffParticle();
+			//EffParticle();
 		}
 		SetCameraFocusZ(cameraZ);
 		cameraZ += 0.6;

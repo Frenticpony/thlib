@@ -444,7 +444,7 @@ task __eff_bossDistort(obj)
 	ObjSprite2D_SetDestRect(objWave, 0, 0, frameWidth, frameHeight);
 	Obj_SetRenderPriorityI(objWave, priEffectMax + 1);
 
-	let pathShader = GetCurrentScriptDirectory ~ "SamplePS03_HLSL.txt";
+	let pathShader = hlsl_distort;
 	ObjShader_SetShaderF(objWave, pathShader);
 	ObjShader_SetTechnique(objWave, "TecWave");
 	

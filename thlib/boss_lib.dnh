@@ -43,6 +43,13 @@ function thBoss_SetUpB(n_obj)
 	__thStage_BossTimer_th11(n_obj);
 }
 
+function thBoss_SetUpEffects(n_obj)
+{
+	__eff_bossPentagram(n_obj);
+	__eff_bossAura(n_obj, Obj_GetValueD(n_obj, "BOSS_COLOR_R", 255), Obj_GetValueD(n_obj, "BOSS_COLOR_G", 50), Obj_GetValueD(n_obj, "BOSS_COLOR_B", 50));
+	__eff_bossDistort(n_obj);
+}
+
 // -=-=-=-=-=-=-=-=-=-=- Attack Initialization -=-=-=-=-=-=-=-=-=-=-
 
 function thBoss_InitTalkEvent(n_obj)
