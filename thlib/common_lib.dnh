@@ -204,6 +204,10 @@ let CenY = GetStgFrameHeight/2;
 let GetCenterX = GetStgFrameWidth/2;
 let GetCenterY = GetStgFrameHeight/2;
 
+//---------- Shader ----------
+
+let hlsl_distort = GetCurrentScriptDirectory ~ "../thlib/shader/HLSL_ZDistortion.fx";
+
 // -=-=-=-=-=-=-=-=-=-=- System Functions -=-=-=-=-=-=-=-=-=-=-
 
 function FP_GetPlayerLife
@@ -577,12 +581,12 @@ function CheckModulo(timer, value)
 
 function thSE_Play(se)
 {
-	NotifyEventAll(EV_PLAY_SE, se);
+	NotifyEvent(GetCommonData("SES", -999), EV_PLAY_SE, se);
 }
 
 function thSE_PlayPan(se, x)
 {
-	NotifyEventAll(EV_PLAY_SE_PAN, [se, x]);
+	NotifyEvent(GetCommonData("SES", -999), EV_PLAY_SE_PAN, [se, x]);
 }
 
 // -=-=-=-=-=-=-=-=-=-=- ObjRender Helper Functions -=-=-=-=-=-=-=-=-=-=-

@@ -247,7 +247,7 @@ function FP_LoadAllSE()
         let objSound = ObjSound_Create();
         ObjSound_Load(objSound, GetCurrentScriptDirectory ~ "../se/" ~ allSEArray[i] ~ ".wav");
         ObjSound_SetSoundDivision(objSound, SOUND_SE);
-        seArray = seArray ~ [objSound];
+        seArray = seArray ~ [[objSound, 0]];
     }  
 }
 
@@ -261,8 +261,12 @@ function FP_UpdateAllSEVolume()
 
 function FP_PlaySE(se)
 {
-	ObjSound_SetPanRate(seArray[se], 0);
-	ObjSound_Play(seArray[se]);
+	if(seArray[se][1] == 0)
+	{
+		ObjSound_SetPanRate(seArray[se][0], 0);
+		ObjSound_Play(seArray[se][0]);
+		seArray[se][1] = 1;
+	}
 }
 
 function FP_PlayPanSE(x, se)
@@ -270,12 +274,15 @@ function FP_PlayPanSE(x, se)
 	let xPos_percent = x / GetStgFrameWidth;
 	let panRateValue = 200 * xPos_percent;
 	
-	ObjSound_SetPanRate(seArray[se], (panRateValue - 100) / 5);
-	ObjSound_Play(seArray[se]);
+	ObjSound_SetPanRate(seArray[se][0], (panRateValue - 100) / 5);
+	ObjSound_Play(seArray[se][0]);
 }
 
-function rip()
+function thSE_ResetHasPlayed()
 {
-
+	ascent(i in 0..length(seArray))
+	{
+		seArray[i][1] = 0;
+	}
 }
 	
