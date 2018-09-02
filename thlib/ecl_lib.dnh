@@ -4003,9 +4003,7 @@ task _ex_spav_osc_t(shot, delay, time, repeat, accel, angvel)
 
 task _ex_armor_t(shot, time)
 {
-	//ObjShot_SetAutoDelete(shot, false);
-	//loop(_frameHelper + time){yield;}
-	//ObjShot_SetAutoDelete(shot, true);
+	ObjShot_SetSpellResistDelay(shot, _frameHelper + time);
 }
 
 task _ex_oob_t(shot, time)
