@@ -161,179 +161,141 @@ function et_copy(obj, idA, idB)
 function et_style(obj, id, style)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[0] = style;
-	ar[0] = ar2;
+	ar[0][0] = style;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_gr(obj, id, graphic)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[1] = graphic;
-	ar[0] = ar2;
+	ar[0][1] = graphic;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_count(obj, id, count)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[2] = count;
-	ar[0] = ar2;
+	ar[0][2] = count;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_layer(obj, id, layer)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[3] = layer;
-	ar[0] = ar2;
+	ar[0][3] = layer;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_ang(obj, id, angle)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[4] = angle;
-	ar[0] = ar2;
+	ar[0][4] = angle;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_ang2(obj, id, lyAngMod)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[5] = lyAngMod;
-	ar[0] = ar2;
+	ar[0][5] = lyAngMod;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_ang3(obj, id, angle, lyAngMod)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[4] = angle;
-	ar2[5] = lyAngMod;
-	ar[0] = ar2;
+	ar[0][4] = angle;
+	ar[0][5] = lyAngMod;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_sp(obj, id, speed)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[6] = speed;
-	ar[0] = ar2;
+	ar[0][6] = speed;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_sp2(obj, id, lySpeed)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[7] = lySpeed;
-	ar[0] = ar2;
+	ar[0][7] = lySpeed;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_sp3(obj, id, speed, lySpeed)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[6] = speed;
-	ar2[7] = lySpeed;
-	ar[0] = ar2;
+	ar[0][6] = speed;
+	ar[0][7] = lySpeed;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_fan_angle(obj, id, angRange)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[8] = angRange;
-	ar[0] = ar2;
+	ar[0][8] = angRange;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_ofs(obj, id, x, y)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[9] = x;
-	ar2[10] = y;
-	ar[0] = ar2;
+	ar[0][9] = x;
+	ar[0][10] = y;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_ofs2(obj, id, angle, radius)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[9] = radius * cos(angle);
-	ar2[10] = radius * sin(angle);
-	ar[0] = ar2;
+	ar[0][9] = radius * cos(angle);
+	ar[0][10] = radius * sin(angle);
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_rad(obj, id, radius)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[11] = radius;
-	ar[0] = ar2;
+	ar[0][11] = radius;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_se(obj, id, se)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[12] = se;
-	ar[0] = ar2;
+	ar[0][12] = se;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_se2(obj, id, se, se2)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[12] = se;
-	ar2[13] = se2;
-	ar[0] = ar2;
+	ar[0][12] = se;
+	ar[0][13] = se2;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_blend(obj, id, blend)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[14] = blend;
-	ar[0] = ar2;
+	ar[0][14] = blend;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_sub(obj, id, subA, subB, subC, subD)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[15] = subA;
-	ar2[16] = subB;
-	ar2[17] = subC;
-	ar2[18] = subD;
-	ar[0] = ar2;
+	ar[0][15] = subA;
+	ar[0][16] = subB;
+	ar[0][17] = subC;
+	ar[0][18] = subD;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
 function et_pr(obj, id, pr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
-	let ar2 = ar[0];
-	ar2[20] = pr;
-	ar[0] = ar2;
+	ar[0][20] = pr;
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -383,18 +345,14 @@ function et_lsr_lw(obj, id, llength, width)
 function exm_modify(obj, idA, idB, index, value)
 {
 	let ar = Obj_GetValue(obj, eclID(idA));
-	let ar2 = ar[idB];
-	ar2[index] = value;
-	ar[idB] = ar2;
+	ar[idB][index] = value;
 	Obj_SetValue(obj, itoa(idA), ar);
 }
 
 function exm_replace(obj, idA, idB, array)
 {
 	let ar = Obj_GetValue(obj, eclID(idA));
-	let ar2 = ar[0];
-	ar2[idB] = [array];
-	ar[0] = ar2;
+	ar[idB] = array;
 	Obj_SetValue(obj, itoa(idA), ar);
 }
 
@@ -422,10 +380,8 @@ function exm_remove(obj, idA, idB)
 function exm_se(obj, idA, idB, value)
 {
 	let ar = Obj_GetValue(obj, eclID(idA));
-	let ar2 = ar[idB];
-	let loc_index = length(ar2) - 1;
-	ar2[loc_index] = value;
-	ar[idB] = ar2;
+	let loc_index = length(ar[idB]) - 1;
+	ar[idB][loc_index] = value;
 	Obj_SetValue(obj, itoa(idA), ar);
 }
 
