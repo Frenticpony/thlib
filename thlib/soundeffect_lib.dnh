@@ -261,7 +261,7 @@ function FP_UpdateAllSEVolume()
 
 function FP_PlaySE(se)
 {
-	if(seArray[se][1] == 0)
+	if(se != -1 && seArray[se][1] == 0)
 	{
 		ObjSound_SetPanRate(seArray[se][0], 0);
 		ObjSound_Play(seArray[se][0]);

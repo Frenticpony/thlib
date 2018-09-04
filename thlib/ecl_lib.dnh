@@ -419,6 +419,16 @@ function exm_remove(obj, idA, idB)
 	Obj_SetValue(obj, itoa(idA), ar);
 }
 
+function exm_se(obj, idA, idB, value)
+{
+	let ar = Obj_GetValue(obj, eclID(idA));
+	let ar2 = ar[idB];
+	let loc_index = length(ar2) - 1;
+	ar2[loc_index] = value;
+	ar[idB] = ar2;
+	Obj_SetValue(obj, itoa(idA), ar);
+}
+
 
 function exi_effon(obj, id, graphic, type, time)
 {
@@ -470,7 +480,7 @@ function ex_grav(obj, id, time, gravAng, gravStr, gravStrMax)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_GRAV, time, gravAng, gravStr, gravStrMax]];
+	ar = ar ~ [[_EX_GRAV, time, gravAng, gravStr, gravStrMax, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -478,7 +488,7 @@ function ex_spup(obj, id, time, accel)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_SPUP, time, accel]];
+	ar = ar ~ [[_EX_SPUP, time, accel, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }	
 
@@ -486,7 +496,7 @@ function ex_spup2(obj, id, time, accel, rAccelRange)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_SPUP2, time, accel, rAccelRange]];
+	ar = ar ~ [[_EX_SPUP2, time, accel, rAccelRange, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -494,7 +504,7 @@ function ex_spup3(obj, id, time, rAccelA, rAccelB)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_SPUP3, time, rAccelA, rAccelB]];
+	ar = ar ~ [[_EX_SPUP3, time, rAccelA, rAccelB, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -502,23 +512,23 @@ function ex_spav(obj, id, time, accel, angVel)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_SPAV, time, accel, angVel]];
+	ar = ar ~ [[_EX_SPAV, time, accel, angVel, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }	
 
-function ex_spav2(obj, id, time, accel, rAccelRange, angVel, rAngveVRange)
+function ex_spav2(obj, id, time, accelAr, angVelAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_SPAV2, time, accel, rAccelRange, angVel, rAngveVRange]];
+	ar = ar ~ [[_EX_SPAV2, time, accelAr[0], accelAr[1], angVelAr[0], angVelAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
-function ex_spav3(obj, id, time, rAccelA, rAccelB, rAngVelA, rAngVelB)
+function ex_spav3(obj, id, time, accelAr, angVelAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_SPAV3, time, rAccelA, rAccelB, rAngVelA, rAngVelB]];
+	ar = ar ~ [[_EX_SPAV3, time, accelAr[0], accelAr[1], angVelAr[0], angVelAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -526,23 +536,23 @@ function ex_angvel(obj, id, time, angvel)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGVEL, time, angvel]];
+	ar = ar ~ [[_EX_ANGVEL, time, angvel, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }	
 
-function ex_angvel2(obj, id, time, angVel, rAngVelRange)
+function ex_angvel2(obj, id, time, angVelAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGVEL2, time, angVel, rAngVelRange]];
+	ar = ar ~ [[_EX_ANGVEL2, time, angVelAr[0], angVelAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
-function ex_angvel3(obj, id, time, rAngVelA, rAngVelB)
+function ex_angvel3(obj, id, time, angVelAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGVEL3, time, rAngVelA, rAngVelB]];
+	ar = ar ~ [[_EX_ANGVEL3, time, angVelAr[0], angVelAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -550,23 +560,23 @@ function ex_angvelB(obj, id, time, angleTotal)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGVELB, time, angleTotal]];
+	ar = ar ~ [[_EX_ANGVELB, time, angleTotal, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
-function ex_angvelB2(obj, id, time, angleTotal, angleTotalRange)
+function ex_angvelB2(obj, id, time, angleTotalAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGVELB2, time, angleTotal, angleTotalRange]];
+	ar = ar ~ [[_EX_ANGVELB2, time, angleTotalAr[0], angleTotalAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
-function ex_angvelB3(obj, id, time, rAngleTotalA, rAngleTotalB)
+function ex_angvelB3(obj, id, time, angleTotalAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGVELB3, time, rAngleTotalA, rAngleTotalB]];
+	ar = ar ~ [[_EX_ANGVELB3, time, angleTotalAr[0], angleTotalAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -574,23 +584,31 @@ function ex_angmod(obj, id, type, frame, repeat, angle, speed)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGMOD, type, frame, repeat, angle, speed]];
+	ar = ar ~ [[_EX_ANGMOD, type, frame, repeat, angle, speed, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
-function ex_angmod2(obj, id, type, frame, repeat, angle, rangleRange, speed, rspeedRange)
+function ex_angmod2(obj, id, type, frame, repeat, angleAr, speedAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGMOD2, type, frame, repeat, angle, rangleRange, speed, rspeedRange]];
+	ar = ar ~ [[_EX_ANGMOD2, type, frame, repeat, angleAr[0], angleAr[1], speedAr[0], speedAr[1], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
-function ex_angmod3(obj, id, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB)
+function ex_angmod3(obj, id, type, frame, repeat, angleAr, speedAr)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_ANGMOD3, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB]];
+	ar = ar ~ [[_EX_ANGMOD3, type, frame, repeat, angleAr[0], angleAr[1], speedAr[0], speedAr[1], ar[0][13]]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
+
+function ex_angmod4(obj, id, type, frame, repeat, angle, speed, angVel, accel)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EX_ANGMOD, type, frame, repeat, angle, speed, angVel, accel, ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -598,7 +616,7 @@ function ex_bounce(obj, id, repeat, speed, sides)
 {
 	let ar = Obj_GetValue(obj, eclID(id));
 	
-	ar = ar ~ [[_EX_BOUNCE, repeat, speed, sides[0], sides[1], sides[2], sides[3]]];
+	ar = ar ~ [[_EX_BOUNCE, repeat, speed, sides[0], sides[1], sides[2], sides[3], ar[0][13]]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -896,47 +914,45 @@ function et_on(obj, id)
 
 let _frameHelper = 0;
 
-let _EXI_EFFON   = 0;
-let _EXI_SPDOWN  = 1;
-let _EX_GRAV     = 2;
-let _EX_SPAV     = 3;
-let _EX_SPAV2    = 4;
-let _EX_SPAV3    = 5;
-let _EX_SPUP     = 6;
-let _EX_SPUP2    = 7;
-let _EX_SPUP3    = 8;
-let _EX_ANGVEL   = 9;
-let _EX_ANGVEL2  = 10;
-let _EX_ANGVEL3  = 11;
-let _EX_ANGVELB  = 12;
-let _EX_ANGVELB2 = 13;
-let _EX_ANGVELB3 = 14;
-let _EX_ANGMOD   = 15;
-let _EX_ANGMOD2  = 16;
-let _EX_ANGMOD3  = 17;
-let _EX_BOUNCE   = 18;
-let _EX_ARMOR    = 19;
-let _EX_OOB      = 20;
-let _EX_GR       = 21;
-let _EX_WAIT     = 22;
-let _EX_DEL      = 23;
-let _EX_SE       = 24;
-let _EX_BLEND    = 25;
-let _EX_GR2      = 26;
-let _EX_EFFON    = 27;
-let _EX_EFFON2   = 28;
-
-let _EX_ETON_FR  = 29;
-let _EX_ETON_BR  = 30;
-let _EX_ETON_PR  = 31;
-
-let _EX_ETON_FR2  = 32; //Frame
-let _EX_ETON_BR2  = 33; //Border
-let _EX_ETON_PR2  = 34; //Proximity
-
-let _EX_SPUP_OSC   = 35;
-let _EX_ANGVEL_OSC = 36;
-let _EX_SPAV_OSC   = 37;
+let _EXI_EFFON     = 0 ;
+let _EXI_SPDOWN    = 1 ;
+let _EX_GRAV       = 2 ;
+let _EX_SPAV       = 3 ;
+let _EX_SPAV2      = 4 ;
+let _EX_SPAV3      = 5 ;
+let _EX_SPUP       = 6 ;
+let _EX_SPUP2      = 7 ;
+let _EX_SPUP3      = 8 ;
+let _EX_ANGVEL     = 9 ;
+let _EX_ANGVEL2    = 10;
+let _EX_ANGVEL3    = 11;
+let _EX_ANGVELB    = 12;
+let _EX_ANGVELB2   = 13;
+let _EX_ANGVELB3   = 14;
+let _EX_ANGMOD     = 15;
+let _EX_ANGMOD2    = 16;
+let _EX_ANGMOD3    = 17;
+let _EX_ANGMOD4    = 18;
+let _EX_BOUNCE     = 19;
+let _EX_ARMOR      = 20;
+let _EX_OOB        = 21;
+let _EX_GR         = 22;
+let _EX_WAIT       = 23;
+let _EX_DEL        = 24;
+let _EX_SE         = 25;
+let _EX_BLEND      = 26;
+let _EX_GR2        = 27;
+let _EX_EFFON      = 28;
+let _EX_EFFON2     = 29;
+let _EX_ETON_FR    = 30;
+let _EX_ETON_BR    = 31;
+let _EX_ETON_PR    = 32;
+let _EX_ETON_FR2   = 33; //Frame
+let _EX_ETON_BR2   = 34; //Border
+let _EX_ETON_PR2   = 35; //Proximity
+let _EX_SPUP_OSC   = 36;
+let _EX_ANGVEL_OSC = 37;
+let _EX_SPAV_OSC   = 38;
 
 let _delayScale = [[2, 0.65], [3, 0.65], [4, 1], [5, 1], [2.5, 1]];
 
@@ -968,71 +984,75 @@ function _ex(obj, id, array, patternCount)
 	}
 	else if(ar[patternCount][0] == _EX_GRAV)
 	{
-		_ex_grav(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
+		_ex_grav(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5]);
 	}
 	else if(ar[patternCount][0] == _EX_SPUP)
 	{
-		_ex_spup(array, ar[patternCount][1], ar[patternCount][2], ar[0][7]);
+		_ex_spup(array, ar[patternCount][1], ar[patternCount][2], ar[0][7], ar[patternCount][3]);
 	}
 	else if(ar[patternCount][0] == _EX_SPUP2)
 	{
-		_ex_spup2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7]);
+		_ex_spup2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_SPUP3)
 	{
-		_ex_spup3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7]);
+		_ex_spup3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_SPAV)
 	{
-		_ex_spav(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7]);
+		_ex_spav(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[0][7], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_SPAV2)
 	{
-		_ex_spav2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[0][7]);
+		_ex_spav2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[0][7], ar[patternCount][6]);
 	}
 	else if(ar[patternCount][0] == _EX_SPAV3)
 	{
-		_ex_spav3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[0][7]);
+		_ex_spav3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[0][7], ar[patternCount][6]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGVEL)
 	{
-		_ex_angvel(array, ar[patternCount][1], ar[patternCount][2]);
+		_ex_angvel(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGVEL2)
 	{
-		_ex_angvel2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+		_ex_angvel2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGVEL3)
 	{
-		_ex_angvel3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+		_ex_angvel3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGVELB)
 	{
-		_ex_angvelB(array, ar[patternCount][1], ar[patternCount][2]);
+		_ex_angvelB(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGVELB2)
 	{
-		_ex_angvelB2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+		_ex_angvelB2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGVELB3)
 	{
-		_ex_angvelB3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3]);
+		_ex_angvelB3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGMOD)
 	{
-		_ex_angmod(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5]);
+		_ex_angmod(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGMOD2)
 	{
-		_ex_angmod2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+		_ex_angmod2(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7], ar[patternCount][8]);
 	}
 	else if(ar[patternCount][0] == _EX_ANGMOD3)
 	{
-		_ex_angmod3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+		_ex_angmod3(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7], ar[patternCount][8]);
+	}
+	else if(ar[patternCount][0] == _EX_ANGMOD4)
+	{
+		_ex_angmod4(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7], ar[patternCount][8]);
 	}
 	else if(ar[patternCount][0] == _EX_BOUNCE)
 	{
-		_ex_bounce(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6]);
+		_ex_bounce(array, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
 	}
 	else if(ar[patternCount][0] == _EX_ARMOR)
 	{
@@ -2282,7 +2302,7 @@ function _exi_spdown(array, flag)
 	_frameHelper += 16;
 }
 
-function _ex_grav(array, time, gravAng, gravStr, gravStrMax)
+function _ex_grav(array, time, gravAng, gravStr, gravStrMax, eclSE)
 {
 	let xa = gravStr * cos(gravAng);
 	let ya = gravStr * sin(gravAng);
@@ -2297,7 +2317,7 @@ function _ex_grav(array, time, gravAng, gravStr, gravStrMax)
 	{
 		ObjMove_AddPatternB2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, xa, ya, xm, ym);
 		ObjMove_AddPatternB2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999, 999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
@@ -2320,7 +2340,7 @@ function _ex_gr2(array, graphicA, graphicB, type, time, scale, pri)
 	//_frameHelper += time;
 }
 
-function _ex_spup(array, time, accel, minSpeed)
+function _ex_spup(array, time, accel, minSpeed, eclSE)
 {
 	if(accel >= 0)
 	{
@@ -2328,7 +2348,7 @@ function _ex_spup(array, time, accel, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 	else
@@ -2337,13 +2357,13 @@ function _ex_spup(array, time, accel, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, 0, minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 	_frameHelper += time;
 }
 
-function _ex_spup2(array, time, accel, rAccelRange, minSpeed)
+function _ex_spup2(array, time, accel, rAccelRange, minSpeed, eclSE)
 {
 	let sAccel = 0;
 	
@@ -2354,24 +2374,24 @@ function _ex_spup2(array, time, accel, rAccelRange, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, sAccel, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else if(accel < 0)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -sAccel, 0, minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 }
 
-function _ex_spup3(array, time, rAccelA, rAccelB, minSpeed)
+function _ex_spup3(array, time, rAccelA, rAccelB, minSpeed, eclSE)
 {
 	let accel = 0;
 	
@@ -2382,24 +2402,24 @@ function _ex_spup3(array, time, rAccelA, rAccelB, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else if(accel < 0)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -accel, 0, minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 }
 
-function _ex_spav(array, time, accel, angvel, minSpeed)
+function _ex_spav(array, time, accel, angvel, minSpeed, eclSE)
 {
 	if(accel >= 0)
 	{
@@ -2407,7 +2427,7 @@ function _ex_spav(array, time, accel, angvel, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, angvel, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0,      999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 	else
@@ -2416,13 +2436,13 @@ function _ex_spav(array, time, accel, angvel, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, accel, angvel, minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0,      999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 	_frameHelper += time;
 }
 
-function _ex_spav2(array, time, accel, rAccelRange, angVel, rAngVelRange, minSpeed)
+function _ex_spav2(array, time, accel, rAccelRange, angVel, rAngVelRange, minSpeed, eclSE)
 {
 	let sAccel = 0;
 	
@@ -2433,24 +2453,24 @@ function _ex_spav2(array, time, accel, rAccelRange, angVel, rAngVelRange, minSpe
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, sAccel, angVel + sRand(-rAngVelRange, rAngVelRange), 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else if(sAccel < 0)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -sAccel, angVel + sRand(-rAngVelRange, rAngVelRange), minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 }
 
-function _ex_spav3(array, time, rAccelA, rAccelB, rAngVelA, rAngVelB, minSpeed)
+function _ex_spav3(array, time, rAccelA, rAccelB, rAngVelA, rAngVelB, minSpeed, eclSE)
 {
 	let sAccel = 0;
 	
@@ -2461,93 +2481,93 @@ function _ex_spav3(array, time, rAccelA, rAccelB, rAngVelA, rAngVelB, minSpeed)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, sAccel, sRand(rAngVelA, rAngVelB), 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else if(sAccel < 0)
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, -sAccel, sRand(rAngVelA, rAngVelB), minSpeed);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0,     0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 		else
 		{
 			ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, 0, 999);
 			ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0, 999);
-			AddPatternSE(array[i], _frameHelper, se_kira00);
+			AddPatternSE(array[i], _frameHelper, eclSE);
 		}
 	}
 }
 
-function _ex_angvel(array, time, angvel)
+function _ex_angvel(array, time, angvel, eclSE)
 {
 	ascent(i in 0..length(array))
 	{
 		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
 		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
 
-function _ex_angvel2(array, time, angvel, rAngVelRange)
+function _ex_angvel2(array, time, angvel, rAngVelRange, eclSE)
 {
 	ascent(i in 0..length(array))
 	{
 		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel + sRand(-rAngVelRange, rAngVelRange), 999);
 		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
 
-function _ex_angvel3(array, time, rAngVelA, rAngVelB)
+function _ex_angvel3(array, time, rAngVelA, rAngVelB, eclSE)
 {
 	ascent(i in 0..length(array))
 	{
 		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, sRand(rAngVelA, rAngVelB), 999);
 		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
 
-function _ex_angvelB(array, time, angleTotal)
+function _ex_angvelB(array, time, angleTotal, eclSE)
 {
 	let angvel = angleTotal / time;
 	ascent(i in 0..length(array))
 	{
 		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
 		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
 
-function _ex_angvelB2(array, time, angleTotal, angleTotalRange)
+function _ex_angvelB2(array, time, angleTotal, angleTotalRange, eclSE)
 {
 	let angvel = (angleTotal + sRand(-angleTotalRange, angleTotalRange)) / time;
 	ascent(i in 0..length(array))
 	{
 		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
 		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
 
-function _ex_angvelB3(array, time, rAngleTotalA, rAngleTotalB)
+function _ex_angvelB3(array, time, rAngleTotalA, rAngleTotalB, eclSE)
 {
 	let angvel = sRand(rAngleTotalA, rAngleTotalB) / time;
 	ascent(i in 0..length(array))
 	{
 		ObjMove_AddPatternA2(array[i], _frameHelper,        NO_CHANGE, NO_CHANGE, 0, angvel, 999);
 		ObjMove_AddPatternA2(array[i], _frameHelper + time, NO_CHANGE, NO_CHANGE, 0, 0,      999);
-		AddPatternSE(array[i], _frameHelper, se_kira00);
+		AddPatternSE(array[i], _frameHelper, eclSE);
 	}
 	_frameHelper += time;
 }
 
-function _ex_angmod(array, type, frame, repeat, angle, speed)
+function _ex_angmod(array, type, frame, repeat, angle, speed, eclSE)
 {
 	let decel = 0;
 	let curAngle = 0;
@@ -2568,7 +2588,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ascent(i in 0..length(array))
 				{
 					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2576,7 +2596,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2592,7 +2612,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2602,9 +2622,9 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
-			_frameHelper++;
+			//_frameHelper++;
 		}
 		else
 		{
@@ -2628,7 +2648,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				{
 					ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, -decel, angle, 0);
 					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0,     0);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2637,7 +2657,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2654,7 +2674,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2665,7 +2685,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2690,7 +2710,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 				ascent(i in 0..length(array))
 				{
 					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2698,7 +2718,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2714,7 +2734,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2724,7 +2744,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 			{
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2735,7 +2755,7 @@ function _ex_angmod(array, type, frame, repeat, angle, speed)
 	}
 }
 
-function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspeedRange)
+function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspeedRange, eclSE)
 {
 	let decel = 0;
 	
@@ -2760,7 +2780,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 					angle = mangle + sRand(-rangleRange, rangleRange);
 					decel = speed / frame;
 					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2770,7 +2790,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				angle = mangle + sRand(-rangleRange, rangleRange);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2789,7 +2809,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2801,7 +2821,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				angle = mangle + sRand(-rangleRange, rangleRange);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2830,7 +2850,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 					ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, -decel, angle, 0);
 					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0,     0);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2842,7 +2862,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2862,7 +2882,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2876,7 +2896,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0,     999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2904,7 +2924,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 					decel = speed / frame;
 
 					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2916,7 +2936,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2935,7 +2955,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2948,7 +2968,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -2959,7 +2979,7 @@ function _ex_angmod2(array, type, frame, repeat, angle, rangleRange, speed, rspe
 	}
 }
 
-function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB)
+function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspeedB, eclSE)
 {
 	let decel = 0;
 	let speed = 0;
@@ -2983,7 +3003,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 					angle = sRand(rangleA, rangleB);
 					decel = speed / frame;
 					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -2993,7 +3013,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				angle = sRand(rangleA, rangleB);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3012,7 +3032,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3024,7 +3044,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				angle = sRand(rangleA, rangleB);
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3053,7 +3073,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 					ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, -decel, angle, 0);
 					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0, 0);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -3065,7 +3085,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3085,7 +3105,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3099,7 +3119,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 				ObjMove_AddPatternA2(array[i], _frameHelper, speed, NO_CHANGE, 0, angle, 999);
 				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, 0, 0, 999);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3127,7 +3147,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 					decel = speed / frame;
 
 					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
-					AddPatternSE(array[i], _frameHelper, se_kira00);
+					AddPatternSE(array[i], _frameHelper, eclSE);
 				}
 				_frameHelper += frame;
 			}
@@ -3139,7 +3159,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3158,7 +3178,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3171,7 +3191,7 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 
 				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, 0, 0, 0, GetPlayerObjectID, NO_CHANGE);
 				ObjRender_SetZ(array[i], speed);
-				AddPatternSE(array[i], _frameHelper, se_kira00);
+				AddPatternSE(array[i], _frameHelper, eclSE);
 			}
 			_frameHelper++;
 		}
@@ -3182,11 +3202,203 @@ function _ex_angmod3(array, type, frame, repeat, rangleA, rangleB, rspeedA, rspe
 	}
 }
 
-function _ex_bounce(array, repeat, speed, sleft, sright, stop, sbottom)
+function _ex_angmod4(array, type, frame, repeat, angle, speed, angVel, accel, eclSE)
+{
+	let decel = 0;
+	let curAngle = 0;
+	
+	let loc_maxSpeed = 999;
+	
+	if(accel < 0){loc_maxSpeed = 0;}
+
+	if(type == TYPE_FIXED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+			}
+			_frameHelper += frame;
+			decel = speed / frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, -decel, 0, 0);
+					AddPatternSE(array[i], _frameHelper, eclSE);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, accel, angVel, loc_maxSpeed);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, accel, angVel, loc_maxSpeed);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper, speed, angle, accel, angVel, loc_maxSpeed);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			//_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_FIXED): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_RELATIVE)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+			}
+			_frameHelper += frame;
+			decel = speed / frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, -decel, angle, 0);
+					ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, -decel, 0,     0);
+					AddPatternSE(array[i], _frameHelper, eclSE);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, accel, angle, loc_maxSpeed);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, accel, angVel, loc_maxSpeed);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, accel, angle, loc_maxSpeed);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, accel, angVel, loc_maxSpeed);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA2(array[i], _frameHelper,     speed,     NO_CHANGE, accel, angle, loc_maxSpeed);
+				ObjMove_AddPatternA2(array[i], _frameHelper + 1, NO_CHANGE, NO_CHANGE, accel, angVel, loc_maxSpeed);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_RELATIVE): 'repeat' argument should not be less than 0")
+		}
+	}
+	else if(type == TYPE_AIMED)
+	{
+		if(repeat > 1)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+			}
+			_frameHelper += frame;
+			decel = speed / frame;
+			ascent(i in 0..repeat - 1)
+			{
+				ascent(i in 0..length(array))
+				{
+					ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, -decel, 0, 0, GetPlayerObjectID, NO_CHANGE);
+					AddPatternSE(array[i], _frameHelper, eclSE);
+				}
+				_frameHelper += frame;
+			}
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, accel, angVel, loc_maxSpeed, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else if(repeat > 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				decel = ObjRender_GetZ(array[i]) / frame;
+				ObjMove_AddPatternA2(array[i], _frameHelper, ObjRender_GetZ(array[i]), NO_CHANGE, -decel, 0, 0);
+			}
+			_frameHelper += frame;
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, accel, angVel, loc_maxSpeed, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else if(repeat == 0)
+		{
+			ascent(i in 0..length(array))
+			{
+				ObjMove_AddPatternA4(array[i], _frameHelper, speed, angle, accel, angVel, loc_maxSpeed, GetPlayerObjectID, NO_CHANGE);
+				ObjRender_SetZ(array[i], speed);
+				AddPatternSE(array[i], _frameHelper, eclSE);
+			}
+			_frameHelper++;
+		}
+		else
+		{
+			RaiseError("ex_angmod(TYPE_AIMED): 'repeat' argument should not be less than 0")
+		}
+	}
+}
+
+function _ex_bounce(array, repeat, speed, sleft, sright, stop, sbottom, eclSE)
 {
 	ascent(i in 0..length(array))
 	{
-		_ex_bounce_t(array[i], repeat, speed, sleft, sright, stop, sbottom);
+		_ex_bounce_t(array[i], repeat, speed, sleft, sright, stop, sbottom, eclSE);
 	}
 }
 
@@ -3421,7 +3633,7 @@ task _ex_gr2_t(shot, graphicA, graphicB, type, time, lscale, pri)
 	}
 }
 
-task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom)
+task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom, eclSE)
 {
 	let cBounces = 1;
 	let lFlag = false;
@@ -3442,7 +3654,7 @@ task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom)
 				ObjMove_SetAcceleration(shot, 0);
 				ObjMove_SetSpeed(shot, speed);
 			}
-			
+			thSE_Play(eclSE);
 			cBounces++;
 		}
 		else
@@ -3461,7 +3673,7 @@ task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom)
 				ObjMove_SetAcceleration(shot, 0);
 				ObjMove_SetSpeed(shot, speed);
 			}
-			
+			thSE_Play(eclSE);
 			cBounces++;
 		}
 		else
@@ -3480,7 +3692,7 @@ task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom)
 				ObjMove_SetAcceleration(shot, 0);
 				ObjMove_SetSpeed(shot, speed);
 			}
-			
+			thSE_Play(eclSE);
 			cBounces++;
 		}
 		else
@@ -3499,7 +3711,7 @@ task _ex_bounce_t(shot, repeat, speed, sleft, sright, stop, sbottom)
 				ObjMove_SetAcceleration(shot, 0);
 				ObjMove_SetSpeed(shot, speed);
 			}
-			
+			thSE_Play(eclSE);
 			cBounces++;
 		}
 		else

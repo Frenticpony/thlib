@@ -281,6 +281,8 @@ function boss_yamame_sc01(obj)
 		ex_spup(ecl, 0, 60, 4 / 60);
 		ex_spav(ecl, 0, 60, SetValueD(ecl_spmEN, ecl_spmEN, ecl_spmHL, ecl_spmHL), 0);
 		
+		exm_se(ecl, 0, 6, se_none);
+		
 		while(!bossAdvance && ecl_times > 0)
 		{
 			ecl_times--;
