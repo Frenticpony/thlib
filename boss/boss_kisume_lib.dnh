@@ -103,22 +103,22 @@ function boss_kisume_ns01(obj)
 			}
 			case(100)
 			{
-				//isBossInvincible = false;
-				//ns01_at1();
-				//thEnemy_SetSpeedAtAngle(obj, 5.5, 90);
-				//thEnemy_TransitionSpeed(obj, IP_DECELERATE, 0, 100);
+				isBossInvincible = false;
+				ns01_at1();
+				thEnemy_SetSpeedAtAngle(obj, 5.5, 90);
+				thEnemy_TransitionSpeed(obj, IP_DECELERATE, 0, 100);
 			}
 			case(200)
 			{
-				//ns01_at2();
+				ns01_at2();
 			}
 			case(230)
 			{
-				//thEnemy_SetMovePosition(obj, IP_DECELERATE, ObjMove_GetX(GetPlayerObjectID) - CenX, 128, 60, false);
+				thEnemy_SetMovePosition(obj, IP_DECELERATE, ObjMove_GetX(GetPlayerObjectID) - CenX, 128, 60, false);
 			}
 			case(290)
 			{
-				//main_frame = 99;
+				main_frame = 99;
 			}
 			main_frame++;
 			yield;

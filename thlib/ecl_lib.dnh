@@ -6,6 +6,8 @@
 	
 	to do: lasers of all types
 	
+	*** ex_eton_br, add flag in source with FADE_DELETE to prevent fading shots from creating new ones
+	
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
 //---------- ECL Constants ----------
@@ -123,7 +125,7 @@ function et_set(obj, id, pattern, speed, angle, graphic, count, layer)
 {
 	//let ar = [[pattern, graphic, count, layer, angle, angleOffset, maxSpeed, minSpeed, fanAngleSpread, xOffset, yOffset, radius, se, se2, blend, sub1, sub2, sub3, sub4, delaytime, priority, lLength, lWidth, lScale, etamaType, filterType]];
 	let l_scale = 1;
-	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0.5,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  -1, -1, l_scale, ETAMA_SHOT, FILTER_LINEAR]];
+	let ar = [[pattern, graphic,  count, layer,  angle, 0,  speed, 0,  0,  0, 0,  0,  se_tan00, se_kira00, BLEND_ALPHA, 0, 0, 0, 0,  0,  50,  -1, -1, l_scale, ETAMA_SHOT, FILTER_LINEAR]];
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
@@ -415,6 +417,13 @@ function exi_spdown(obj, id)
 	Obj_SetValue(obj, itoa(id), ar);
 }
 
+function exi_spdown2(obj, id)
+{
+	let ar = Obj_GetValue(obj, eclID(id));
+	
+	ar = ar ~ [[_EXI_SPDOWN2]];
+	Obj_SetValue(obj, itoa(id), ar);
+}
 
 function ex_effon(obj, id, graphic, type, time)
 {
@@ -640,11 +649,11 @@ function ex_eton_fr(obj, idA, idB, type, angle, delay, frame, repeat, del)
 	Obj_SetValue(obj, itoa(idA), ar);
 }
 
-function ex_eton_br(obj, idA, idB, type, sides, del)
+function ex_eton_br(obj, idA, idB, type, sides, del, delete)
 {
 	let ar = Obj_GetValue(obj, eclID(idA));
 	
-	ar = ar ~ [[_EX_ETON_BR, idB, type, sides[0], sides[1], sides[2], sides[3], del]];
+	ar = ar ~ [[_EX_ETON_BR, idB, type, sides[0], sides[1], sides[2], sides[3], del, delete]];
 	Obj_SetValue(obj, itoa(idA), ar);
 }
 
@@ -872,43 +881,44 @@ let _frameHelper = 0;
 
 let _EXI_EFFON     = 0 ;
 let _EXI_SPDOWN    = 1 ;
-let _EX_GRAV       = 2 ;
-let _EX_SPAV       = 3 ;
-let _EX_SPAV2      = 4 ;
-let _EX_SPAV3      = 5 ;
-let _EX_SPUP       = 6 ;
-let _EX_SPUP2      = 7 ;
-let _EX_SPUP3      = 8 ;
-let _EX_ANGVEL     = 9 ;
-let _EX_ANGVEL2    = 10;
-let _EX_ANGVEL3    = 11;
-let _EX_ANGVELB    = 12;
-let _EX_ANGVELB2   = 13;
-let _EX_ANGVELB3   = 14;
-let _EX_ANGMOD     = 15;
-let _EX_ANGMOD2    = 16;
-let _EX_ANGMOD3    = 17;
-let _EX_ANGMOD4    = 18;
-let _EX_BOUNCE     = 19;
-let _EX_ARMOR      = 20;
-let _EX_OOB        = 21;
-let _EX_GR         = 22;
-let _EX_WAIT       = 23;
-let _EX_DEL        = 24;
-let _EX_SE         = 25;
-let _EX_BLEND      = 26;
-let _EX_GR2        = 27;
-let _EX_EFFON      = 28;
-let _EX_EFFON2     = 29;
-let _EX_ETON_FR    = 30;
-let _EX_ETON_BR    = 31;
-let _EX_ETON_PR    = 32;
-let _EX_ETON_FR2   = 33; //Frame
-let _EX_ETON_BR2   = 34; //Border
-let _EX_ETON_PR2   = 35; //Proximity
-let _EX_SPUP_OSC   = 36;
-let _EX_ANGVEL_OSC = 37;
-let _EX_SPAV_OSC   = 38;
+let _EXI_SPDOWN2   = 2 ;
+let _EX_GRAV       = 3 ;
+let _EX_SPAV       = 4 ;
+let _EX_SPAV2      = 5 ;
+let _EX_SPAV3      = 6 ;
+let _EX_SPUP       = 7 ;
+let _EX_SPUP2      = 8 ;
+let _EX_SPUP3      = 9 ;
+let _EX_ANGVEL     = 10;
+let _EX_ANGVEL2    = 11;
+let _EX_ANGVEL3    = 12;
+let _EX_ANGVELB    = 13;
+let _EX_ANGVELB2   = 14;
+let _EX_ANGVELB3   = 15;
+let _EX_ANGMOD     = 16;
+let _EX_ANGMOD2    = 17;
+let _EX_ANGMOD3    = 18;
+let _EX_ANGMOD4    = 19;
+let _EX_BOUNCE     = 20;
+let _EX_ARMOR      = 21;
+let _EX_OOB        = 22;
+let _EX_GR         = 23;
+let _EX_WAIT       = 24;
+let _EX_DEL        = 25;
+let _EX_SE         = 26;
+let _EX_BLEND      = 27;
+let _EX_GR2        = 28;
+let _EX_EFFON      = 29;
+let _EX_EFFON2     = 30;
+let _EX_ETON_FR    = 31;
+let _EX_ETON_BR    = 32;
+let _EX_ETON_PR    = 33;
+let _EX_ETON_FR2   = 34; //Frame
+let _EX_ETON_BR2   = 35; //Border
+let _EX_ETON_PR2   = 36; //Proximity
+let _EX_SPUP_OSC   = 37;
+let _EX_ANGVEL_OSC = 38;
+let _EX_SPAV_OSC   = 39;
 
 let _delayScale = [[2, 0.65], [3, 0.65], [4, 1], [5, 1], [2.5, 1]];
 
@@ -930,6 +940,14 @@ function _ex(obj, id, array, patternCount)
 			flag = true;
 		}
 		_exi_spdown(array, flag);
+	}
+	else if(ar[patternCount][0] == _EXI_SPDOWN2)
+	{
+		if(ar[1][0] == _EXI_EFFON)
+		{
+			flag = true;
+		}
+		_exi_spdown2(array, flag);
 	}
 	if(ar[patternCount][0] == _EX_EFFON)
 	{
@@ -1048,7 +1066,7 @@ function _ex(obj, id, array, patternCount)
 	}
 	else if(ar[patternCount][0] == _EX_ETON_BR)
 	{
-		_ex_eton_br(array, obj, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7]);
+		_ex_eton_br(array, obj, ar[patternCount][1], ar[patternCount][2], ar[patternCount][3], ar[patternCount][4], ar[patternCount][5], ar[patternCount][6], ar[patternCount][7], ar[patternCount][8]);
 	}
 	else if(ar[patternCount][0] == _EX_ETON_BR2)
 	{
@@ -1099,9 +1117,10 @@ function _ex(obj, id, array, patternCount)
 	]
 */
 
-function _et_on_r(objA, objB, angle, id)
+function _et_on_r(objA, objB, angle, id, del)
 {
-	if(!Obj_IsDeleted(ecl_objID(objA)))
+	loop(del){yield;}
+	if(!Obj_IsDeleted(ecl_objID(objA)) && !Obj_IsDeleted(objB))
 	{
 		let patternCount = 1;
 		let ecl_initShots = [];
@@ -2258,6 +2277,20 @@ function _exi_spdown(array, flag)
 	_frameHelper += 16;
 }
 
+function _exi_spdown2(array, flag)
+{
+	let frames = 18;
+	ascent(i in 0..length(array))
+	{
+		let fp_speed = ObjRender_GetZ(array[i]);
+		let fp_startSpeed =  fp_speed * 4.2;
+		let fp_speedDifference = fp_startSpeed - fp_speed;
+		let fp_accel = fp_speedDifference / frames;
+		ObjMove_AddPatternA2(array[i], _frameHelper, fp_startSpeed, NO_CHANGE, -fp_accel, 0, fp_speed);
+	}
+	_frameHelper += 18;
+}
+
 function _ex_grav(array, time, gravAng, gravStr, gravStrMax, eclSE)
 {
 	let xa = gravStr * cos(gravAng);
@@ -3398,11 +3431,11 @@ function _ex_eton_fr(array, eclObj, id, type, angle, delay, frame, repeat, del)
 	if(flag){_frameHelper += frame * repeat;}
 }
 
-function _ex_eton_br(array, eclObj, id, type, sleft, sright, stop, sbottom, del)
+function _ex_eton_br(array, eclObj, id, type, sleft, sright, stop, sbottom, del, delete)
 {
 	ascent(i in 0..length(array))
 	{
-		_ex_eton_br_t(array[i], eclObj, id, type, sleft, sright, stop, sbottom, del);
+		_ex_eton_br_t(array[i], eclObj, id, type, sleft, sright, stop, sbottom, del, delete);
 	}
 }
 
@@ -3694,7 +3727,7 @@ task _ex_eton_fr_t(shot, eclObj, id, type, angle, delay, frame, repeat, del)
 		{
 			if(loc_frame == frame)
 			{
-				_et_on_r(eclObj, shot, angle, id);
+				_et_on_r(eclObj, shot, angle, id, 0);
 				
 				loc_frame = 1;
 				loc_repeat++;
@@ -3717,7 +3750,7 @@ task _ex_eton_fr_t(shot, eclObj, id, type, angle, delay, frame, repeat, del)
 		{
 			if(loc_frame == frame)
 			{
-				_et_on_r(eclObj, shot, ObjMove_GetAngle(shot) + angle, id);
+				_et_on_r(eclObj, shot, ObjMove_GetAngle(shot) + angle, id, 0);
 				
 				loc_frame = 1;
 				loc_repeat++;
@@ -3736,7 +3769,7 @@ task _ex_eton_fr_t(shot, eclObj, id, type, angle, delay, frame, repeat, del)
 	}
 }
 
-task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
+task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del, delete)
 {
 	let cBounces = 0;
 	let lFlag = false;
@@ -3752,7 +3785,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			{
 				lFlag = true;
 				
-				_et_on_r(eclObj, shot, 0, id);
+				_et_on_r(eclObj, shot, 0, id, del);
 				
 				if(del == 1)
 				{
@@ -3768,7 +3801,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
 			{
 				rFlag = true;
-				_et_on_r(eclObj, shot, 180, id);
+				_et_on_r(eclObj, shot, 180, id, del);
 				
 				if(del == 1)
 				{
@@ -3785,7 +3818,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
 			{
 				tFlag = true;
-				_et_on_r(eclObj, shot, 90, id);
+				_et_on_r(eclObj, shot, 90, id, del);
 				
 				if(del == 1)
 				{
@@ -3802,7 +3835,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
 			{
 				bFlag = true;
-				_et_on_r(eclObj, shot, 270, id);
+				_et_on_r(eclObj, shot, 270, id, del);
 				
 				if(del == 1)
 				{
@@ -3826,7 +3859,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			{
 				lFlag = true;
 				
-				_et_on_r(eclObj, shot, 180 - ObjMove_GetAngle(shot), id);
+				_et_on_r(eclObj, shot, 180 - ObjMove_GetAngle(shot), id, del);
 				
 				if(del == 1)
 				{
@@ -3842,7 +3875,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
 			{
 				rFlag = true;
-				_et_on_r(eclObj, shot, 180 - ObjMove_GetAngle(shot), id);
+				_et_on_r(eclObj, shot, 180 - ObjMove_GetAngle(shot), id, del);
 				
 				if(del == 1)
 				{
@@ -3859,7 +3892,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
 			{
 				tFlag = true;
-				_et_on_r(eclObj, shot, -1 * ObjMove_GetAngle(shot), id);
+				_et_on_r(eclObj, shot, -1 * ObjMove_GetAngle(shot), id, del);
 				
 				if(del == 1)
 				{
@@ -3876,7 +3909,7 @@ task _ex_eton_br_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, del)
 			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
 			{
 				bFlag = true;
-				_et_on_r(eclObj, shot, -1 * ObjMove_GetAngle(shot), id);
+				_et_on_r(eclObj, shot, -1 * ObjMove_GetAngle(shot), id, del);
 				
 				if(del == 1)
 				{
@@ -3910,7 +3943,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			{
 				lFlag = true;
 				
-				_et_on_r(eclObj, shot, 0 + sRand(-aleft, aleft), id);
+				_et_on_r(eclObj, shot, 0 + sRand(-aleft, aleft), id, 0);
 				
 				if(del == 1)
 				{
@@ -3926,7 +3959,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
 			{
 				rFlag = true;
-				_et_on_r(eclObj, shot, 180 + sRand(-aright, aright), id);
+				_et_on_r(eclObj, shot, 180 + sRand(-aright, aright), id, 0);
 				
 				if(del == 1)
 				{
@@ -3943,7 +3976,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
 			{
 				tFlag = true;
-				_et_on_r(eclObj, shot, 90 + sRand(-atop, atop), id);
+				_et_on_r(eclObj, shot, 90 + sRand(-atop, atop), id, 0);
 				
 				if(del == 1)
 				{
@@ -3960,7 +3993,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
 			{
 				bFlag = true;
-				_et_on_r(eclObj, shot, 270 + sRand(-abottom, abottom), id);
+				_et_on_r(eclObj, shot, 270 + sRand(-abottom, abottom), id, 0);
 				
 				if(del == 1)
 				{
@@ -3984,7 +4017,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			{
 				lFlag = true;
 				
-				_et_on_r(eclObj, shot, (180 - ObjMove_GetAngle(shot)) + sRand(-aleft, aleft), id);
+				_et_on_r(eclObj, shot, (180 - ObjMove_GetAngle(shot)) + sRand(-aleft, aleft), id, 0);
 				
 				if(del == 1)
 				{
@@ -4000,7 +4033,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			if(sright && ObjMove_GetX(shot) > GetStgFrameWidth && !rFlag)
 			{
 				rFlag = true;
-				_et_on_r(eclObj, shot, (180 - ObjMove_GetAngle(shot)) + sRand(-aright, aright), id);
+				_et_on_r(eclObj, shot, (180 - ObjMove_GetAngle(shot)) + sRand(-aright, aright), id, 0);
 				
 				if(del == 1)
 				{
@@ -4017,7 +4050,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			if(stop && ObjMove_GetY(shot) < 0 && !tFlag)
 			{
 				tFlag = true;
-				_et_on_r(eclObj, shot, (-1 * ObjMove_GetAngle(shot)) + sRand(-atop, atop), id);
+				_et_on_r(eclObj, shot, (-1 * ObjMove_GetAngle(shot)) + sRand(-atop, atop), id, 0);
 				
 				if(del == 1)
 				{
@@ -4034,7 +4067,7 @@ task _ex_eton_br2_t(shot, eclObj, id, type, sleft, sright, stop, sbottom, aleft,
 			if(sbottom && ObjMove_GetY(shot) > GetStgFrameHeight && !bFlag)
 			{
 				bFlag = true;
-				_et_on_r(eclObj, shot, (-1 * ObjMove_GetAngle(shot)) + sRand(-abottom, abottom), id);
+				_et_on_r(eclObj, shot, (-1 * ObjMove_GetAngle(shot)) + sRand(-abottom, abottom), id, 0);
 				
 				if(del == 1)
 				{

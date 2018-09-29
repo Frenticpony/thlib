@@ -31,6 +31,15 @@ task boss_yamame_bh()
 			{
 				boss_yamame_sc01(boss_Yamame);
 			}
+			case(3)
+			{
+				boss_yamame_ns02(boss_Yamame);
+			}
+			case(4)
+			{
+				isFinalBossAttack = true;
+				boss_yamame_sc02(boss_Yamame);
+			}
 			case(0) //End
 			{
 				thBoss_FinishBoss(boss_Yamame);
@@ -61,7 +70,10 @@ function boss_yamame_ns01(obj)
 	thBoss_InitPattern(obj, 4000, 110);
 	thBoss_SetBossMoveField(obj, 128, 280, 128);
 	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetInvincibilityTime(obj, 60);
 	thBoss_SetNextPhaseA(obj, 2);
+	
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 128, 60, false);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
@@ -77,8 +89,6 @@ function boss_yamame_ns01(obj)
 		let val_A = SetValueD(90, 90, 40, 40);
 		let val_B = 0;
 		let val_C = 0;
-		
-		thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 128, 60, false);
 		
 		while(!bossAdvance)
 		{
@@ -124,17 +134,17 @@ function boss_yamame_ns01(obj)
 		et_ofs(ecl, 0, 8, -32);
 		et_rad(ecl, 0, 24);
 		exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_15);
-		exi_spdown(ecl, 0);
+		exi_spdown2(ecl, 0);
 		
 		et_set(ecl, 1, STYLE_CIRCLE, ecl_speed, 0, SHOT_ROUND_BLUE, ecl_count, 1);
 		et_ofs(ecl, 1, 8, -32);
 		et_rad(ecl, 1, 24);
 		exi_effon(ecl, 1, DELAY_BLUE, EFFON_DEF, EFFON_15);
-		exi_spdown(ecl, 1);
+		exi_spdown2(ecl, 1);
 		
 		ex_wait(ecl, 1, 20);
 		ex_angmod(ecl, 1, TYPE_AIMED, 35, 1, 0, 1);
-		ex_gr2(ecl, 1, SHOT_ROUND_RED, DELAY_BLUE, EFFON_DEF, EFFON_8);
+		ex_gr2(ecl, 1, SHOT_ROUND_RED, DELAY_RED, EFFON_DEF, EFFON_8);
 		ex_wait(ecl, 1, 40);
 		ex_spup(ecl, 1, 120, 0.019);
 		
@@ -188,8 +198,11 @@ function boss_yamame_sc01(obj)
 	let dString = SetValueD(eString, eString, hString, hString);
 	thBoss_InitSpellcard(obj, 2100, 60, 500000, dString);
 	thBoss_SetBossMoveField(obj, 128, 280, 256);
-	thBoss_SetDamageRate(obj, 100, 100);
-	thBoss_SetNextPhaseA(obj, 1);
+	thBoss_SetDamageRate(obj, 20, 100);
+	thBoss_SetInvincibilityTime(obj, 60);
+	thBoss_SetNextPhaseA(obj, 3);
+	
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 128, 60, false);
 	
 	MainTask;
 	thBoss_WaitForZeroLife(obj);
@@ -208,9 +221,6 @@ function boss_yamame_sc01(obj)
 		let varGraphicA = [SHOT_RICE_PINK, DELAY_PURPLE];
 		let varGraphicB = [SHOT_RICE_PINK, DELAY_PURPLE];
 		let varGraphicC = [SHOT_RICE_LIME, DELAY_GREEN];
-		
-		
-		thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 128, 60, false);
 		
 		while(!bossAdvance)
 		{
@@ -308,7 +318,259 @@ function boss_yamame_sc01(obj)
 	}
 }
 
+//Non-spell #2
+function boss_yamame_ns02(obj)
+{	
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	thBoss_InitPattern(obj, 4000, 110);
+	thBoss_SetBossMoveField(obj, 160, 280, 64);
+	thBoss_SetDamageRate(obj, 100, 100);
+	thBoss_SetInvincibilityTime(obj, 60);
+	thBoss_SetNextPhaseA(obj, 4);
+	
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 192, 60, false);
+	
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
 
+	bossAdvance = true;
+	thBoss_Finish(obj);
+	thEcl_Finish(ecl);
+
+	task MainTask
+	{
+		let main_frame = -60;
+		
+		let val_A = 0;
+		let val_B = 0;
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(40)
+			{
+				val_A = 45;
+				val_B = SetValueD(-5.624, -5.624, -5.124, -5.124);
+				ns02_at1(obj, val_A, val_B);
+			}
+			case(64)
+			{
+				thBoss_SetRandomMoveSpeed(obj, bossAdvance, IP_DECELERATE, 4, 40, false);
+			}
+			case(101)
+			{
+				val_A = -45;
+				val_B = SetValueD(5.624, 5.624, 5.124, 5.124);
+				if(isDifficulty(NHL))
+				{ns02_at1(obj, val_A, val_B);}
+			}
+			case(125)
+			{
+				thBoss_SetRandomMoveSpeed(obj, bossAdvance, IP_DECELERATE, 4, 40, false);
+			}
+			case(166)
+			{
+				main_frame = 39;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+	
+	function ns02_at1(obj, angleA, angleB)
+	{
+		let ecl_times = SetValueD(16, 16, 29, 32);
+		let ecl_speed = 2;
+		let ecl_angle = angleA;
+		let ecl_count = SetValueD(4, 4, 4, 8);
+		
+		et_set(ecl, 0, STYLE_CIRCLE, ecl_speed, 0, SHOT_ROUND_BLUE, ecl_count, 1);
+		et_ofs(ecl, 0, 8, -32);
+		et_rad(ecl, 0, 15);
+		exi_effon(ecl, 0, DELAY_BLUE, EFFON_DEF, EFFON_15);
+		exi_spdown2(ecl, 0);
+		
+		et_set(ecl, 1, STYLE_CIRCLE, ecl_speed, 0, SHOT_ROUND_BLUE, ecl_count, 1);
+		et_ofs(ecl, 1, 8, -32);
+		et_rad(ecl, 1, 15);
+		exi_effon(ecl, 1, DELAY_BLUE, EFFON_DEF, EFFON_15);
+		exi_spdown2(ecl, 1);
+		
+		ex_wait(ecl, 1, 30);
+		ex_angmod(ecl, 1, TYPE_FIXED, 40, 1, 90, 1.1);
+		ex_gr2(ecl, 1, SHOT_ROUND_RED, DELAY_RED, EFFON_DEF, EFFON_8);
+		
+		let timesCounter = 0;
+		let ecl_counter = 0;
+		let ecl_counterB = -8;
+		
+		let ecl_wait = SetValueD(5, 5, 3, 2);
+		
+		while(!bossAdvance && timesCounter < ecl_times)
+		{
+			if(ecl_counterB == ecl_wait)
+			{
+				alternative(ecl_counter)
+				case(0)
+				{
+					et_sp(ecl, 0, ecl_speed);
+					et_ang(ecl, 0, ecl_angle);
+					et_on(ecl, 0);
+					ecl_angle += angleB;
+				}
+				case(1)
+				{
+					et_sp(ecl, 1, ecl_speed);
+					et_ang(ecl, 1, ecl_angle);
+					et_on(ecl, 1);
+					ecl_angle += angleB;
+					ecl_counter = -1;
+					timesCounter++;
+				}
+				ecl_counter++;
+				ecl_counterB = 0;
+			}
+			ecl_counterB++;
+			yield;
+		}
+	}
+	
+	task ns02_at1_t(obj, angleA, angleB)
+	{
+		ns02_at1(obj, angleA, angleB);
+	}
+}
+
+//Spellcard #1
+function boss_yamame_sc02(obj)
+{	
+	let ecl = thEcl_Init(obj);
+	let bossAdvance = false;
+	
+	let eString = "瘴符「フィルドミアズマ」";
+	let hString = "瘴気「原因不明の熱病」";
+	let dString = SetValueD(eString, eString, hString, hString);
+	thBoss_InitSpellcard(obj, 2400, 60, 500000, dString);
+	thBoss_SetBossMoveField(obj, 128, 280, 256);
+	thBoss_SetDamageRate(obj, 20, 100);
+	thBoss_SetInvincibilityTime(obj, 60);
+	thBoss_SetNextPhaseA(obj, 0);
+	
+	thEnemy_SetMovePosition(obj, IP_DECELERATE, 0, 192, 60, false);
+	
+	MainTask;
+	thBoss_WaitForZeroLife(obj);
+
+	bossAdvance = true;
+	thBoss_Finish(obj);
+	thEcl_Finish(ecl);
+
+	task MainTask
+	{
+		let main_frame = 0;
+		
+		let varY = 144;
+		let varB = 180;
+		let varC = 0.35;
+		let varGraphicA = [SHOT_RICE_PINK, DELAY_PURPLE];
+		let varGraphicB = [SHOT_RICE_PINK, DELAY_PURPLE];
+		let varGraphicC = [SHOT_RICE_LIME, DELAY_GREEN];
+		
+		while(!bossAdvance)
+		{
+			alternative(main_frame)
+			case(60)
+			{
+				thEffect_Play(obj, EFF_CHARGE);
+			}
+			case(150)
+			{
+				sc02_atA(obj, 4.42, SHOT_ICE_RED);
+			}
+			case(530)
+			{
+				sc02_atA(obj, -8.86, SHOT_ICE_PINK);
+			}
+			case(910)
+			{
+				sc02_atA(obj, -4.42, SHOT_ICE_RED);
+			}
+			case(1290)
+			{
+				sc02_atA(obj, 8.86, SHOT_ICE_PINK);
+			}
+			case(1670)
+			{
+				main_frame = -1;
+			}
+			main_frame++;
+			yield;
+		}
+	}
+	
+	task sc02_atA(obj, ecl_angmod, ecl_graphic)
+	{
+		let ecl_loop = SetValueD(75, 130, 130, 130);
+		let ecl_wait = SetValueD(2, 1, 1, 1);
+		let ecl_times = 0;
+		
+		let ecl_radmod = SetValueD(0.28, 0.14, 0.14, 0.14);
+		let ecl_radius = 8 - ecl_radmod;
+		let ecl_delay = 270;
+		let ecl_angle = 180;
+		
+		let ecl_delaygr = DELAY_RED;
+		if(ecl_graphic == SHOT_ICE_PINK){ecl_delaygr = DELAY_PURPLE;}
+		
+		et_set(ecl, 0, STYLE_CIRCLE, 0.01, 0, ecl_graphic, 1, 1);
+		et_ofs(ecl, 0, 8, -32);
+		ex_effon(ecl, 0, ecl_delaygr, EFFON_DEF, EFFON_15);
+		ex_armor(ecl, 0, 20);
+		ex_wait(ecl, 0, ecl_delay);
+		ex_spup(ecl, 0, 60, 1.6 / 60);
+		
+		et_copy(ecl, 0, 1);
+		ex_spup(ecl, 1, 60, -1.6 / 60);
+		ex_wait(ecl, 1, 60);
+		ex_angmod(ecl, 1, TYPE_RELATIVE, 1, 1, 180 + (z_randAngle / 100), 3);
+		
+		while(!bossAdvance && ecl_times < ecl_loop)
+		{
+			loop(2)
+			{
+				ecl_radius += ecl_radmod;
+				ecl_angle -= ecl_angmod;
+				et_rad(ecl, 0, ecl_radius);
+				et_ang(ecl, 0, ecl_angle);
+				exm_modify(ecl, 0, 3, 1, ecl_delay);
+				et_on(ecl, 0);
+				
+				ecl_radius += ecl_radmod;
+				ecl_angle -= ecl_angmod;
+				et_rad(ecl, 1, ecl_radius);
+				et_ang(ecl, 1, ecl_angle);
+				exm_modify(ecl, 1, 3, 1, ecl_delay);
+				exm_modify(ecl, 1, 7, 4, 180 + (z_randAngle / 100));
+				et_on(ecl, 1);
+			}
+			
+			ecl_delay -= SetValueD(4, 2, 2, 2);
+			
+			ecl_loop--;
+			wait(ecl_wait);
+		}
+	}
+	
+	task sc02_atB(obj, x, y)
+	{
+		while(!bossAdvance)
+		{
+			yield;
+		}
+	}
+}
 
 
 

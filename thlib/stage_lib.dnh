@@ -114,7 +114,7 @@ SetCommonData("FP_STG_STATE", 0);
 function thStage_Initialize()
 {
 	__thReplay_Init();
-	LoadStageTextures();
+	//LoadStageTextures();
 	
 	StartShotScript(GetMainStgScriptDirectory ~ "thlib/thshot/shotscript.dnh");
 	LoadEnemyShotData(GetMainStgScriptDirectory ~ "thlib/thshot/shotdata.dnh");
