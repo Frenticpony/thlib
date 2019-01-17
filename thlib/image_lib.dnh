@@ -82,6 +82,8 @@ let img_th11_weapon_01a          = path_img ~ "th11/title/weapon_01a.png";
 let img_th11_weapon_01b          = path_img ~ "th11/title/weapon_01b.png";
 let img_th11_weapon_01c          = path_img ~ "th11/title/weapon_01c.png";
 
+let img_th11_title01ex           = path_img ~ "th11/extra/title01ex.png";
+
 //Declare Main textures
 let img_null = GetCurrentScriptDirectory ~ "../img/null.png";
 
@@ -830,8 +832,29 @@ function RemoveStageBG(bgConst)
 	}
 }
 
-function LoadMenuTextures()
+task LoadMenuTextures_th11()
 {
+	LoadTexture(img_th11_title_rank00); yield;
+	LoadTexture(img_th11_title_result00); yield;
+	LoadTexture(img_th11_title_select00); yield;
+	LoadTexture(img_th11_title_select00b); yield;
+	LoadTexture(img_th11_title_select01); yield;
+	LoadTexture(img_th11_title_sl_player); yield;
+	LoadTexture(img_th11_title_sl_reimu); yield;
+	LoadTexture(img_th11_title_sl_marisa); yield;
+	LoadTexture(img_th11_title_logo); yield;
+	LoadTexture(img_th11_title_ver); yield;
+	LoadTexture(img_th11_title00a); yield;
+	LoadTexture(img_th11_title01); yield;
+	LoadTexture(img_th11_weapon); yield;
+	LoadTexture(img_th11_weapon_00a); yield;
+	LoadTexture(img_th11_weapon_00b); yield;
+	LoadTexture(img_th11_weapon_00c); yield;
+	LoadTexture(img_th11_weapon_01a); yield;
+	LoadTexture(img_th11_weapon_01b); yield;
+	LoadTexture(img_th11_weapon_01c); yield;
+	
+	LoadTexture(img_th11_title01ex);
 }
 
 function LoadStageTextures()
