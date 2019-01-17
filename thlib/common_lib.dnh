@@ -771,6 +771,8 @@ function thDraw_CreateNumericSpriteList(texture, spacing, spX, spY, spWidth, spH
 	Obj_SetValue(__nsl_drawNumber, "a", 0);
 	Obj_SetValue(__nsl_drawNumber, "b", 0);
 	Obj_SetValue(__nsl_drawNumber, "c", -1);
+	Obj_SetValue(__nsl_drawNumber, "dX", 0);
+	Obj_SetValue(__nsl_drawNumber, "dY", 0);
 	
 	ObjSpriteList2D_CloseVertex(__nsl_drawNumber);
 	
@@ -783,6 +785,8 @@ function thDraw_CreateNumericSpriteList(texture, spacing, spX, spY, spWidth, spH
 		let loc_a = Obj_GetValue(__nsl_drawNumber, "a");
 		let loc_b = Obj_GetValue(__nsl_drawNumber, "b");
 		let loc_c = Obj_GetValue(__nsl_drawNumber, "c");
+		let loc_dX = Obj_GetValueD(__nsl_drawNumber, "dX", 0);
+		let loc_dY = Obj_GetValueD(__nsl_drawNumber, "dY", 0);
 		
 		let stLength = 0;
 		let chArr = [];
@@ -806,6 +810,8 @@ function thDraw_CreateNumericSpriteList(texture, spacing, spX, spY, spWidth, spH
 			loc_a = Obj_GetValue(__nsl_drawNumber, "a");
 			loc_b = Obj_GetValue(__nsl_drawNumber, "b");
 			loc_c = Obj_GetValue(__nsl_drawNumber, "c");
+			loc_dX = Obj_GetValueD(__nsl_drawNumber, "dX", 0);
+			loc_dY = Obj_GetValueD(__nsl_drawNumber, "dY", 0);
 		
 			UpdateNumericSpriteList();
 			ObjRender_SetPosition(__nsl_drawNumber, posX, posY, 0);
@@ -850,7 +856,8 @@ function thDraw_CreateNumericSpriteList(texture, spacing, spX, spY, spWidth, spH
 				char = char - 48;
 				
 				ObjRender_SetPosition(__nsl_drawNumber, loc_x2, 0, 1);
-				ObjSpriteList2D_SetSourceRect(__nsl_drawNumber, spX + (spWidth * char), spY, spX + (spWidth * (char + 1)), spY + spHeight);
+				ObjSpriteList2D_SetSourceRect(__nsl_drawNumber, (spX + loc_dX) + (spWidth * char), (spY + loc_dY), (spX + loc_dX) + (spWidth * (char + 1)), (spY + loc_dY) + spHeight);
+				//ObjSpriteList2D_SetSourceRect(__nsl_drawNumber, (spX + 0) + (spWidth * char), (spY + 0), (spX + 0) + (spWidth * (char + 1)), (spY + 0) + spHeight);
 				ObjSpriteList2D_SetDestRect(__nsl_drawNumber, 0, 0, spWidth, spHeight);
 				ObjRender_SetFilterType(__nsl_drawNumber, FILTER_LINEAR);
 				ObjRender_SetScaleXYZ(__nsl_drawNumber, scale, scale, 1);
@@ -871,6 +878,12 @@ function thDraw_SetNumericSpriteListValue(obj, value)
 function thDraw_SetNumericSpriteListJustification(obj, just)
 {
 	Obj_SetValue(obj, "b", just);
+}
+
+function thDraw_SetNumericSpriteListOffset(obj, xOfs, yOfs)
+{
+	Obj_SetValue(obj, "dX", xOfs);
+	Obj_SetValue(obj, "dY", yOfs);
 }
 
 function thDraw_SetMaxCharacterWidth(obj, width)
