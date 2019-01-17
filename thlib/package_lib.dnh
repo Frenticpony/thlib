@@ -68,6 +68,7 @@ let menuItemOptions = 5;
 let menuItemPractice = [0, 0, 0, 0, 0, 0, 0, 0];
 let menuItemReplay = [0, 0, 0, 0, 0];
 let menuItemPause = [0, 0, 0, 0, 0];
+let menuSelectFlashTime = 10;
 
 let menuArray;
 let maxMenu = length(menuItem) - 1;
@@ -136,6 +137,9 @@ let def_CameraRoll = GetCameraRoll;
 
 // ---------- Other Variables ----------
 
+let bgmVolObj = 0;
+let seVolObj = 0;
+
 let isGameStarted = false;
 let hasStarted = false;
 let goToMenu = false;
@@ -180,7 +184,7 @@ SetCommonData("RP",
 // ---------- Common Data ----------
 //to do: remove unused commondata, redefine existing ones to fit thlib naming
 
-SetCommonData("Difficulty", 1);
+SetCommonData("Difficulty", 3);
 SetCommonData("Stage", 1);
 SetCommonData("isDebugEnabled", true);
 SetCommonData("isGameStarted", false);
@@ -232,9 +236,9 @@ function Package_Init()
 	PauseHandler();
 
 	StartScript(LoadScriptInThread(Script_SE));
-	//Menu_Init();
-	//LoadingGraphic();
-	PlayStage();
+	Menu_Init();
+	LoadingGraphic();
+	//PlayStage();
 }
 
 function Package_MainLoop()
@@ -245,6 +249,10 @@ function Package_MainLoop()
 		goToMenu = false;
 	}
 	scriptID_se = GetCommonData("SE_SCRIPT", -999);
+	
+	thDraw_SetNumericSpriteListValue(bgmVolObj, GetCommonData("BGMVol", 0));
+	thDraw_SetNumericSpriteListValue(seVolObj, GetCommonData("SEVol", 0));
+	
 	yield;
 }
 
@@ -267,37 +275,36 @@ function Package_Event()
 	}
 }
 
-function Menu_Init()
-{
-	LoadMenuTextures();
-	LoadMenuBGM();
-	
-	SetCommonData("isLoading", true);
-	
-	FadeFromBlack(8);
-	LoadTexture(GetCurrentScriptDirectory() ~ "img/loading/sig.png");
-	LoadingBack();
+task Menu_Init()
+{	
 	SetCameraFocusX(0);
 	SetCameraFocusY(0);
 	SetCameraFocusZ(0);
 	SetCameraAzimuthAngle(0);
 	SetCameraElevationAngle(0);
+	SetCommonData("isLoading", true);
+	
+	FadeFromBlack(8);
+	LoadingBack(img_th11_sig);
+	wait(30);
+	LoadMenuTextures_th11();
+	LoadMenuBGM();
+	
+	
 	wait(120);
 	
-	MenuBGM();
+	//MenuBGM();
 	SetCommonData("isLoading", false);
 	
 	FadeFromBlack(8);
-	InitMenuObjects_th15();
-	MenuHandler_th15();
+	InitMenuObjects_th11();
+	MenuHandler_th11();
 }
 
 function Menu_Reload()
 {
-	LoadMenuTextures();
-	//LoadAllSE();
 	LoadMenuBGM();
-	LoadMenuTextures();
+	LoadMenuTextures_th11();
 	SetCameraFocusX(0);
 	SetCameraFocusY(0);
 	SetCameraFocusZ(0);
@@ -309,8 +316,8 @@ function Menu_Reload()
 	SetCommonData("isLoading", false);
 	
 	FadeFromBlack(8);
-	InitMenuObjects_th15();
-	MenuHandler_th15();
+	InitMenuObjects_th11();
+	MenuHandler_th11();
 }
 
 function GetStageNumber
@@ -341,6 +348,17 @@ function UpdateNumericSpriteList_M(obj, x, y, value)
 {
 	let loc_value = itoa(value);
 	WriteLog(loc_value);
+}
+
+task LoadingBack(texture)
+{
+	let loadingBg = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(loadingBg, texture);
+	ObjSprite2D_SetSourceRect(loadingBg, 0, 0, 640, 480);
+	ObjSprite2D_SetDestRect(loadingBg, 0, 0, 640, 480);
+	Obj_SetRenderPriorityI(loadingBg, 10);
+	wait(150);
+	Obj_Delete(loadingBg);
 }
 
 // -=-=-=-=-=-=-=-=-=-=- Menu/Stage Management Functions -=-=-=-=-=-=-=-=-=-=-
@@ -403,6 +421,7 @@ function StartStageFromMain(stagenum)
 function StartGame()
 {
 	//LoadStageTextures();
+	SetCommonData("Stage", 1);
 	LoadStageBGM(bgm_th10_09, bgm_th10_10);
 	InitializeStageScene();
 	SetStageIndex(stageIndex);
@@ -552,7 +571,7 @@ task LoadingGraphic()
 		let aliveTime = round(rand(40,60));
 		let xVel = cos(angle)*speed;
 		let yVel = sin(angle)*speed;
-		let leafParticle = Create2DSpriteObject(img_ascii_loading, 0, 64, 32, 96);
+		let leafParticle = Create2DSpriteObject(img_th11_loading, 0, 64, 32, 96);
 		ObjSprite2D_SetDestRect(leafParticle, -16, -16, 16, 16);
 		ObjRender_SetAlpha(leafParticle, particleAlpha);
 		Obj_SetRenderPriorityI(leafParticle, 99);
@@ -592,12 +611,12 @@ task LoadingGraphic()
 	let alpha2 = 200;
 	let counter = 0;
 
-	let loadImg1 = Create2DSpriteObject(img_ascii_loading, 0, 0, 128, 32);
+	let loadImg1 = Create2DSpriteObject(img_th11_loading, 0, 0, 128, 32);
 	Obj_SetRenderPriorityI(loadImg1, 100);
 	ObjRender_SetPosition(loadImg1, 460, 380, 0);
 	ObjRender_SetAlpha(loadImg1, 0);
 
-	let loadImg2 = Create2DSpriteObject(img_ascii_loading, 0, 32, 128, 64);
+	let loadImg2 = Create2DSpriteObject(img_th11_loading, 0, 32, 128, 64);
 	Obj_SetRenderPriorityI(loadImg2, 100);
 	ObjRender_SetPosition(loadImg2, 640, 370, 0);
 	ObjRender_SetAlpha(loadImg2, 0);
@@ -1765,46 +1784,96 @@ task PauseHandler()
 	}
 }
 
-// -=-=-=-=-=-=-=-=-=-=- TH15 Menu Objects -=-=-=-=-=-=-=-=-=-=-
-
-function CreateMenuOption_th15(name, mPage, mItem, mAnim, x, y, texPath, width, height, row, col)
+function CreateMenuOption_Numeric(name, mPage, mItem, mAnim, x, y, texPath, spX, spY, spWidth, spHeight, isSelectable)
 {
-	let x1 = width * row;
-	let y1 = height * col;
+	//let x1 = width * row;
+	//let y1 = height * col;
+	let texArray = [spX, spY, spWidth, spHeight];
 	
-	let menuObj = Create2DSpriteObject_M(texPath, x1, y1, width, height);
+	let menuObj = thDraw_CreateNumericSpriteList(texPath, 15, spX, spY, spWidth, spHeight, 1);
+	thDraw_SetNumericSpriteListValue(menuObj, 100);
+	thDraw_SetNumericSpriteListJustification(menuObj, 2);
 	ObjRender_SetPosition(menuObj, x, y, 0);
 	
-	let texArray = [x1, y1, width, height];
-	
 	alternative(mAnim)
-	case(-1)
-	{
-		MenuAnim_Select_th15(menuObj, mPage, mItem, texArray);
-	}
 	case(ANIM_TITLE)
 	{
-		MenuAnim_Title_th15(menuObj, mPage, mItem, texArray);
-	}
-	case(1)
-	{
-		MenuAnim_Difficulty_th15(menuObj, mPage, mItem, texArray);
+		MenuAnim_TitleNumeric_th11(menuObj, mPage, mItem, texArray, isSelectable);
 	}
 	
 	return menuObj;
 }
 
-function CreateMenuOption_Numeric(name, mPage, mItem, mAnim, x, y, texPath, width, height, row, col)
+function MenuAction_GoToPage(index, dir)
 {
-	//return menuObj;
+	if(dir == 0)
+	{
+		PlaySE(se_ok00);
+		wait(menuSelectFlashTime);
+		menuPage = index;
+		menuState = menuSelect[index];
+	}
+	else if(dir == 1)
+	{
+		PlaySE(se_cancel00);
+		menuPage = index;
+		menuState = menuSelect[index];
+	}
 }
 
-function InitMenuObjects_th15()
+function MenuAction_SelectPlayerScript(script)
 {
-	let path = GetCurrentScriptDirectory ~ "../img/title/th15/title_item00.png";
-	let path2 = GetCurrentScriptDirectory ~ "../img/title/th15/rank00.png";
-	let path3 = GetCurrentScriptDirectory ~ "../img/title/th15/select00.png";
 	
+}
+
+function MenuAction_SelectDifficulty()
+{
+	
+}
+
+function MenuAction_PlayStage(stage)
+{
+	PlaySE(se_ok00);
+	wait(10);
+	
+	SetCommonData("Stage", stage);
+	SetCommonData("FP_BOSS_START", false);
+
+	InitializeStageScene();
+	SetStageMainScript(stagePath);
+	SetStagePlayerScript(player_current);
+	
+	SetCommonData("isLoading", true);
+	FadeToBlack(5);
+	FadeMenuBGM();
+	wait(30);
+	
+	RemoveMenuTextures();
+	wait(30);
+	
+	StartStageScene();
+	RemoveBlack();
+	FadeFromBlack(8);
+	SetCommonData("isGameStarted", true);
+	wait(20);
+	
+	SetCommonData("isLoading", false);
+}
+
+function MenuAction_PlaySpellcard()
+{
+	
+}
+
+task MenuNumeric(mPage, mItem)
+{
+	yield;
+}
+
+// -=-=-=-=-=-=-=-=-=-=- TH11 Style Menu -=-=-=-=-=-=-=-=-=-=-
+
+function InitMenuObjects_th11()
+{
 	menuItem = 9;
 	menuItemDiff = 4;
 	menuItemDebug = 1;
@@ -1814,111 +1883,107 @@ function InitMenuObjects_th15()
 	menuItemReplay = [0, 0, 0, 0, 0];
 	menuItemPause = [0, 0, 0, 0, 0];
 	
-	MenuBack_th15();
+	MenuBack_th11();
 	
-	CreateMenuOption_th15("GAME_START",  INDEX_TITLE, 0, ANIM_TITLE, 72, 235, path, 128, 32, 0, 0);
-	CreateMenuOption_th15("EXTRA_START", INDEX_TITLE, 1, ANIM_TITLE, 48, 260, path, 128, 32, 0, 1);
-	CreateMenuOption_th15("PRACTICE",    INDEX_TITLE, 2, ANIM_TITLE, 32, 285, path, 128, 32, 0, 2);
-	CreateMenuOption_th15("REPLAY",      INDEX_TITLE, 3, ANIM_TITLE, 24, 310, path, 128, 32, 0, 3);
-	CreateMenuOption_th15("PLAYER_DATA", INDEX_TITLE, 4, ANIM_TITLE, 16, 335, path, 128, 32, 0, 4);
-	CreateMenuOption_th15("MUSIC_ROOM",  INDEX_TITLE, 5, ANIM_TITLE, 20, 360, path, 128, 32, 0, 5);
-	CreateMenuOption_th15("OPTION",      INDEX_TITLE, 6, ANIM_TITLE, 26, 385, path, 128, 32, 0, 6);
-	CreateMenuOption_th15("MANUAL",      INDEX_TITLE, 7, ANIM_TITLE, 40, 410, path, 128, 32, 0, 7);
-	CreateMenuOption_th15("QUIT",        INDEX_TITLE, 8, ANIM_TITLE, 56, 435, path, 128, 32, 0, 8);
+	CreateMenuOption_th11("GAME_START",     INDEX_TITLE, 0, ANIM_TITLE, 476, 232, img_th11_title01,   128, 32, 0, 0, true);
+	CreateMenuOption_th11("EXTRA_START",    INDEX_TITLE, 1, ANIM_TITLE, 476, 256, img_th11_title01,   128, 32, 0, 1, true);
+	CreateMenuOption_th11("PRACTICE",       INDEX_TITLE, 2, ANIM_TITLE, 476, 280, img_th11_title01,   128, 32, 0, 2, true);
+	CreateMenuOption_th11("SPELL_PRACTICE", INDEX_TITLE, 3, ANIM_TITLE, 476, 304, img_th11_title01ex, 128, 32, 0, 0, true);
+	CreateMenuOption_th11("REPLAY",         INDEX_TITLE, 4, ANIM_TITLE, 476, 328, img_th11_title01,   128, 32, 0, 3, true);
+	CreateMenuOption_th11("PLAYER_DATA",    INDEX_TITLE, 5, ANIM_TITLE, 476, 352, img_th11_title01,   128, 32, 0, 4, true);
+	CreateMenuOption_th11("MUSIC_ROOM",     INDEX_TITLE, 6, ANIM_TITLE, 476, 376, img_th11_title01,   128, 32, 0, 5, true);
+	CreateMenuOption_th11("OPTION",         INDEX_TITLE, 7, ANIM_TITLE, 476, 400, img_th11_title01,   128, 32, 0, 6, true);
+	CreateMenuOption_th11("QUIT",           INDEX_TITLE, 8, ANIM_TITLE, 476, 424, img_th11_title01,   128, 32, 0, 7, true);
 	
-	CreateMenuOption_th15("RANK_TITLE", INDEX_DIFFICULTY, -1, -1, 192, 16 - 80, path3, 256, 64, 0, 0);
-	CreateMenuOption_th15("EASY",       INDEX_DIFFICULTY, 0, 1, 0, 0, path2, 256, 80, 0, 0);
-	CreateMenuOption_th15("NORMAL",     INDEX_DIFFICULTY, 1, 1, 0, 0, path2, 256, 80, 0, 1);
-	CreateMenuOption_th15("HARD",       INDEX_DIFFICULTY, 2, 1, 0, 0, path2, 256, 80, 0, 2);
-	CreateMenuOption_th15("LUNATIC",    INDEX_DIFFICULTY, 3, 1, 0, 0, path2, 256, 80, 0, 3);
+	CreateMenuOption_th11("EASY",       INDEX_DIFFICULTY, 0, 1, 0, 0, img_th11_title_rank00, 256, 96, 0, 0, true);
+	CreateMenuOption_th11("NORMAL",     INDEX_DIFFICULTY, 1, 1, 0, 0, img_th11_title_rank00, 256, 96, 0, 1, true);
+	CreateMenuOption_th11("HARD",       INDEX_DIFFICULTY, 2, 1, 0, 0, img_th11_title_rank00, 256, 96, 0, 2, true);
+	CreateMenuOption_th11("LUNATIC",    INDEX_DIFFICULTY, 3, 1, 0, 0, img_th11_title_rank00, 256, 96, 0, 3, true);
+	CreateMenuOption_th11("RANK_TITLE", INDEX_DIFFICULTY, -1, -1, -256, 5, img_th11_title_select01, 256, 48, 0, 0, false);
 	
-	CreateMenuOption_th15("OP_BGM_V",   INDEX_OPTIONS, 0, ANIM_TITLE, 72, 235, path, 128, 32, 0, 9);
-	CreateMenuOption_th15("OP_SE_V",    INDEX_OPTIONS, 1, ANIM_TITLE, 48, 260, path, 128, 32, 0, 10);
-	CreateMenuOption_th15("OP_KEY",     INDEX_OPTIONS, 2, ANIM_TITLE, 32, 285, path, 128, 32, 0, 11);
-	CreateMenuOption_th15("OP_DEFAULT", INDEX_OPTIONS, 3, ANIM_TITLE, 24, 310, path, 128, 32, 0, 12);
-	CreateMenuOption_th15("OP_QUIT",    INDEX_OPTIONS, 4, ANIM_TITLE, 16, 335, path, 128, 32, 0, 8);
+	CreateMenuOption_th11("OP_BGM_V",   INDEX_OPTIONS, 0, ANIM_TITLE, 444, 304, img_th11_title01, 128, 32, 0, 8, false);
+	CreateMenuOption_th11("OP_SE_V",    INDEX_OPTIONS, 1, ANIM_TITLE, 444, 328, img_th11_title01, 128, 32, 0, 9, false);
+	CreateMenuOption_th11("OP_KEY",     INDEX_OPTIONS, 2, ANIM_TITLE, 444, 352, img_th11_title01, 128, 32, 0, 10, true);
+	CreateMenuOption_th11("OP_DEFAULT", INDEX_OPTIONS, 3, ANIM_TITLE, 444, 376, img_th11_title01, 128, 32, 0, 11, true);
+	CreateMenuOption_th11("OP_QUIT",    INDEX_OPTIONS, 4, ANIM_TITLE, 444, 400, img_th11_title01, 128, 32, 0, 7, true);
+	
+	bgmVolObj = CreateMenuOption_Numeric("OP_BGM_V_N", INDEX_OPTIONS, 0, ANIM_TITLE, 593, 303, img_th11_title01, 0, 480, 18, 32, false);
+	CreateMenuOptionB_th11("OP_BGM_V_P",               INDEX_OPTIONS, 0, ANIM_TITLE, 608, 303, img_th11_title01, [360, 480, 24, 32], [384, 480, 24, 32], false);
+	
+	seVolObj  = CreateMenuOption_Numeric("OP_SE_V_N",  INDEX_OPTIONS, 1, ANIM_TITLE, 593, 327, img_th11_title01, 0, 480, 18, 32, false);
+	CreateMenuOptionB_th11("OP_SE_V_P",                INDEX_OPTIONS, 1, ANIM_TITLE, 608, 327, img_th11_title01, [360, 480, 24, 32], [384, 480, 24, 32], false);
 }
 
-task LoadingBack()
+function CreateMenuOption_th11(name, mPage, mItem, mAnim, x, y, texPath, width, height, row, col, isSelectable)
 {
-	let loadingBg = ObjPrim_Create(OBJ_SPRITE_2D);
-	let loadingBg2 = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(loadingBg, img_loading_sig00);
-	ObjPrim_SetTexture(loadingBg2, img_loading_sig01);
-	ObjSprite2D_SetSourceRect(loadingBg, 0, 0, 512, 480);
-	ObjSprite2D_SetSourceRect(loadingBg2, 0, 0, 128, 480);
-	ObjSprite2D_SetDestRect(loadingBg, 0, 0, 512, 480);
-	ObjSprite2D_SetDestRect(loadingBg2, 0, 0, 128, 480);
-	Obj_SetRenderPriorityI(loadingBg, 9);
-	Obj_SetRenderPriorityI(loadingBg2, 9);
-	ObjRender_SetPosition(loadingBg2, 512, 0, 0);
-	let bg1alpha = 255;
-	wait(150);
-	Obj_Delete(loadingBg);
-	Obj_Delete(loadingBg2);
-}
-
-task MenuBack_th15()
-{
-	let path  = GetCurrentScriptDirectory ~ "../img/title/th15/title_bk00.png";
-	let path2 = GetCurrentScriptDirectory ~ "../img/title/th15/title_bk01.png";
+	let x1 = width * row;
+	let y1 = height * col;
+	let texArray = [x1, y1, width, height];
 	
-	let mainBG00 = Create2DSpriteObject(path, 0, 0, 512, 480);
-	let mainBG01 = Create2DSpriteObject(path2, 0, 0, 128, 480);
-
-	//let selectBG00 = Create2DSpriteObject(img_title_select00, 0, 0, 512, 480);
+	let menuObj = Create2DSpriteObject_M(texPath, x1, y1, width, height);
+	ObjRender_SetPosition(menuObj, x, y, 0);
 	
-	//let selectBG01 = Create2DSpriteObject(img_title_select01, 0, 0, 128, 480);
-
-	let selectAlpha = 256;
-
-	Obj_SetRenderPriorityI(mainBG00, 9);
-	Obj_SetRenderPriorityI(mainBG01, 9);
-	ObjRender_SetPosition(mainBG01, 512, 0, 0);
-
-	//Obj_SetRenderPriorityI(selectBG00, 10);
-	
-	//Obj_SetRenderPriorityI(selectBG00, 10);
-	
-	//ObjRender_SetPosition(selectBG01, 512, 0, 0);
-
-	ObjRender_SetAlpha(mainBG00, 255);
-	ObjRender_SetAlpha(mainBG01, 255);
-	while(GetCommonData("isGameStarted", false) == false)
+	alternative(mAnim)
+	case(-1)
 	{
-		alternative(menuPage)
-		case(INDEX_TITLE)
-		{
-			if(selectAlpha < 256)
-			{
-				selectAlpha += 5;
-			}
-		}
-		others
-		{
-			if(selectAlpha > 100)
-			{
-				selectAlpha -= 1.75;
-			}
-		}
-		ObjRender_SetAlpha(mainBG00, selectAlpha);
-		ObjRender_SetAlpha(mainBG01, selectAlpha);
-		yield;
+		MenuAnim_Select_th11(menuObj, mPage, mItem, texArray);
 	}
-	Obj_Delete(mainBG00);
-	Obj_Delete(mainBG01);
-	//Obj_Delete(selectBG00);
+	case(ANIM_TITLE)
+	{
+		MenuAnim_Title_th11(menuObj, mPage, mItem, texArray, isSelectable);
+	}
+	case(1)
+	{
+		MenuAnim_Difficulty_th11(menuObj, mPage, mItem, texArray, isSelectable);
+	}
+	case(2)
+	{
+		MenuAnim_Kanji_th11(menuObj, mPage, texArray, mItem);
+	}
+	case(3)
+	{
+		MenuAnim_SA_th11(menuObj, mPage, texArray);
+	}
 	
-	//Obj_Delete(selectBG01);
+	return menuObj;
 }
 
-/* 
-todo - replace written out input conditionals with common_lib functions
-*/
-task MenuHandler_th15()
+function CreateMenuOptionB_th11(name, mPage, mItem, mAnim, x, y, texPath, rectArrayA, rectArrayB, isSelectable)
+{
+	let texArray = [rectArrayA, rectArrayB];
+	
+	let menuObj = Create2DSpriteObject_M(texPath, rectArrayA[0], rectArrayA[1], rectArrayA[2], rectArrayA[3]);
+	ObjRender_SetPosition(menuObj, x, y, 0);
+	
+	alternative(mAnim)
+	case(-1)
+	{
+		MenuAnim_Select_th11(menuObj, mPage, mItem, texArray);
+	}
+	case(ANIM_TITLE)
+	{
+		MenuAnim_TitleB_th11(menuObj, mPage, mItem, texArray, isSelectable);
+	}
+	case(1)
+	{
+		MenuAnim_Difficulty_th11(menuObj, mPage, mItem, texArray, isSelectable);
+	}
+	case(2)
+	{
+		MenuAnim_Kanji_th11(menuObj, mPage, texArray, mItem);
+	}
+	case(3)
+	{
+		MenuAnim_SA_th11(menuObj, mPage, texArray);
+	}
+	
+	return menuObj;
+}
+
+task MenuHandler_th11()
 {
 	let debugTimer = 0;
-	let waitTime = 10;
+	let waitTime = menuSelectFlashTime;
 	
 	Reset3DCamera_All();
 	
@@ -1928,30 +1993,22 @@ task MenuHandler_th15()
 		case(INDEX_TITLE)//Title scene - 0
 		{
 			DoMenu(menuItem, 0);
-			if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH)
+			if(isShotPressed)
 			{
 				if(menuSelect[INDEX_TITLE] == 0) //Game Start
 				{
-					PlaySE(se_ok00);
-					wait(waitTime);
-					menuPage = INDEX_DIFFICULTY;
-					menuState = menuSelect[INDEX_DIFFICULTY];
-					//DifficultySelectBG_th15();
+					MenuAction_GoToPage(INDEX_DIFFICULTY, 0);
 				}
-				if(menuSelect[INDEX_TITLE] == 6) //Options
+				if(menuSelect[INDEX_TITLE] == 7) //Options
 				{
-					PlaySE(se_ok00);
-					wait(waitTime);
-					menuPage = INDEX_OPTIONS;
-					menuState = menuSelect[INDEX_OPTIONS];
-					//DifficultySelectBG_th15();
+					MenuAction_GoToPage(INDEX_OPTIONS, 0);
 				}
 				if(menuSelect[INDEX_TITLE] == maxMenu)
 				{
 					ClosePackage();
 				}
 			}
-			else if(GetVirtualKeyState(VK_BOMB) == KEY_PUSH)
+			else if(isBombPressed)
 			{
 				menuState = maxMenu;
 				menuSelect[INDEX_TITLE] = menuState;
@@ -1978,52 +2035,28 @@ task MenuHandler_th15()
 		case(INDEX_DIFFICULTY) //Difficulty Select - 1
 		{
 			DoMenuB(menuItemDiff, 1);
-			if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH)
+			if(isShotPressed)
 			{
-				PlaySE(se_ok00);
-				if(menuSelect[INDEX_DIFFICULTY] == 0)
-				{
-					SetCommonData("Difficulty", 0);
-				}
-				else if(menuSelect[INDEX_DIFFICULTY] == 1)
-				{
-					SetCommonData("Difficulty", 1);
-				}
-				else if(menuSelect[INDEX_DIFFICULTY] == 2)
-				{
-					SetCommonData("Difficulty", 2);
-				}
-				else if(menuSelect[INDEX_DIFFICULTY] == 3)
-				{
-					SetCommonData("Difficulty", 3);
-				}
-				wait(waitTime);
-				PlayStage();
-				//menuPage = INDEX_PLAYERSELECT;
-				
-				//menuState = menuSelect[INDEX_PLAYERSELECT];
+				SetCommonData("Difficulty", menuSelect[INDEX_DIFFICULTY]);
+				MenuAction_PlayStage(1);
 			}
-			if(GetVirtualKeyState(VK_BOMB) == KEY_PUSH)
+			if(isBombPressed)
 			{
-				menuPage = INDEX_TITLE;
-				menuState = menuSelect[INDEX_TITLE];
-				PlaySE(se_cancel00);
+				MenuAction_GoToPage(INDEX_TITLE, 1);
 			}
 		}
 		case(INDEX_PLAYERSELECT) //Player Select - 2
 		{
 			DoMenu(menuItemPlSel, 2);
-			if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH)
+			if(isShotPressed)
 			{
 				PlaySE(se_ok00);
 				wait(waitTime);
 				PlayStage();
 			}
-			if(GetVirtualKeyState(VK_BOMB) == KEY_PUSH)
+			if(isBombPressed)
 			{
-				menuPage = INDEX_DIFFICULTY;
-				menuState = menuSelect[INDEX_DIFFICULTY];
-				PlaySE(se_cancel00);
+				MenuAction_GoToPage(INDEX_DIFFICULTY, 0);
 			}
 		}
 		case(INDEX_OPTIONS)
@@ -2034,11 +2067,17 @@ task MenuHandler_th15()
 				alternative(menuSelect[INDEX_OPTIONS])
 				case(0)
 				{
-					
+					let l_v = GetCommonData("BGMVol", 0);
+					l_v -= 5;
+					if(l_v < 0){l_v = 0}
+					SetCommonData("BGMVol", l_v);
 				}
 				case(1)
 				{
-					
+					let l_v = GetCommonData("SEVol", 0);
+					l_v -= 5;
+					if(l_v < 0){l_v = 0}
+					SetCommonData("SEVol", l_v);
 				}
 			}
 			if(isRightPressed)
@@ -2046,11 +2085,17 @@ task MenuHandler_th15()
 				alternative(menuSelect[INDEX_OPTIONS])
 				case(0)
 				{
-					
+					let l_v = GetCommonData("BGMVol", 0);
+					l_v += 5;
+					if(l_v > 100){l_v = 100}
+					SetCommonData("BGMVol", l_v);
 				}
 				case(1)
 				{
-					
+					let l_v = GetCommonData("SEVol", 0);
+					l_v += 5;
+					if(l_v > 100){l_v = 100}
+					SetCommonData("SEVol", l_v);
 				}
 			}
 			if(isShotPressed)
@@ -2077,8 +2122,8 @@ task MenuHandler_th15()
 			}
 			if(isBombPressed)
 			{
-				menuPage = INDEX_TITLE;
-				menuState = menuSelect[INDEX_TITLE];
+				menuState = maxMenu;
+				menuSelect[INDEX_OPTIONS] = menuState;
 				PlaySE(se_cancel00);
 			}
 		}
@@ -2104,115 +2149,7 @@ task MenuHandler_th15()
 	}
 }
 
-task DifficultySelectBG_th15()
-{
-	let multi = 4;
-	let multi2 = 0.1;
-	
-	let color = [10, 7, 7];
-	let obj = ObjPrim_Create(OBJ_SPRITE_2D);
-	Obj_SetRenderPriorityI(obj, 10);
-	
-	ObjPrim_SetTexture(obj, GetCurrentScriptDirectory ~ "../img/title/th15/effLine.png");
-	ObjSprite2D_SetSourceRect(obj, 0, 0, 256, 96);
-	ObjSprite2D_SetDestCenter(obj);
-	
-	ObjRender_SetPosition(obj, 320, 240, 0);
-	ObjRender_SetBlendType(obj, BLEND_MULTIPLY);
-	
-	let itemHold = menuSelect[INDEX_DIFFICULTY];
-	
-	let IPFrame = 0;
-	let IPFrameA = 0;
-	
-	let angle = 0;
-	//let alpha = 0;
-	let scaleX = 1;
-	let scaleY = 1;
-	
-	let scaleXStart = 0.75;
-	let scaleYStart = 0;
-	let angleStart = -90;
-	//let alphaStart = 0;
-	
-	let scaleXDest = 1;
-	let scaleYDest = 1;
-	let angleDest = 0;
-	//let alphaDest = 256;
-	
-	while(menuPage == INDEX_DIFFICULTY)
-	{
-		if(itemHold != menuSelect[INDEX_DIFFICULTY])
-		{
-			alternative(menuSelect[INDEX_DIFFICULTY])
-			case(0)
-			{
-				angleStart = angle;
-				angleDest = -10;
-			}
-			case(1)
-			{
-				angleStart = angle;
-				angleDest = 0;
-			}
-			case(2)
-			{
-				angleStart = angle;
-				angleDest = 5;
-			}
-			case(3)
-			{
-				angleStart = angle;
-				angleDest = 10;
-			}
-			IPFrameA = 0;
-		}
-		
-		if(IPFrame < 34)
-		{
-			IPFrame++;
-		}
-		if(IPFrameA < 30)
-		{
-			IPFrameA++;
-		}
-		scaleX = InterpolateValue(scaleXStart, scaleXDest, IPFrame, IP_LINEAR, 34);
-		scaleY = InterpolateValue(scaleYStart, scaleYDest, IPFrame, IP_LINEAR, 34);
-		angle = InterpolateValue(angleStart, angleDest, IPFrameA, IP_DECELERATE, 30);
-		//alpha = InterpolateValue(alphaStart, alphaDest, IPFrame, IP_LINEAR, 34);
-		
-		itemHold = menuSelect[INDEX_DIFFICULTY];
-		
-		ObjRender_SetScaleXYZ(obj, scaleX, scaleY, 1);
-		ObjRender_SetAngleZ(obj, angle);
-		//ObjRender_SetColor(obj, alpha, alpha, alpha);
-		yield;
-	}
-	scaleXStart = scaleX;
-	scaleYStart = scaleY;
-	angleStart = angle;
-	
-	scaleXDest = 1.25;
-	scaleYDest = 0;
-	angleDest = 67.5;
-	IPFrame = 0;
-	while(scaleX > 0)
-	{
-		if(IPFrame < 20)
-		{
-			IPFrame++;
-		}
-		scaleX = InterpolateValue(scaleXStart, scaleXDest, IPFrame, IP_LINEAR, 20);
-		scaleY = InterpolateValue(scaleYStart, scaleYDest, IPFrame, IP_LINEAR, 20);
-		angle = InterpolateValue(angleStart, angleDest, IPFrame, IP_DECELERATE, 20);
-		
-		ObjRender_SetScaleXYZ(obj, scaleX, scaleY, 1);
-		ObjRender_SetAngleZ(obj, angle);
-		yield;
-	}
-}
-
-task MenuAnim_Select_th15(menuObj, mPage, mItem, texArray)
+task MenuAnim_Select_th11(menuObj, mPage, mItem, texArray)
 {
 	let initX = ObjRender_GetX(menuObj);
 	let initY = ObjRender_GetY(menuObj);
@@ -2233,8 +2170,8 @@ task MenuAnim_Select_th15(menuObj, mPage, mItem, texArray)
 			menuStartX = ObjRender_GetX(menuObj);
 			menuStartY = ObjRender_GetY(menuObj);
 			
-			menuDestX = 192;
-			menuDestY = -64;
+			menuDestX = -256;
+			menuDestY = 5;
 			IPFrame = 0;
 		}
 		else if(pageHold != menuPage && menuPage == mPage)
@@ -2242,8 +2179,8 @@ task MenuAnim_Select_th15(menuObj, mPage, mItem, texArray)
 			menuStartX = ObjRender_GetX(menuObj);
 			menuStartY = ObjRender_GetY(menuObj);
 			
-			menuDestX = 192;
-			menuDestY = 16;
+			menuDestX = 10;
+			menuDestY = 5;
 			IPFrame = 0;
 		}
 		
@@ -2260,17 +2197,26 @@ task MenuAnim_Select_th15(menuObj, mPage, mItem, texArray)
 	Obj_Delete(menuObj);
 }
 
-task MenuAnim_Title_th15(menuObj, mPage, mItem, texArray)
+task MenuAnim_Title_th11(menuObj, mPage, mItem, texArray, isSelectable)
 {
 	let initX = ObjRender_GetX(menuObj);
 	let initY = ObjRender_GetY(menuObj);
+	
+	let sX = initX;
+	let sY = initY;
+	
+	let pageHold = -1;
+	let IPFrame = 0;
+	let menuStartX = 0;
+	let menuStartY = 0;
+	let menuDestX = 0;
+	let menuDestY = 0;
 
 	let lastItem = 0;
 
 	let xShake = 0;
 	let shakeFlag = false;
 
-	let movX = 0;
 	let moveFrame = 0;
 	let isFlash = false;
 
@@ -2310,6 +2256,25 @@ task MenuAnim_Title_th15(menuObj, mPage, mItem, texArray)
 
 	while(GetCommonData("isGameStarted", false) == false)
 	{
+		if(pageHold != menuPage && menuPage != mPage)
+		{
+			menuStartX = ObjRender_GetX(menuObj);
+			menuStartY = ObjRender_GetY(menuObj);
+			
+			menuDestX = sX + 50;
+			menuDestY = sY;
+			IPFrame = 0;
+		}
+		else if(pageHold != menuPage && menuPage == mPage)
+		{
+			menuStartX = ObjRender_GetX(menuObj);
+			menuStartY = ObjRender_GetY(menuObj);
+			
+			menuDestX = sX;
+			menuDestY = sY;
+			IPFrame = 0;
+		}
+		
 		if(menuPage == mPage)
 		{
 			if(!isFlash)
@@ -2326,7 +2291,7 @@ task MenuAnim_Title_th15(menuObj, mPage, mItem, texArray)
 					shakeFlag = true;
 					MenuAnim_Shake();
 				}
-				if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH)
+				if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH && isSelectable == true)
 				{
 					isFlash = true;
 				}
@@ -2337,7 +2302,6 @@ task MenuAnim_Title_th15(menuObj, mPage, mItem, texArray)
 				shakeFlag = false;
 				ObjSprite2D_SetSourceRect(menuObj, texArray[0] + texArray[2], texArray[1], texArray[0] + (texArray[2]*2), texArray[1] + texArray[3]);
 			}
-
 		}
 		else
 		{
@@ -2350,7 +2314,6 @@ task MenuAnim_Title_th15(menuObj, mPage, mItem, texArray)
 			}
 
 			shakeFlag = false;
-
 		}
 		
 		if(isFlash)
@@ -2371,13 +2334,173 @@ task MenuAnim_Title_th15(menuObj, mPage, mItem, texArray)
 		{
 			ObjRender_SetAlpha(menuObj, alpha);
 		}
-		ObjRender_SetPosition(menuObj, round((initX + xShake) + movX), round(initY), 0);
+		
+		if(IPFrame < 18)
+		{
+			IPFrame++;
+		}
+		initX = InterpolateValue(menuStartX, menuDestX, IPFrame, IP_DECELERATE, 18);
+		initY = InterpolateValue(menuStartY, menuDestY, IPFrame, IP_DECELERATE, 18);
+		pageHold = menuPage;
+		ObjRender_SetPosition(menuObj, round(initX + xShake), round(initY), 0);
 		yield;
 	}
 	Obj_Delete(menuObj);
 }
 
-task MenuAnim_Difficulty_th15(menuObj, mPage, mItem, texArray)
+task MenuAnim_TitleB_th11(menuObj, mPage, mItem, texArray, isSelectable)
+{
+	let initX = ObjRender_GetX(menuObj);
+	let initY = ObjRender_GetY(menuObj);
+	
+	let sX = initX;
+	let sY = initY;
+	
+	let pageHold = -1;
+	let IPFrame = 0;
+	let menuStartX = 0;
+	let menuStartY = 0;
+	let menuDestX = 0;
+	let menuDestY = 0;
+
+	let lastItem = 0;
+
+	let xShake = 0;
+	let shakeFlag = false;
+
+	let moveFrame = 0;
+	let isFlash = false;
+
+	let alpha = 255;
+	let alphaMod = 500;
+
+	let counter = 0;
+	task MenuAnim_Shake()
+	{
+		let shakeFrames = 2;
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-4, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-2, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-7, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-4, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-4, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+	}
+
+	while(GetCommonData("isGameStarted", false) == false)
+	{
+		if(pageHold != menuPage && menuPage != mPage)
+		{
+			menuStartX = ObjRender_GetX(menuObj);
+			menuStartY = ObjRender_GetY(menuObj);
+			
+			menuDestX = sX + 50;
+			menuDestY = sY;
+			IPFrame = 0;
+		}
+		else if(pageHold != menuPage && menuPage == mPage)
+		{
+			menuStartX = ObjRender_GetX(menuObj);
+			menuStartY = ObjRender_GetY(menuObj);
+			
+			menuDestX = sX;
+			menuDestY = sY;
+			IPFrame = 0;
+		}
+		
+		if(menuPage == mPage)
+		{
+			if(!isFlash)
+			{
+				if(alpha < 255)
+				{
+					alpha += 15;
+				}
+			}
+			if(menuSelect[mPage] == mItem)
+			{
+				if(!shakeFlag)
+				{
+					shakeFlag = true;
+					MenuAnim_Shake();
+				}
+				if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH && isSelectable == true)
+				{
+					isFlash = true;
+				}
+				ObjSprite2D_SetSourceRect(menuObj, texArray[0][0], texArray[0][1], texArray[0][0] + texArray[0][2], texArray[0][1] + texArray[0][3]);
+			}
+			else
+			{
+				shakeFlag = false;
+				ObjSprite2D_SetSourceRect(menuObj, texArray[1][0], texArray[1][1], texArray[1][0] + texArray[1][2], texArray[1][1] + texArray[1][3]);
+			}
+
+		}
+		else
+		{
+			if(!isFlash)
+			{
+				if(alpha > 0)
+				{
+					alpha -= 15;
+				}
+			}
+
+			shakeFlag = false;
+		}
+		
+		if(isFlash)
+		{
+			if(counter < 15)
+			{
+				alphaMod = -alphaMod;
+				counter++;
+			}
+			else
+			{
+				isFlash = false;
+				counter = 0;
+			}
+			ObjRender_SetAlpha(menuObj, alpha - alphaMod);
+		}
+		else
+		{
+			ObjRender_SetAlpha(menuObj, alpha);
+		}
+		
+		if(IPFrame < 18)
+		{
+			IPFrame++;
+		}
+		initX = InterpolateValue(menuStartX, menuDestX, IPFrame, IP_DECELERATE, 18);
+		initY = InterpolateValue(menuStartY, menuDestY, IPFrame, IP_DECELERATE, 18);
+		pageHold = menuPage;
+		ObjRender_SetPosition(menuObj, round(initX + xShake), round(initY), 0);
+		yield;
+	}
+	Obj_Delete(menuObj);
+}
+
+task MenuAnim_Difficulty_th11(menuObj, mPage, mItem, texArray, isSelectable)
 {
 	let initX = ObjRender_GetX(menuObj);
 	let initY = ObjRender_GetY(menuObj);
@@ -2398,13 +2521,16 @@ task MenuAnim_Difficulty_th15(menuObj, mPage, mItem, texArray)
 	let menuDestY = 0;
 	let counter = 0;
 	
-	alternative(mItem)
-	case(0){posArray = [[0,     0], [-256, -64], [-512, -128], [-768, -192]];}
-	case(1){posArray = [[256,  64], [   0,   0], [-256,  -64], [-512, -128]];}
-	case(2){posArray = [[512, 128], [ 256,  64], [   0,    0], [-256,  -64]];}
-	case(3){posArray = [[768, 192], [ 512, 128], [ 256,   64], [   0,    0]];}
+	let xSpacing = 0;
+	let ySpacing = 128;
 	
-	let subObj = Create2DSpriteObject_M(GetCurrentScriptDirectory ~ "../img/title/th15/rank00.png", 256, 0 + (80 * mItem), 256, 80);
+	alternative(mItem)
+	case(0){posArray = [[xSpacing*0, ySpacing*0], [xSpacing*-1, ySpacing*-1], [xSpacing*-2, ySpacing*-2], [xSpacing*-3, ySpacing*-3]];}
+	case(1){posArray = [[xSpacing*1, ySpacing*1], [ xSpacing*0,  ySpacing*0], [xSpacing*-1, ySpacing*-1], [xSpacing*-2, ySpacing*-2]];}
+	case(2){posArray = [[xSpacing*2, ySpacing*2], [ xSpacing*1,  ySpacing*1], [ xSpacing*0,  ySpacing*0], [xSpacing*-1, ySpacing*-1]];}
+	case(3){posArray = [[xSpacing*3, ySpacing*3], [ xSpacing*2,  ySpacing*2], [ xSpacing*1,  ySpacing*1], [ xSpacing*0,  ySpacing*0]];}
+	
+	let subObj = Create2DSpriteObject_M(img_th11_title_rank00, 256, 0 + (96 * mItem), 256, 96);
 
 	while(GetCommonData("isGameStarted", false) == false)
 	{	
@@ -2521,9 +2647,212 @@ task MenuAnim_Difficulty_th15(menuObj, mPage, mItem, texArray)
 	Obj_Delete(subObj);
 }
 
-task MenuNumeric(mPage, mItem)
+task MenuAnim_Kanji_th11(menuObj, mPage, texArray, id)
 {
-	yield;
+
+}
+
+task MenuAnim_TitleNumeric_th11(menuObj, mPage, mItem, texArray, isSelectable)
+{
+	let initX = ObjRender_GetX(menuObj);
+	let initY = ObjRender_GetY(menuObj);
+	
+	let sX = initX;
+	let sY = initY;
+	
+	let pageHold = -1;
+	let IPFrame = 0;
+	let menuStartX = 0;
+	let menuStartY = 0;
+	let menuDestX = 0;
+	let menuDestY = 0;
+
+	let lastItem = 0;
+
+	let xShake = 0;
+	let shakeFlag = false;
+
+	let moveFrame = 0;
+	let isFlash = false;
+
+	let alpha = 255;
+	let alphaMod = 500;
+
+	let counter = 0;
+	task MenuAnim_Shake()
+	{
+		let shakeFrames = 2;
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-4, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-2, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-7, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-4, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+		ascent(i in 0..shakeFrames)
+		{
+			xShake = InterpolateValue(-4, 0, i, IP_DECELERATE, shakeFrames);
+			yield;
+		}
+	}
+
+	while(GetCommonData("isGameStarted", false) == false)
+	{
+		if(pageHold != menuPage && menuPage != mPage)
+		{
+			menuStartX = ObjRender_GetX(menuObj);
+			menuStartY = ObjRender_GetY(menuObj);
+			
+			menuDestX = sX + 50;
+			menuDestY = sY;
+			IPFrame = 0;
+		}
+		else if(pageHold != menuPage && menuPage == mPage)
+		{
+			menuStartX = ObjRender_GetX(menuObj);
+			menuStartY = ObjRender_GetY(menuObj);
+			
+			menuDestX = sX;
+			menuDestY = sY;
+			IPFrame = 0;
+		}
+		
+		if(menuPage == mPage)
+		{
+			if(!isFlash)
+			{
+				if(alpha < 255)
+				{
+					alpha += 15;
+				}
+			}
+			if(menuSelect[mPage] == mItem)
+			{
+				if(!shakeFlag)
+				{
+					shakeFlag = true;
+					MenuAnim_Shake();
+				}
+				if(GetVirtualKeyState(VK_SHOT) == KEY_PUSH && isSelectable == true)
+				{
+					isFlash = true;
+				}
+				//ObjSprite2D_SetSourceRect(menuObj, texArray[0], texArray[1], texArray[0] + texArray[2], texArray[1] + texArray[3]);
+				thDraw_SetNumericSpriteListOffset(menuObj, 0, 0);
+			}
+			else
+			{
+				shakeFlag = false;
+				//ObjSprite2D_SetSourceRect(menuObj, texArray[0] + texArray[2], texArray[1], texArray[0] + (texArray[2]*2), texArray[1] + texArray[3]);
+				thDraw_SetNumericSpriteListOffset(menuObj, 180, 0);
+			}
+		}
+		else
+		{
+			if(!isFlash)
+			{
+				if(alpha > 0)
+				{
+					alpha -= 15;
+				}
+			}
+
+			shakeFlag = false;
+		}
+		
+		if(isFlash)
+		{
+			if(counter < 15)
+			{
+				alphaMod = -alphaMod;
+				counter++;
+			}
+			else
+			{
+				isFlash = false;
+				counter = 0;
+			}
+			ObjRender_SetAlpha(menuObj, alpha - alphaMod);
+		}
+		else
+		{
+			ObjRender_SetAlpha(menuObj, alpha);
+		}
+		
+		if(IPFrame < 18)
+		{
+			IPFrame++;
+		}
+		initX = InterpolateValue(menuStartX, menuDestX, IPFrame, IP_DECELERATE, 18);
+		initY = InterpolateValue(menuStartY, menuDestY, IPFrame, IP_DECELERATE, 18);
+		pageHold = menuPage;
+		ObjRender_SetPosition(menuObj, round(initX + xShake), round(initY), 0);
+		yield;
+	}
+	Obj_Delete(menuObj);
+}
+
+task MenuAnim_SA_th11(menuObj, mPage, texArray)
+{
+	
+}
+
+task MenuBack_th11()
+{
+	let mainBG00 = Create2DSpriteObject(img_th11_title00a, 0, 0, 640, 480);
+
+	let selectBG00 = Create2DSpriteObject(img_th11_title_select00, 0, 0, 512, 480);
+	let selectBG01 = Create2DSpriteObject(img_th11_title_select00b, 0, 0, 128, 480);
+
+	let selectAlpha = 0;
+
+	Obj_SetRenderPriorityI(mainBG00, 9);
+
+	Obj_SetRenderPriorityI(selectBG00, 10);
+	Obj_SetRenderPriorityI(selectBG01, 10);
+	ObjRender_SetPosition(selectBG01, 512, 0, 0);
+
+	ObjRender_SetAlpha(mainBG00, 256);
+	ObjRender_SetAlpha(selectBG00, 0);
+	ObjRender_SetAlpha(selectBG01, 0);
+	while(GetCommonData("isGameStarted", false) == false)
+	{
+		alternative(menuPage)
+		case(INDEX_TITLE, INDEX_OPTIONS)
+		{
+			if(selectAlpha > 0)
+			{
+				selectAlpha -= 5;
+			}
+		}
+		others
+		{
+			if(selectAlpha < 256)
+			{
+				selectAlpha += 5;
+			}
+		}
+		ObjRender_SetAlpha(selectBG00, selectAlpha);
+		ObjRender_SetAlpha(selectBG01, selectAlpha);
+		yield;
+	}
+	Obj_Delete(mainBG00);
+	//Obj_Delete(mainBG01);
+	Obj_Delete(selectBG00);
+	Obj_Delete(selectBG01);
 }
 
 
