@@ -8,6 +8,33 @@
 	
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+// ----------
+
+//let ANIM_IDLE = 0;
+//let ANIM_LEFT = ;
+//let ANIM_RIGHT = ;
+//let ANIM_ATTACK = ;
+//let ANIM_USER = ;
+
+//let __animArray = [[]];
+
+//thAnim_Init(animID, texture);
+//thAnim_AddAnimationFramesA(animID, type, x, y, width, heigth, direction, count);
+//thAnim_AddAnimationFramesB(animID, type, x, y, width, height, [[row, col], [row, col], [row, col], [row, col]]);
+//thAnim_AddAnimationFramesC(animID, type, [[x1, y1, x2, y2], [x1, y1, x2, y2], [x1, y1, x2, y2], [x1, y1, x2, y2]]);
+//thAnim_SetAnimationLoop(animID, type, frameRate, frameStart, frameEnd);
+//thAnim_SetNextAnimationType(animID, typeA, typeB, loopCount);
+//thAnim_SetAnimationTexture(animID, type, texture);
+//thAnim_SetInvincibilityTexture(animID, texture);
+
+//let anim = thAnimObj_CreateOnMoveObject(animID, objID);
+//let anim = thAnimObj_CreateLoose(animID);
+//thAnimObj_SetAnimationID(objID, animID);
+//thAnimObj_ChangeAnimationToTypeA(objID, type);
+//thAnimObj_ChangeAnimationToTypeB(objID, type);
+
+// ----------
+
 //let useAtkAnim = false;
 //let useAltAtkAnim = false;
 
