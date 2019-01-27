@@ -7,6 +7,29 @@
 	to do: animation library: ease of use- replace and rework old code down to one animate task, use arrays to store frame data and rects
 	
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/*
+
+Animation Flow/Priority:
+
+ANIM_USER when this animation type is active
+ANIM_LEFT when object X speed is < 0
+ANIM_RIGHT when object X speed is > 0
+ANIM_ATTACK when useAttackAnimation == true
+ANIM_IDLE when object speed is 0
+
+if ANIM_LEFT and ANIM_RIGHT are not defined in the animation array, the animator will 
+simply stay on ANIM_IDLE when the object moves.  If only one of the two is defined, the animator
+will Y-flip LEFT/RIGHT when the object is moving in the opposite direction.
+
+LEFT/RIGHT will play until the last frame, which will be held until the direction
+changes or speed reaches 0, in which the animation will play back the frames in 
+reverse before moving to the next animation type
+
+If loop points are defined for LEFT and RIGHT, the animation will continue to loop until
+direction has changed or speed is 0.  afterwards, the animation will reverse starting from the
+frame before the first loop frame before transitioning to the new direction's animation
+
+*/
 
 // ----------
 
@@ -16,22 +39,49 @@
 //let ANIM_ATTACK = ;
 //let ANIM_USER = ;
 
-//let __animArray = [[]];
+//let thGlobal_animArray = [[]];
 
-//thAnim_Init(animID, texture);
-//thAnim_AddAnimationFramesA(animID, type, x, y, width, heigth, direction, count);
-//thAnim_AddAnimationFramesB(animID, type, x, y, width, height, [[row, col], [row, col], [row, col], [row, col]]);
-//thAnim_AddAnimationFramesC(animID, type, [[x1, y1, x2, y2], [x1, y1, x2, y2], [x1, y1, x2, y2], [x1, y1, x2, y2]]);
+//let animEnemyA = thAnim_Init(texture); //returns the new animID
+//thAnim_AddAnimationFramesA(animID, type, frameRate, x, y, width, heigth, direction, count);
+//thAnim_AddAnimationFramesB(animID, type, frameRate, x, y, width, height, [[row, col], [row, col], [row, col], [row, col]]);
+//thAnim_AddAnimationFramesC(animID, type, frameRate, [[x1, y1, x2, y2], [x1, y1, x2, y2], [x1, y1, x2, y2], [x1, y1, x2, y2]]);
+//thAnim_SetAnimationSpeed(animID, type, frameRate);
 //thAnim_SetAnimationLoop(animID, type, frameRate, frameStart, frameEnd);
 //thAnim_SetNextAnimationType(animID, typeA, typeB, loopCount);
 //thAnim_SetAnimationTexture(animID, type, texture);
 //thAnim_SetInvincibilityTexture(animID, texture);
 
-//let anim = thAnimObj_CreateOnMoveObject(animID, objID);
-//let anim = thAnimObj_CreateLoose(animID);
+//let anim = thAnimObj_Create(animID); //returns a new sprite2D object
+//thAnimObj_CreateToEnemy(eneID, animID); //assigns necessary Obj_Values to an enemy object
+//thAnimObj_AssignToMoveObject(objID, moveObjID);
 //thAnimObj_SetAnimationID(objID, animID);
 //thAnimObj_ChangeAnimationToTypeA(objID, type);
 //thAnimObj_ChangeAnimationToTypeB(objID, type);
+
+
+
+/*
+animArray = 
+[ //animArray[i], i for animID
+	[ //animArray[i][j], j for each anim type
+		[ //animArray[i][j][k], k0 for header, k1+ for frame data
+			[ //k0
+				type,
+				frameRate,
+				loopPointStart,
+				loopPointEnd
+			],
+			[ //k1+
+				x1,
+				y1,
+				x2,
+				y2
+			],
+		]
+	]
+];
+*/
+//Obj_SetValue(obj, "animArray");
 
 // ----------
 
