@@ -2269,7 +2269,7 @@ function _exi_spdown(array, flag)
 	ascent(i in 0..length(array))
 	{
 		let fp_speed = ObjRender_GetZ(array[i]);
-		let fp_startSpeed =  fp_speed * 2;
+		let fp_startSpeed =  fp_speed + 5;
 		let fp_speedDifference = fp_startSpeed - fp_speed;
 		let fp_accel = fp_speedDifference / frames;
 		ObjMove_AddPatternA2(array[i], _frameHelper, fp_startSpeed, NO_CHANGE, -fp_accel, 0, fp_speed);
@@ -2283,7 +2283,7 @@ function _exi_spdown2(array, flag)
 	ascent(i in 0..length(array))
 	{
 		let fp_speed = ObjRender_GetZ(array[i]);
-		let fp_startSpeed =  fp_speed * 4.2;
+		let fp_startSpeed =  fp_speed + 5;
 		let fp_speedDifference = fp_startSpeed - fp_speed;
 		let fp_accel = fp_speedDifference / frames;
 		ObjMove_AddPatternA2(array[i], _frameHelper, fp_startSpeed, NO_CHANGE, -fp_accel, 0, fp_speed);
