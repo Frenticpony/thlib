@@ -25,7 +25,7 @@ task boss_yamame_bh()
 			alternative(bossAttackState)
 			case(1)
 			{
-				boss_yamame_sc02(boss_Yamame);
+				boss_yamame_ns01(boss_Yamame);
 			}
 			case(2)
 			{
