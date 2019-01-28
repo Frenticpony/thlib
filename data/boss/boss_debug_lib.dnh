@@ -1,12 +1,3 @@
-/*
-
-WORK UP
-GIGA IMPACT
-
-SUCKER PUNCH
-DOUBLE TEAM
-
-*/
 //Main int that will hold boss obj ID
 let objDebug = 0;
 

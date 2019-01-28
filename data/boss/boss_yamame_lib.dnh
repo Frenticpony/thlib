@@ -98,6 +98,7 @@ function boss_yamame_ns01(obj)
 				val_B = 45;
 				val_C = SetValueD(-5.625, -5.625, -3.75, -3.75);
 				ns01_at1_t(obj, val_B, val_C);
+				ObjBoss_UseAttackAnimationA(obj);
 			}
 			case(64)
 			{
@@ -109,6 +110,7 @@ function boss_yamame_ns01(obj)
 				val_C = SetValueD(5.625, 5.625, 3.75, 3.75);
 				if(isDifficulty(NHL))
 				{ns01_at1_t(obj, val_B, val_C);}
+				ObjBoss_UseAttackAnimationA(obj);
 			}
 			case(289)
 			{
