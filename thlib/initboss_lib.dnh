@@ -8,10 +8,6 @@
 	
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-#include"./animate_lib.dnh"
-#include"./spellbg_lib.dnh"
-#include"./cutin_lib.dnh"
-
 // ---------- th06 ----------
 let BOSS_RUMIA_06     = 0;
 let BOSS_DAYOSEI_06   = 1;
@@ -264,7 +260,7 @@ function InitBoss(FPEnemy, value)
 		Obj_SetValue(FPEnemy, "CT_X", 256);
 		Obj_SetValue(FPEnemy, "CT_Y", 512);
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
-		AnimateKisume(FPEnemy);
+		Obj_SetValue(FPEnemy, "A_OBJ", thAnimObj_CreateOnMoveObject(animKisume, FPEnemy));
 		SpellCardBGKisumeYamame(FPEnemy);
 		img_ename_current = img_th11_ename;
 		img_ct_current = img_th11_ct_kisume;
@@ -277,7 +273,7 @@ function InitBoss(FPEnemy, value)
 		Obj_SetValue(FPEnemy, "CT_X", 256);
 		Obj_SetValue(FPEnemy, "CT_Y", 512);
 		Obj_SetValue(FPEnemy, "CT_YO", 30);
-		AnimateYamame(FPEnemy);
+		Obj_SetValue(FPEnemy, "A_OBJ", thAnimObj_CreateOnMoveObject(animYamame, FPEnemy));
 		SpellCardBGKisumeYamame(FPEnemy);
 		img_ename_current = img_th11_ename;
 		img_ct_current = img_th11_ct_yamame;

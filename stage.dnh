@@ -1,7 +1,9 @@
 #include"./thlib/stage_lib.dnh"
 
-#include"./stage/aStageList.dnh"
-#include"./boss/aBossList.dnh"
+#include"./data/anim_data.dnh"
+
+#include"./data/stage/aStageList.dnh"
+#include"./data/boss/aBossList.dnh"
 
 let renderTarget = [];
 let renderTargetVoid = 0;
@@ -19,8 +21,8 @@ let test;
 	thStage_Initialize();
 	renderTarget = thStage_InitRenderTarget();
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+	SetUpAllAnim();
 	thStage_Timeline;
-	//debug_InterpolateTest();
 }
 
 @MainLoop

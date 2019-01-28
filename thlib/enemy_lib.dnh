@@ -8,9 +8,12 @@
 	
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+#include"./animate_lib.dnh"
 #include"./boss_lib.dnh"
 #include"./effect_lib.dnh"
 #include"./ecl_lib.dnh"
+#include"./spellbg_lib.dnh"
+#include"./cutin_lib.dnh"
 #include"./initboss_lib.dnh"
 
 let endSpellcard = false;
@@ -27,7 +30,6 @@ let byakurenNodeB = 0;
 let byakurenNodeC = 0;
 let byakurenNodeD = 0;
 let endLotus = false;
-
 
 // -=-=-=-=-=-=-=-=-=-=- Helper Functions -=-=-=-=-=-=-=-=-=-=-
 
@@ -168,396 +170,27 @@ function thEnemy_AnimateEnemy(n_obj, c_type)
 
 task thEnemy_AnimateFairyA1(n_obj, c_type)
 {
-	let deadFlag = false;
-	let animationID = 0;
-	let animDirection = 0;
-	let enemyDirection = 0;
-	let frame = 0;
-	let frameB = 0;
-	let prevAngle = "NULL";
-
-	let rowColArray =
-	[
-		[0, 0],
-		[1, 0],
-		[2, 0],
-		[3, 0],
-
-		[0, 1],
-		[1, 1],
-		[2, 1],
-		[3, 1],
-
-		[0, 2],
-		[1, 2],
-		[2, 2],
-		[3, 2]
-	];
-	let rowCol = rowColArray[0];
-
-	let x_min = 0;
-	let y_min = 0;
-	let x_max = 64;
-	let y_max = 64;
-
-	let offsetX = 32;
-	let offsetY = 32;
-
-	let spriteRow = 0;
-	let spriteCol = 0;
-
-	//0 == Idle
-	
-	//1 == Turning
-	
-	//2 == Moving
-
-	let imgObj = ObjPrim_Create(OBJ_SPRITE_2D);
-	ObjPrim_SetTexture(imgObj, img_th11_enemy);
-	ObjSprite2D_SetSourceRect(imgObj, 0, 0, 32, 32);
-	ObjSprite2D_SetDestCenter(imgObj);
-	Obj_SetRenderPriorityI(imgObj, 41);
-
-	//if(color == "BLUE_S"){yOffset = 0;}
-	
-	//if(color == "RED_S"){yOffset = 32;}
-	
-	//if(color == "GREEN_S"){yOffset = 64;}
-	
-	//if(color == "YELLOW_S"){yOffset = 96;}
-
 	alternative(c_type)
 	case(ENE_FAIRY00_BLUE)
 	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[4, 0],
-			[5, 0],
-			[6, 0],
-			[7, 0],
-
-			[8, 0],
-			[9, 0],
-			[10, 0],
-			[11, 0]
-		];
-
-		x_min = 0;
-		y_min = 256;
-		x_max = 32;
-		y_max = 288;
-
-		offsetX = 32;
-		offsetY = 32;
+		thAnimObj_CreateOnMoveObject(animFairy00Blue, n_obj);
 	}
 	case(ENE_FAIRY00_RED)
 	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[4, 0],
-			[5, 0],
-			[6, 0],
-			[7, 0],
-
-			[8, 0],
-			[9, 0],
-			[10, 0],
-			[11, 0]
-		];
-
-		x_min = 0;
-		y_min = 288;
-		x_max = 32;
-		y_max = 320;
-
-		offsetX = 32;
-		offsetY = 32;
+		thAnimObj_CreateOnMoveObject(animFairy00Red, n_obj);
 	}
 	case(ENE_FAIRY00_GREEN)
 	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[4, 0],
-			[5, 0],
-			[6, 0],
-			[7, 0],
-
-			[8, 0],
-			[9, 0],
-			[10, 0],
-			[11, 0]
-		];
-
-		x_min = 0;
-		y_min = 320;
-		x_max = 32;
-		y_max = 352;
-
-		offsetX = 32;
-		offsetY = 32;
+		thAnimObj_CreateOnMoveObject(animFairy00Green, n_obj);
 	}
 	case(ENE_FAIRY00_YELLOW)
 	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[4, 0],
-			[5, 0],
-			[6, 0],
-			[7, 0],
-
-			[8, 0],
-			[9, 0],
-			[10, 0],
-			[11, 0]
-		];
-
-		x_min = 0;
-		y_min = 352;
-		x_max = 32;
-		y_max = 384;
-
-		offsetX = 32;
-		offsetY = 32;
+		thAnimObj_CreateOnMoveObject(animFairy00Yellow, n_obj);
 	}
 	case(ENE_FAIRY01_WHITE)
 	{
-		rowColArray =
-		[
-			[0, 2],
-			[1, 2],
-			[2, 2],
-			[3, 2],
-
-			[4, 2],
-			[5, 2],
-			[6, 2],
-			[7, 2],
-
-			[6, 0],
-			[7, 0],
-			[6, 1],
-			[7, 1]
-		];
-
-		x_min = 0;
-		y_min = 256;
-		x_max = 64;
-		y_max = 320;
-
-		offsetX = 64;
-		offsetY = 64;
+		thAnimObj_CreateOnMoveObject(animFairy01White, n_obj);
 	}
-	case(ENE_FAIRY02_BLUE)
-	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[0, 1],
-			[1, 1],
-			[2, 1],
-			[3, 1],
-
-			[0, 2],
-			[1, 2],
-			[2, 2],
-			[3, 2]
-		];
-
-		x_min = 0;
-		y_min = 0;
-		x_max = 48;
-		y_max = 32;
-
-		offsetX = 48;
-		offsetY = 32;
-	}
-	case(ENE_FAIRY02_RED)
-	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[0, 1],
-			[1, 1],
-			[2, 1],
-			[3, 1],
-
-			[0, 2],
-			[1, 2],
-			[2, 2],
-			[3, 2]
-		];
-
-		x_min = 0;
-		y_min = 96;
-		x_max = 48;
-		y_max = 128;
-
-		offsetX = 48;
-		offsetY = 32;
-	}
-	case(ENE_FAIRY03_BLUE)
-	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[0, 1],
-			[1, 1],
-			[2, 1],
-			[3, 1],
-
-			[0, 2],
-			[1, 2],
-			[2, 2],
-			[3, 2]
-		];
-
-		x_min = 320;
-		y_min = 144;
-		x_max = 368;
-		y_max = 192;
-
-		offsetX = 48;
-		offsetY = 48;
-	}
-	case(ENE_FAIRY03_RED)
-	{
-		rowColArray =
-		[
-			[0, 0],
-			[1, 0],
-			[2, 0],
-			[3, 0],
-
-			[0, 1],
-			[1, 1],
-			[2, 1],
-			[3, 1],
-
-			[0, 2],
-			[1, 2],
-			[2, 2],
-			[3, 2]
-		];
-
-		x_min = 320;
-		y_min = 0;
-		x_max = 368;
-		y_max = 48;
-
-		offsetX = 48;
-		offsetY = 48;
-	}
-
-	while(!Obj_IsDeleted(n_obj))
-	{
-		let x_vel = ObjMove_GetSpeed(n_obj)*cos(ObjMove_GetAngle(n_obj));
-
-		//all of this nonsense because value*cos(90) won't return exactly 0
-		x_vel = x_vel * 10000000;
-		x_vel = truncate(x_vel);
-		x_vel = x_vel / 10000000;
-		//end nonsense
-
-		if(x_vel < 0)
-		{
-			enemyDirection = -1;
-		}
-		else if(x_vel > 0)
-		{
-			enemyDirection = 1;
-		}
-		else
-		{
-			enemyDirection = 0;
-		}
-
-		if(animDirection == enemyDirection && enemyDirection != 0)
-		{
-			frame++;
-		}
-		else if(frame > 0)
-		{
-			if(frame > 20)
-			{
-				frame = 20;
-			}
-			frame--;
-		}
-		if(frame == 0)
-		{
-			animDirection = enemyDirection;
-			if(animDirection == -1)
-			{
-				ObjRender_SetScaleX(imgObj, -1);
-			}
-			else
-			{
-				ObjRender_SetScaleX(imgObj, 1);
-			}
-		}
-
-		if(frame == 0)
-		{
-			if(frameB >= 0 && frameB < 5)  {rowCol = rowColArray[0];}
-			if(frameB >= 5 && frameB < 10) {rowCol = rowColArray[1];}
-			if(frameB >= 10 && frameB < 15){rowCol = rowColArray[2];}
-			if(frameB >= 15 && frameB < 20){rowCol = rowColArray[3];}
-			if(frameB == 20){frameB = -1;}
-			frame = 0;
-			frameB++;
-		}
-		else
-		{
-			if(frame >= 0 && frame < 5)  {rowCol = rowColArray[4];}
-			if(frame >= 5 && frame < 10) {rowCol = rowColArray[5];}
-			if(frame >= 10 && frame < 15){rowCol = rowColArray[6];}
-			if(frame >= 15 && frame < 20){rowCol = rowColArray[7];}
-
-			if(frame >= 20 && frame < 25){rowCol = rowColArray[8];}
-			if(frame >= 25 && frame < 30){rowCol = rowColArray[9];}
-			if(frame >= 30 && frame < 35){rowCol = rowColArray[10];}
-			if(frame >= 35 && frame < 40){rowCol = rowColArray[11];}
-			if(frame == 40){frame = 19;}
-		}
-
-		ObjRender_SetPosition(imgObj, round(ObjMove_GetX(n_obj)), round(ObjMove_GetY(n_obj)), 0);
-		ObjSprite2D_SetSourceRect(imgObj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
-		ObjSprite2D_SetDestCenter(imgObj);
-		yield;
-	}
-	Obj_Delete(imgObj);
 }
 
 task thEnemy_AnimateWispA1(n_obj, c_type)
@@ -2176,4 +1809,400 @@ function __objB_ConfineToMoveField(n_obj)
 	{
 		ObjMove_SetY(n_obj, __confY2);
 	}
+}
+
+// -=-=-=-=-=-=-=-=-=-=- old -=-=-=-=-=-=-=-=-=-=-
+
+task thEnemy_AnimateFairyA1_old(n_obj, c_type)
+{
+	let deadFlag = false;
+	let animationID = 0;
+	let animDirection = 0;
+	let enemyDirection = 0;
+	let frame = 0;
+	let frameB = 0;
+	let prevAngle = "NULL";
+
+	let rowColArray =
+	[
+		[0, 0],
+		[1, 0],
+		[2, 0],
+		[3, 0],
+
+		[0, 1],
+		[1, 1],
+		[2, 1],
+		[3, 1],
+
+		[0, 2],
+		[1, 2],
+		[2, 2],
+		[3, 2]
+	];
+	let rowCol = rowColArray[0];
+
+	let x_min = 0;
+	let y_min = 0;
+	let x_max = 64;
+	let y_max = 64;
+
+	let offsetX = 32;
+	let offsetY = 32;
+
+	let spriteRow = 0;
+	let spriteCol = 0;
+
+	//0 == Idle
+	
+	//1 == Turning
+	
+	//2 == Moving
+
+	let imgObj = ObjPrim_Create(OBJ_SPRITE_2D);
+	ObjPrim_SetTexture(imgObj, img_th11_enemy);
+	ObjSprite2D_SetSourceRect(imgObj, 0, 0, 32, 32);
+	ObjSprite2D_SetDestCenter(imgObj);
+	Obj_SetRenderPriorityI(imgObj, 41);
+
+	//if(color == "BLUE_S"){yOffset = 0;}
+	
+	//if(color == "RED_S"){yOffset = 32;}
+	
+	//if(color == "GREEN_S"){yOffset = 64;}
+	
+	//if(color == "YELLOW_S"){yOffset = 96;}
+
+	alternative(c_type)
+	case(ENE_FAIRY00_BLUE)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[4, 0],
+			[5, 0],
+			[6, 0],
+			[7, 0],
+
+			[8, 0],
+			[9, 0],
+			[10, 0],
+			[11, 0]
+		];
+
+		x_min = 0;
+		y_min = 256;
+		x_max = 32;
+		y_max = 288;
+
+		offsetX = 32;
+		offsetY = 32;
+	}
+	case(ENE_FAIRY00_RED)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[4, 0],
+			[5, 0],
+			[6, 0],
+			[7, 0],
+
+			[8, 0],
+			[9, 0],
+			[10, 0],
+			[11, 0]
+		];
+
+		x_min = 0;
+		y_min = 288;
+		x_max = 32;
+		y_max = 320;
+
+		offsetX = 32;
+		offsetY = 32;
+	}
+	case(ENE_FAIRY00_GREEN)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[4, 0],
+			[5, 0],
+			[6, 0],
+			[7, 0],
+
+			[8, 0],
+			[9, 0],
+			[10, 0],
+			[11, 0]
+		];
+
+		x_min = 0;
+		y_min = 320;
+		x_max = 32;
+		y_max = 352;
+
+		offsetX = 32;
+		offsetY = 32;
+	}
+	case(ENE_FAIRY00_YELLOW)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[4, 0],
+			[5, 0],
+			[6, 0],
+			[7, 0],
+
+			[8, 0],
+			[9, 0],
+			[10, 0],
+			[11, 0]
+		];
+
+		x_min = 0;
+		y_min = 352;
+		x_max = 32;
+		y_max = 384;
+
+		offsetX = 32;
+		offsetY = 32;
+	}
+	case(ENE_FAIRY01_WHITE)
+	{
+		rowColArray =
+		[
+			[0, 2],
+			[1, 2],
+			[2, 2],
+			[3, 2],
+
+			[4, 2],
+			[5, 2],
+			[6, 2],
+			[7, 2],
+
+			[6, 0],
+			[7, 0],
+			[6, 1],
+			[7, 1]
+		];
+
+		x_min = 0;
+		y_min = 256;
+		x_max = 64;
+		y_max = 320;
+
+		offsetX = 64;
+		offsetY = 64;
+	}
+	case(ENE_FAIRY02_BLUE)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[0, 1],
+			[1, 1],
+			[2, 1],
+			[3, 1],
+
+			[0, 2],
+			[1, 2],
+			[2, 2],
+			[3, 2]
+		];
+
+		x_min = 0;
+		y_min = 0;
+		x_max = 48;
+		y_max = 32;
+
+		offsetX = 48;
+		offsetY = 32;
+	}
+	case(ENE_FAIRY02_RED)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[0, 1],
+			[1, 1],
+			[2, 1],
+			[3, 1],
+
+			[0, 2],
+			[1, 2],
+			[2, 2],
+			[3, 2]
+		];
+
+		x_min = 0;
+		y_min = 96;
+		x_max = 48;
+		y_max = 128;
+
+		offsetX = 48;
+		offsetY = 32;
+	}
+	case(ENE_FAIRY03_BLUE)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[0, 1],
+			[1, 1],
+			[2, 1],
+			[3, 1],
+
+			[0, 2],
+			[1, 2],
+			[2, 2],
+			[3, 2]
+		];
+
+		x_min = 320;
+		y_min = 144;
+		x_max = 368;
+		y_max = 192;
+
+		offsetX = 48;
+		offsetY = 48;
+	}
+	case(ENE_FAIRY03_RED)
+	{
+		rowColArray =
+		[
+			[0, 0],
+			[1, 0],
+			[2, 0],
+			[3, 0],
+
+			[0, 1],
+			[1, 1],
+			[2, 1],
+			[3, 1],
+
+			[0, 2],
+			[1, 2],
+			[2, 2],
+			[3, 2]
+		];
+
+		x_min = 320;
+		y_min = 0;
+		x_max = 368;
+		y_max = 48;
+
+		offsetX = 48;
+		offsetY = 48;
+	}
+
+	while(!Obj_IsDeleted(n_obj))
+	{
+		let x_vel = ObjMove_GetSpeed(n_obj)*cos(ObjMove_GetAngle(n_obj));
+
+		//all of this nonsense because value*cos(90) won't return exactly 0
+		x_vel = x_vel * 10000000;
+		x_vel = truncate(x_vel);
+		x_vel = x_vel / 10000000;
+		//end nonsense
+
+		if(x_vel < 0)
+		{
+			enemyDirection = -1;
+		}
+		else if(x_vel > 0)
+		{
+			enemyDirection = 1;
+		}
+		else
+		{
+			enemyDirection = 0;
+		}
+
+		if(animDirection == enemyDirection && enemyDirection != 0)
+		{
+			frame++;
+		}
+		else if(frame > 0)
+		{
+			if(frame > 20)
+			{
+				frame = 20;
+			}
+			frame--;
+		}
+		if(frame == 0)
+		{
+			animDirection = enemyDirection;
+			if(animDirection == -1)
+			{
+				ObjRender_SetScaleX(imgObj, -1);
+			}
+			else
+			{
+				ObjRender_SetScaleX(imgObj, 1);
+			}
+		}
+
+		if(frame == 0)
+		{
+			if(frameB >= 0 && frameB < 5)  {rowCol = rowColArray[0];}
+			if(frameB >= 5 && frameB < 10) {rowCol = rowColArray[1];}
+			if(frameB >= 10 && frameB < 15){rowCol = rowColArray[2];}
+			if(frameB >= 15 && frameB < 20){rowCol = rowColArray[3];}
+			if(frameB == 20){frameB = -1;}
+			frame = 0;
+			frameB++;
+		}
+		else
+		{
+			if(frame >= 0 && frame < 5)  {rowCol = rowColArray[4];}
+			if(frame >= 5 && frame < 10) {rowCol = rowColArray[5];}
+			if(frame >= 10 && frame < 15){rowCol = rowColArray[6];}
+			if(frame >= 15 && frame < 20){rowCol = rowColArray[7];}
+
+			if(frame >= 20 && frame < 25){rowCol = rowColArray[8];}
+			if(frame >= 25 && frame < 30){rowCol = rowColArray[9];}
+			if(frame >= 30 && frame < 35){rowCol = rowColArray[10];}
+			if(frame >= 35 && frame < 40){rowCol = rowColArray[11];}
+			if(frame == 40){frame = 19;}
+		}
+
+		ObjRender_SetPosition(imgObj, round(ObjMove_GetX(n_obj)), round(ObjMove_GetY(n_obj)), 0);
+		ObjSprite2D_SetSourceRect(imgObj, x_min + offsetX*rowCol[0], y_min + offsetY*rowCol[1], x_max + offsetX*rowCol[0], y_max + offsetY*rowCol[1]);
+		ObjSprite2D_SetDestCenter(imgObj);
+		yield;
+	}
+	Obj_Delete(imgObj);
 }

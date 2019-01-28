@@ -7,39 +7,6 @@
 	to do: animation library: ease of use- replace and rework old code down to one animate task, use arrays to store frame data and rects
 	
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-/*
-
-Animation Flow/Priority:
-
-ANIM_USER when this animation type is active
-ANIM_LEFT when object X speed is < 0
-ANIM_RIGHT when object X speed is > 0
-ANIM_ATTACK when useAttackAnimation == true
-ANIM_IDLE when object speed is 0
-
-if ANIM_LEFT and ANIM_RIGHT are not defined in the animation array, the animator will 
-simply stay on ANIM_IDLE when the object moves.  If only one of the two is defined, the animator
-will Y-flip LEFT/RIGHT when the object is moving in the opposite direction.
-
-LEFT/RIGHT will play until the last frame, which will be held until the direction
-changes or speed reaches 0, in which the animation will play back the frames in 
-reverse before moving to the next animation type
-
-If loop points are defined for LEFT and RIGHT, the animation will continue to loop until
-direction has changed or speed is 0.  afterwards, the animation will reverse starting from the
-frame before the first loop frame before transitioning to the new direction's animation
-
-*/
-
-// ----------
-
-//let ANIM_IDLE = 0;
-//let ANIM_LEFT = ;
-//let ANIM_RIGHT = ;
-//let ANIM_ATTACK = ;
-//let ANIM_USER = ;
-
-//let thGlobal_animArray = [[]];
 
 //let animEnemyA = thAnim_Init(texture); //returns the new animID
 //thAnim_AddAnimationFramesA(animID, type, frameRate, x, y, width, heigth, direction, count);
@@ -58,35 +25,364 @@ frame before the first loop frame before transitioning to the new direction's an
 //thAnimObj_ChangeAnimationToTypeA(objID, type);
 //thAnimObj_ChangeAnimationToTypeB(objID, type);
 
+let thGlobal_animArray = [];
+let thGlobal_animArrayTextures = [];
+
+let ANIM_IDLE = 0;
+let ANIM_LEFT = 1;
+let ANIM_RIGHT = 2;
+let ANIM_ATTACK = 3;
+let ANIM_USER = 4;
+
+// -=-=-=-=-=-=-=-=-=-=- thAnim Library -=-=-=-=-=-=-=-=-=-=-
+
+function thAnim_Init(texture)
+{
+	thGlobal_animArray = thGlobal_animArray ~ [[[[ANIM_IDLE, 5, -1, -1]], [[ANIM_LEFT, -1, -1, -1]], [[ANIM_RIGHT, -1, -1, -1]], [[ANIM_ATTACK, -1, -1, -1]]]];
+	thGlobal_animArrayTextures = thGlobal_animArrayTextures ~ [[texture, texture]];
+	return length(thGlobal_animArray) - 1;
+}
+
+function thAnim_AddAnimationFramesA(animID, animType, sprX, sprY, sprWidth, sprHeight, sprDirection, sprCount)
+{
+	let la_animID = thGlobal_animArray[animID];
+	let la_animType = thGlobal_animArray[animID][animType];
+	//la_animType[0][2] = 1;
+	//la_animType[0][3] = sprCount - 1;
+
+	alternative(sprDirection)
+	case(0) //RIGHT
+	{
+		ascent(i in 0..sprCount)
+		{
+			la_animType = la_animType ~ [[sprX + (sprWidth*i), sprY, sprX + (sprWidth*(i+1)), sprY + sprHeight]];
+		}
+	}
+	thGlobal_animArray[animID][animType] = la_animType;
+}
+
+function thAnim_SetAnimationSpeed(animID, animType, frameRate)
+{
+	thGlobal_animArray[animID][animType][0][1] = frameRate;
+}
+
+function thAnim_SetAnimationLoop(animID, animType, loopStart, loopEnd)
+{
+	thGlobal_animArray[animID][animType][0][2] = loopStart;
+	thGlobal_animArray[animID][animType][0][3] = loopEnd;
+}
+
+function thAnimObj_Create(animID)
+{
+	let __animObj = ObjPrim_Create(OBJ_SPRITE_2D);
+	Obj_SetValue(__animObj, "A_ID", animID);  //animation ID
+	Obj_SetValue(__animObj, "A_MO", -1);  //assigned Move Object
+	Obj_SetValue(__animObj, "A_AT", 0);   //current Animation Type
+	Obj_SetRenderPriorityI(__animObj, 41);
+	__thAnim_Loop(__animObj, -1, thGlobal_animArray[animID]);
+	return __animObj;
+}
+
+function thAnimObj_CreateOnMoveObject(animID, moveObj)
+{
+	let __animObj = ObjPrim_Create(OBJ_SPRITE_2D);
+	Obj_SetValue(__animObj, "A_ID", animID);  //animation ID
+	Obj_SetValue(__animObj, "A_MO", moveObj);  //assigned Move Object
+	Obj_SetValue(__animObj, "A_AT", 0);   //current Animation Type
+	Obj_SetRenderPriorityI(__animObj, 41);
+	__thAnim_Loop(__animObj, -1, thGlobal_animArray[animID]);
+	return __animObj;
+}
+
+function thAnimObj_AssignToMoveObject(__animObj, __moveObj)
+{
+	Obj_SetValue(__animObj, "A_MO", __moveObj);
+}
+
+task __thAnim_Loop(__animObj, __moveObj, animArray)
+{
+	//let __TextureData = animArray[0][0];
+	let __AnimType = ANIM_IDLE;
+	let __AnimFrame = 0;
+	let __AnimFrameB = 0;
+	let __AnimFrameCounter = 0;
+	let __AnimFrameCounterB = 0;
+	let __AnimRects = animArray[__AnimType][__AnimFrame + 1];
+	let __MoveObj = -1;
+	
+	let __enemyDirection = 0;
+	let __animDirection = 0;
+	
+	let __FramesIdle = [];
+	let __SpeedIdle = 0;
+	let __LengthIdle = 0;
+	
+	let __FramesRight = [];
+	let __SpeedRight = 0;
+	let __LengthRight = 0;
+	let __LoopRight = [-1, -1];
+	
+	let __FramesLeft = [];
+	let __SpeedLeft = 0;
+	let __LengthLeft = 0;
+	let __LoopLeft = [-1, -1];
+	
+	let __FramesAttack = [];
+	let __SpeedAttack = 0;
+	let __LengthAttack = 0;
+	let __LoopAttack = [-1, -1];
+	
+	let __flipLeft = false;
+	let __flipRight = false;
+	let __NoMoveAnim = false;
+	
+	if(animArray[ANIM_IDLE][0][1] != -1)
+	{
+		__FramesIdle = animArray[ANIM_IDLE];
+		__SpeedIdle = __FramesIdle[0][1];
+		__LengthIdle = length(__FramesIdle) - 1;
+	}
+	
+	if(animArray[ANIM_ATTACK][0][1] != -1)
+	{
+		__FramesAttack = animArray[ANIM_ATTACK];
+		__SpeedAttack = __FramesAttack[0][1];
+		__LengthAttack = length(__FramesAttack) - 1;
+		__LoopAttack = [__FramesAttack[0][2], __FramesAttack[0][3]];
+	}
+	WriteLog(animArray[ANIM_ATTACK]);
+	
+	if(animArray[ANIM_LEFT][0][1] != -1)
+	{
+		__FramesLeft = animArray[ANIM_LEFT];
+		__SpeedLeft = __FramesLeft[0][1];
+		__LengthLeft = length(__FramesLeft) - 1;
+		__LoopLeft = [__FramesLeft[0][2], __FramesLeft[0][3]];
+		if(animArray[ANIM_RIGHT][0][1] == -1)
+		{
+			__FramesRight = __FramesLeft;
+			__SpeedRight = __FramesLeft[0][1];
+			__LengthRight = length(__FramesLeft) - 1;
+			__LoopRight = [__FramesLeft[0][2], __FramesLeft[0][3]];
+			__flipRight = true;
+		}
+	}
+	
+	if(animArray[ANIM_RIGHT][0][1] != -1)
+	{
+		__FramesRight = animArray[ANIM_RIGHT];
+		__SpeedRight = __FramesRight[0][1];
+		__LengthRight = length(__FramesRight) - 1;
+		__LoopRight = [__FramesRight[0][2], __FramesRight[0][3]];
+		if(animArray[ANIM_LEFT][0][1] == -1)
+		{
+			__FramesLeft = animArray[ANIM_RIGHT];
+			__SpeedLeft = __FramesRight[0][1];
+			__LengthLeft = length(__FramesRight) - 1;
+			__LoopLeft = [__FramesRight[0][2], __FramesRight[0][3]];
+			__flipLeft = true;
+		}
+	}
+	
+	if(animArray[ANIM_LEFT][0][1] == -1 && animArray[ANIM_RIGHT][0][1] == -1){__NoMoveAnim = true;}
+	
+	ObjPrim_SetTexture(__animObj, thGlobal_animArrayTextures[Obj_GetValue(__animObj, "A_ID")][0]);
+	ObjRender_SetFilterType(__animObj, FILTER_NONE);
+	
+	while(!Obj_IsDeleted(__animObj))
+	{
+		__MoveObj = Obj_GetValueD(__animObj, "A_MO", -1);
+		
+		let __x_vel = ObjMove_GetSpeed(__MoveObj) * cos(ObjMove_GetAngle(__MoveObj));
+
+		//all of this nonsense because value*cos(90) won't return exactly 0
+		__x_vel = __x_vel * 10000000;
+		__x_vel = truncate(__x_vel);
+		__x_vel = __x_vel / 10000000;
+		//end nonsense
+
+		if(__x_vel < 0)
+		{
+			__enemyDirection = -1;
+			Obj_SetValue(__animObj, "A_ATK", false);
+			__AnimFrameB = 1;
+		}
+		else if(__x_vel > 0)
+		{
+			__enemyDirection = 1;
+			Obj_SetValue(__animObj, "A_ATK", false);
+			__AnimFrameB = 1;
+		}
+		else
+		{
+			__enemyDirection = 0;
+		}
+		
+		if(__animDirection == __enemyDirection && __enemyDirection != 0)
+		{
+			if(__animDirection == -1) //LEFT
+			{
+				if(__AnimFrameCounter % __SpeedLeft == 0)
+				{
+					__AnimFrame++;
+					if(__LoopLeft != [-1, -1])
+					{
+						if(__AnimFrame > __LoopLeft[1])
+						{
+							__AnimFrame = __LoopLeft[0];
+						}
+					}
+					else
+					{
+						if(__AnimFrame >= __LengthLeft)
+						{
+							__AnimFrame = __LengthLeft;
+						}
+					}
+				}
+			}
+			else if(__animDirection == 1) //RIGHT
+			{
+				
+				if(__AnimFrameCounter % __SpeedRight == 0)
+				{
+					__AnimFrame++;
+					if(__LoopRight != [-1, -1])
+					{
+						if(__AnimFrame > __LoopRight[1])
+						{
+							__AnimFrame = __LoopRight[0];
+						}
+					}
+					else
+					{
+						if(__AnimFrame >= __LengthRight)
+						{
+							__AnimFrame = __LengthRight;
+						}
+					}
+				}
+			}
+			__AnimFrameCounter++;
+		}
+		else if(__AnimFrame > 0)
+		{
+			if(__animDirection == -1) //LEFT
+			{
+				if(__LoopLeft != [-1, -1])
+				{
+					if(__AnimFrame > __LoopLeft[0] - 1){__AnimFrame = __LoopLeft[0] - 1;}
+				}
+				else
+				{
+					if(__AnimFrame > __LengthLeft){__AnimFrame = __LengthLeft;}
+				}
+				
+				if(__AnimFrameCounter % __SpeedLeft == 0)
+				{
+					__AnimFrame--;
+				}
+			}
+			else if(__animDirection == 1) //RIGHT
+			{
+				if(__LoopRight != [-1, -1])
+				{
+					if(__AnimFrame > __LoopRight[0] - 1){__AnimFrame = __LoopRight[0] - 1;}
+				}
+				else
+				{
+					if(__AnimFrame > __LengthRight){__AnimFrame = __LengthRight;}
+				}
+				if(__AnimFrameCounter % __SpeedRight == 0)
+				{
+					__AnimFrame--;
+				}
+			}
+			__AnimFrameCounter++;
+		}
+	
+		if(__AnimFrame == 0 || __NoMoveAnim) //IDLE
+		{
+			__animDirection = __enemyDirection;
+			
+			if(Obj_GetValueD(__animObj, "A_ATK", false) == true)
+			{
+				__AnimRects = __FramesAttack[__AnimFrameB];
+				
+				if(__AnimFrameCounterB % __SpeedAttack == 0)
+				{
+					__AnimFrameB++;
+					if(__LoopAttack != [-1, -1])
+					{
+						if(__AnimFrameB > __LoopAttack[1])
+						{
+							__AnimFrameB = __LoopAttack[0];
+						}
+					}
+					else
+					{
+						if(__AnimFrameB >= __LengthAttack)
+						{
+							__AnimFrameB = __LengthAttack;
+						}
+					}
+				}
+				ObjRender_SetScaleX(__animObj, 1);
+			}
+			else
+			{
+				__AnimRects = __FramesIdle[__AnimFrameB];
+				
+				if(__AnimFrameCounterB % __SpeedIdle == 0)
+				{
+					__AnimFrameB++;
+					if(__AnimFrameB > __LengthIdle)
+					{
+						__AnimFrameB = 1;
+					}
+				}
+			}
+			
+			__AnimFrame = 0;
+			__AnimFrameCounter = 0;
+			__AnimFrameCounterB++;
+		}
+		else
+		{
+			if(__animDirection == -1)
+			{
+				__AnimRects = __FramesLeft[__AnimFrame];
+				if(__flipLeft){ObjRender_SetScaleX(__animObj, -1);}
+				else{ObjRender_SetScaleX(__animObj, 1);}
+			}
+			else if(__animDirection == 1)
+			{
+				__AnimRects = __FramesRight[__AnimFrame];
+				if(__flipRight){ObjRender_SetScaleX(__animObj, -1);}
+				else{ObjRender_SetScaleX(__animObj, 1);}
+			}
+			
+			__AnimFrameB = 1;
+			__AnimFrameCounterB = 0;
+		}
+		
+		ObjSprite2D_SetSourceRect(__animObj, __AnimRects[0], __AnimRects[1], __AnimRects[2], __AnimRects[3]);
+		ObjSprite2D_SetDestCenter(__animObj);
+		if(__MoveObj != -1)
+		{
+			ObjRender_SetPosition(__animObj, ObjMove_GetX(__MoveObj), ObjMove_GetY(__MoveObj), 0);
+		}
+		
+		if(Obj_IsDeleted(__MoveObj) && __MoveObj != -1)
+		{
+			Obj_Delete(__animObj);
+		}
+		yield;
+	}
+}
 
 
-/*
-animArray = 
-[ //animArray[i], i for animID
-	[ //animArray[i][j], j for each anim type
-		[ //animArray[i][j][k], k0 for header, k1+ for frame data
-			[ //k0
-				type,
-				frameRate,
-				loopPointStart,
-				loopPointEnd
-			],
-			[ //k1+
-				x1,
-				y1,
-				x2,
-				y2
-			],
-		]
-	]
-];
-*/
-//Obj_SetValue(obj, "animArray");
-
-// ----------
-
-//let useAtkAnim = false;
-//let useAltAtkAnim = false;
+// -=-=-=-=-=-=-=-=-=-=- old -=-=-=-=-=-=-=-=-=-=-
 
 let useAtkAnim = 0;
 
@@ -110,29 +406,10 @@ let yuyuko_UseFan = false;
 let sukuna_UseTeaCup = false;
 let sukuna_isBreakTeacup = false;
 
-task ObjBoss_UseAttackAnimationA(obj, type)
+task ObjBoss_UseAttackAnimationA(n_obj)
 {
-	let loc_flag = false;
-	let loc_cancel = false;
-	
-	if(useAtkAnim == 1)
-	{
-		loc_flag = true;;
-	}
-	
-	if(!loc_flag)
-	{
-		while(!loc_cancel)
-		{
-			useAtkAnim = 1;
-			if(ObjMove_GetSpeed(obj) > 0)
-			{
-				loc_cancel = true;
-			}
-			yield;
-		}
-		useAtkAnim = 0;
-	}
+	let l_animObj = Obj_GetValueD(n_obj, "A_OBJ", -1);
+	Obj_SetValue(l_animObj, "A_ATK", true);
 }
 
 task AnimateTemplate(FPEnemy)
@@ -1423,7 +1700,7 @@ task AnimateSuwako(FPEnemy)
 }
 
 
-task AnimateKisume(FPEnemy)
+task AnimateKisume_old(FPEnemy)
 {
 	let rowColArray =
 	[
@@ -1498,7 +1775,7 @@ task AnimateKisume(FPEnemy)
 	Obj_Delete(obj);
 }
 
-task AnimateYamame(FPEnemy)
+task AnimateYamame_old(FPEnemy)
 {
 	let rowColArray =
 	[

@@ -204,7 +204,7 @@ SetCommonData("RP",
 // ---------- Common Data ----------
 //to do: remove unused commondata, redefine existing ones to fit thlib naming
 
-SetCommonData("Difficulty", 3);
+SetCommonData("Difficulty", 1);
 SetCommonData("Stage", 1);
 SetCommonData("isDebugEnabled", true);
 SetCommonData("isGameStarted", false);
@@ -256,9 +256,9 @@ function Package_Init()
 	PauseHandler();
 
 	StartScript(LoadScriptInThread(Script_SE));
-	Menu_Init();
-	LoadingGraphic();
-	//PlayStage();
+	//Menu_Init();
+	//LoadingGraphic();
+	PlayStage();
 }
 
 function Package_MainLoop()
@@ -2710,5 +2710,4 @@ function GetSelectedMenuObject
 // -=-=-=-=-=-=-=-=-=-=- TH11 Style Player Data Menu -=-=-=-=-=-=-=-=-=-=-
 
 // -=-=-=-=-=-=-=-=-=-=- TH11 Style Music Room -=-=-=-=-=-=-=-=-=-=-
-
 

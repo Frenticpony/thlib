@@ -62,6 +62,7 @@ let img_th11_sig                 = path_img ~ "th11/loading/sig.png";
 let img_th11_enm_kisumeyamame    = path_img ~ "th11/stgenm/stg1enm.png";
 let img_th11_enm_parsee          = path_img ~ "th11/stgenm/stg2enm.png";
 let img_th11_enm_yuugi           = path_img ~ "th11/stgenm/stg3enm.png";
+let img_th11_enm_okuu            = path_img ~ "th11/stgenm/stg6enm.png";
 let img_th11_title_rank00        = path_img ~ "th11/title/rank00.png";
 let img_th11_title_result00      = path_img ~ "th11/title/result00.png";
 let img_th11_title_select00      = path_img ~ "th11/title/select00.png";
